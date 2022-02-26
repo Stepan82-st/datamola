@@ -22,10 +22,41 @@
     </div></header>
     <main class="main" id = "main"><div class = "conteiner main-conteiner">
         <section class="section tweet" id="tweet"></section>
-        <section class="section list" id="list"></section>
-        <section class="section filter" id="filter"></section>
+        <section class="section list" id="list"><article class="tweet-window">line
+            <article class="item">q</article>
+            <article class="item">w</article>
+            <article class="item">s</article>
+            <article class="item">s</article>
+            <article class="item">x</article>
+            <article class="item">x</article>
+            <article class="item">c</article>
+            <article class="item">g</article>
+            <article class="item">g</article>
+            <article class="item">h</article>
+        </article></section>
+        <section class="section filter" id="filter">
+            <form action="/somewhere_else" method="post">
+                <label for="POST-tweet">Search tweet</label>
+                <p><input class="input" id="POST-tweet" type="text" name="tweet"></p>
+                <label for="POST-name">Search name</label>
+                <p><input class="input" id="POST-name" type="text" name="name"></p>
+                <label for="POST-start">Date start</label>
+                <p><input class="input date" id="POST-start" type="text" name="start"></p>
+                <label for="POST-end">Date end</label>
+                <p><input class="input date" id="POST-end" type="text" name="end"></p>
+                <input class="btn" type="submit" value="Find">
+    </form></section>
     </div></main>
-    <footer class="footer"><div class = "conteiner"></div></footer>
+    <footer class="footer"><div class = "conteiner">
+        <nav class="nav">
+            <ul class="nav-list footer">
+              <li class="nav-item"><h3>Twitter</h3></li>
+              <li class="nav-item"><h4>Stepan Bryl</h4></li>
+              <li class="nav-item"><h4>bryl.step@tut.by</h4></li>
+              <li class="nav-item"><h>Version 1.0<br>30.12.2021</h></li>
+            </ul>
+          </nav>
+    </div></footer>
     
 <script type="module" src="index.js"></script>
 </body>

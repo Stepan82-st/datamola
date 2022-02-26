@@ -1,4 +1,10 @@
 
+:root {
+  --color-blue: #53D4FD;
+  --color-white: #fff;
+  --font1: 60px;
+  --font2: 40px;
+}
 @font-face {
     font-family: Roboto;
      src: url("fonts/Roboto.ttf");
@@ -27,25 +33,56 @@ body {
   .header{
       max-width: 100%;
       height: 100px;
-      background: #53D4FD;
+      background: var(--color-blue);
       border-radius: 0 0px 30px 30px;
   }
   .nav-list {
     display: flex;
+    flex-direction: row;
     align-items: center;
     list-style: none;
-   
+    justify-content:space-between;
+   position: relative;
   }
   .nav-link h1{
-    font-family: Frijole;
+    font-family: "Frijole";
     font-weight: 700;
   }
-  .nav-link {
-    
+  .nav-link { 
     transition: .3s;
-    color:#fff;
+    color:var(--color-white);
     text-decoration: none;  
-  transition: color 0.5s;
+    transition: color 0.5s;
+  }
+  .sing_out{
+    position: absolute;
+    left: 90%;
+  }
+  .name{
+    position: absolute;
+    left: 70%;
+  }
+  INPUT.input {
+    border: 5px solid var(--color-blue); 
+    
+   }
+  .input{
+    max-width: 200px;
+    min-height: 15px;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--color-blue);
+    transition: background-color 0s ease-in-out 9000s;
+  }
+
+ .date{
+    max-width: 100px;
+  }
+  label{
+    color: var(--color-blue);
   }
   .nav-link:hover {
     color: #5d7260;
@@ -56,12 +93,17 @@ body {
      height: 715px;
     
  }
- 
+ .item{
+   width: 300px;
+   height: 20px;
+   border: 2px solid var(--color-blue);
+ }
 
  .footer{
      max-width: 100%;
      height: 80px;
-     background-color: #53D4FD;
+     background-color: var(--color-blue);
+     color: var(--color-white);
  }
 .main-conteiner{
     display: flex;
@@ -81,18 +123,18 @@ body {
       }
 .tweet{
     width: 320px;
-    background-color: orange;
+    background-color: var(--color-white);
     height: 715px;
 }
 .list{
-    border: 3px solid #53D4FD;
+    border: 3px solid  var(--color-blue);
     max-width: 872px;
-    background-color: #f1f1f1;
+    background-color: var(--color-white);
     height: 715px;
 }
 .filter{
     max-width: 320px;
-    background-color: #f44336;
+    background-color: var(--color-white);
     height: 715px;
 }
 
@@ -125,8 +167,8 @@ hr {
 
 /* Set a style for the submit/register button */
 .registerbtn {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--color-blue);
+  color: var(--color-white);
   padding: 16px 20px;
   margin: 8px 0;
   border: none;
@@ -141,12 +183,12 @@ hr {
 
 /* Add a blue text color to links */
 a {
-  color: dodgerblue;
+  color: var(--color-blue);
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
 .signin {
-  background-color: #f1f1f1;
+  background-color: var(--color-white);
   text-align: center;
 }
 /* The Modal (background) */
@@ -166,7 +208,7 @@ a {
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--color-white);
   margin: 5px auto; /* 15% from the top and centered */
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
@@ -222,13 +264,15 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button {
-  background-color: #4CAF50;
+  background-color: #fff;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
+  border-radius: 10%;
   cursor: pointer;
   width: 100%;
+  color:#53D4FD;
 }
 
 /* Add a hover effect for buttons */
