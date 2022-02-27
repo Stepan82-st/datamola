@@ -93,6 +93,10 @@ body {
      height: 715px;
     
  }
+ select{
+   width: 200px;
+   height: 35px;
+ }
  .item{
    width: 300px;
    height: 20px;
