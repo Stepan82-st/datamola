@@ -145,6 +145,11 @@ textarea{
   left: 55%;
   top:70%;
 }
+.add-btn{
+  position: absolute;
+  left: 135%;
+  top:45%;
+}
 .footer-tweet{
   position: relative;
   max-width: 1200px;
@@ -214,10 +219,10 @@ textarea{
     
       }
 .list{
-    border: 1px solid  var(--color-blue);
+    border: 2px solid  var(--color-blue);
     max-width: 1024px;
     background-color: var(--color-white);
-    max-height: 715px;
+    height: 715px;
     border-radius: 10px 10px;
     
 }
@@ -226,6 +231,23 @@ textarea{
   max-height: 585px;
   overflow: scroll;
   white-space: nowrap;
+}
+.my-comment{
+  position: relative;
+  min-width: 400px;
+  height: 580px;
+  border: 2px solid var(--color-blue);
+  border-radius: 10px 10px;
+  overflow-y: scroll;
+}
+.comment-add{
+  position: absolute;
+  top: 85%;
+  max-width: 600px;
+  min-width: 400px;
+  height: 80px;
+  border: 2px solid var(--color-blue);
+  border-radius: 10px 10px;
 }
 .btn:hover{
   background-color: var(--color-orange);
@@ -247,6 +269,7 @@ textarea{
     min-width: 320px;
     background-color: var(--color-white);
     max-height: 715px;
+  
 }
 .avator {
   border-radius:100px;
