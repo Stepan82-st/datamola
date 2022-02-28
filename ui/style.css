@@ -2,6 +2,7 @@
 :root {
   --color-blue: #53D4FD;
   --color-white: #fff;
+  --color-orange:#FFA500;
   --font1: 60px;
   --font2: 40px;
 }
@@ -56,7 +57,7 @@ body {
     text-decoration: none;  
     transition: color 0.5s;
   }
-  .sing_out{
+  .btn-sing-out{
     position: absolute;
     left: 85%;
     border-radius: 5px 5px;
@@ -66,7 +67,7 @@ body {
     background-color: var(--color-white);
     color: var(--color-blue);
   }
-  .name{
+  .user-name{
     position: absolute;
     left: 70%;
   }
@@ -78,14 +79,12 @@ body {
     border-radius: 10px 10px;
    }
 
-  .input_btn{
+  .btn{
     width: 100px;
     height: 30px;
     background-color: var(--color-blue);
     border: none;
     border-radius: 5px 5px;
-    margin-left: 170px;
-    margin-top: 15px;
     color: var(--color-white);
   }
   input:-webkit-autofill,
@@ -95,6 +94,7 @@ body {
     -webkit-text-fill-color: var(--color-blue);
     transition: background-color 0s ease-in-out 9000s;
   }
+  /*input:default { background-color: rgb(151, 150, 150);}*/
 
  .date{
     max-width: 100px;
@@ -105,27 +105,52 @@ body {
   }
 
  .main{
+   border-radius: 30px 30px;
      max-width: 100%;
      height: 715px;
     
  }
 .header-tweet{
+  position: relative;
   max-width: 1200px;
-  height: 30px;
+  height: 35px;
   background-color: rgb(151, 150, 150);
   border-radius: 10px 10px;
+}
+textarea{
+  border: none;
+}
+.delete-btn{
+  position: absolute;
+  left: 80%;
+  top: 5%;
+}
+.tweet-btn{
+  position: absolute;
+  left: 80%;
+  top: 9%;
+}
+.edit-btn{
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 5px 5px;
+}
+.menu-btn{
+  position:absolute;
+  top:20%;
+}
+.find-btn{
+  position:absolute;
+  left: 55%;
+  top:70%;
 }
 .footer-tweet{
   position: relative;
   max-width: 1200px;
-  height: 30px;
+  height: 35px;
   background-color: rgb(151, 150, 150); 
   border-radius: 10px 10px;
-}
-.tweet-btn{
-  position:absolute;
-  left:55%;
-  top: -50%;
 }
 
  select{
@@ -139,17 +164,24 @@ body {
   text-decoration: none;
   color: var(--color-blue);
  }
+ .menu{
+   max-width: 320px;
+   position: relative;
+ }
+ 
  .container_tweet{
    max-width: 1200px;
    min-width: 400px;
    border: 2px solid var(--color-blue);
+   border-radius: 10px 10px;
  }
- .item{
-   max-width: 600px;
-   min-width: 400px;
-   height: 60px;
-   border: 2px solid var(--color-blue);
-   border-radius: 30px 30px;
+ .comments-message{
+   position:absolute;
+   color: var(--color-white);
+   display: flex;
+   flex-direction: row;
+   left: 10%;
+   top: 20%;
  }
  label {
   display: block;
@@ -163,6 +195,7 @@ body {
      height: 80px;
      background-color: var(--color-blue);
      color: var(--color-white);
+     border-radius: 30px 30px 0 0;
  }
 .main-conteiner{
     display: flex;
@@ -180,21 +213,40 @@ body {
         width: 100%;
     
       }
-.tweet{
-    max-width: 320px;
-    background-color: var(--color-white);
-    height: 715px;
-}
 .list{
-    border: 3px solid  var(--color-blue);
-    max-width: 872px;
+    border: 1px solid  var(--color-blue);
+    max-width: 1024px;
     background-color: var(--color-white);
-    height: 715px;
+    max-height: 715px;
+    border-radius: 10px 10px;
+    
+}
+.my-article{
+  position: relative;
+  max-height: 585px;
+  overflow: scroll;
+  white-space: nowrap;
+}
+.btn:hover{
+  background-color: var(--color-orange);
+}
+.next-message{
+  position: absolute;
+  margin: 10px auto;
+  width: 200px;
+  height: 40px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 7px 7px;
+  left: 35%;
 }
 .filter{
-    max-width: 320px;
+  position: relative;
+  overflow-y: scroll;
+    min-width: 320px;
     background-color: var(--color-white);
-    height: 715px;
+    max-height: 715px;
 }
 .avator {
   border-radius:100px;
@@ -210,7 +262,7 @@ body {
   margin-top: 10px;
   border-radius:3px;
   border-bottom: 1px solid #e6ecf0;
-  
+
 }
 
 .tweet-header {
@@ -247,16 +299,18 @@ body {
   
 }
 .tweet-info-counts div svg {
-  color:#657786;
+  color: var(--color-blue);
   margin-right: 10px;
 }
 .message{
   background-color: var(--color-white);
   border:none;
+  color: var(--color-white);
 }
 .feather-send {
 background-color: var(--color-blue);
 left: 70%;
+border-radius: 50%;
 }
 @media screen and (max-width:400px){
   body {
