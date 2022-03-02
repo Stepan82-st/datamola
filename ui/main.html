@@ -11,16 +11,18 @@
 <title>twitter</title>
 </head>
 <body>
-    <header class="header"><div class = "conteiner"> 
-        <nav class="nav">
+    <header class="header">
+      <div class = "conteiner"> 
+      
             <ul class="nav-list">
               <li class="nav-item title"><a href="#main" class="nav-link"><h1>Twitter</h1></a></li>
               <li class="nav-item user-name"><a href="#" class="nav-link"><h2>Stepan Bryl</h2></a></li>
               <li class="nav-item "><button class="btn-sing-out">Sing out</button></li>
             </ul>
-          </nav>
+          
     </div></header>
-    <main class="main" id = "main"><div class = "conteiner main-conteiner">
+    <main class="main" id = "main">
+      <div class = "conteiner main-conteiner">
         <section class="section menu" id="menu"></section>
         <section class="section list" id="list">
             <div class="container_tweet">
@@ -287,7 +289,7 @@
             </div>
         </section>
         <section class="section filter" id="filter">
-            <form action="/somewhere_else.html" method="post">
+            <form action="/somewhere_else.html" method="post" class="filter">
                 <label for="POST-tweet">Search name:</label>
                 <select name="select">
                     <option value="Vasiy">Vasiy</option>
@@ -303,11 +305,8 @@
                 <label for="end">Date end:</label>
                 <input class="input" type="date" id="end" name="trip-end" value="2021-08-22" min="2018-01-01" max="2022-02-28"><br>
                 <label for="heshtag">Search heshtags:</label>
-                <select name="select" id="heshtag" multiple>
-                    <option value="healthy food">healthy food</option>
-                    <option value="gym" selected>gym</option>
-                    <option value="food" selected>food</option>
-                </select><br>
+                <input class="input" type="text" name="add heshtag">
+                <input type="submit" name="add heshtag" class="btn input-btn heshtag-btn" value="Add heshtag"><br>
                 <input class="btn find-btn" type="submit" value="Find"><br>
     </form></section>
     </div></main>
