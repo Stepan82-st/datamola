@@ -40,6 +40,15 @@ html, body {
       border-radius: 0 0px 2rem 2rem;
       background-position: center 0;
   }
+  .menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  .button{
+    width: 8rem;
+  }
   .nav-list {
     display: flex;
     flex-direction: row;
@@ -172,7 +181,14 @@ textarea{
   left: 110%;
   top:45%;
 }
-
+.next-message{
+  width: 7rem;
+  height: 3rem;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 7px 7px;
+}
 
  select{
    width: 12rem;
@@ -267,18 +283,7 @@ flex-wrap: wrap;
 .btn:hover{
   background-color: var(--color-orange);
 }
-.next-message{
-  display: none;
-  position: absolute;
-  margin: 10px auto;
-  width: 12rem;
-  height: 3rem;
-  background-color: var(--color-blue);
-  color: var(--color-white);
-  border: none;
-  border-radius: 7px 7px;
-  left: 35%;
-}
+
 form.filter{
   width: 21rem;
 }
