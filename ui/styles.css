@@ -107,6 +107,7 @@ html, body {
     border: none;
     border-radius: 5px 5px;
     color: var(--color-white);
+    margin: 5px;
   }
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
