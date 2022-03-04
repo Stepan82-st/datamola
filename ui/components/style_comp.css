@@ -12,6 +12,9 @@
     width: 30vw;
     color: var(--color-blue);
   }
+  .error{
+    text-align: center;
+  }
   input[type=text], input[type=password] {
     width: 100%;
     padding: 15px;
