@@ -1,9 +1,17 @@
-/* Add padding to containers */
+:root {
+  --color-blue: #53D4FD;
+  --color-white: #fff;
+  --color-orange:#FFA500;
+  --color-greylight: #90949c;
+  --color-greydark:#4b4f56;
+  --header-height: 6rem;
+  --footer-height: 4.5rem;
+}
 .contain {
     padding: 16px;
+    width: 30vw;
+    color: var(--color-blue);
   }
-  
-  /* Full-width input fields */
   input[type=text], input[type=password] {
     width: 100%;
     padding: 15px;
@@ -12,35 +20,28 @@
     border: none;
     background: #f1f1f1;
   }
-  
   input[type=text]:focus, input[type=password]:focus {
     background-color: #ddd;
     outline: none;
   }
-  
-  /* Overwrite default styles of hr */
   hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
   }
-  
-  /* Set a style for the submit/register button */
   .registerbtn {
     background-color: var(--color-blue);
     color: var(--color-white);
     padding: 16px 20px;
     margin: 8px 0;
     border: none;
+    border-radius: 10px 10px;
     cursor: pointer;
-    width: 100%;
+    width: 100px;
     opacity: 0.9;
   }
-  
   .registerbtn:hover {
     opacity:1;
   }
-  
-  /* Add a blue text color to links */
   a {
     color: var(--color-blue);
   }
