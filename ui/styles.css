@@ -444,7 +444,7 @@ border-radius: 50%;
 }
 .box_comment .cancel{
 	margin-left:8px;
-	background-color: #f5f6f7;
+	background-color: var(--color-white);
 	color: var(--color-greydark);
 	text-decoration: none;
 	line-height: 22px;
@@ -453,11 +453,11 @@ border-radius: 50%;
 	font-weight: bold;
 	position: relative;
 	text-align: center;
-  border-color: #ccd0d5;
+  
 }
 .box_comment .cancel:hover{
-	background-color: #d0d0d0;
-	border-color: #ccd0d5;
+	background-color: var(--color-orange);
+
 }
 .box_result{
   margin-top: 24px;
@@ -465,7 +465,7 @@ border-radius: 50%;
 .box_result .result_comment h4{
   font-weight: 600;
   white-space: nowrap;
-  color: #365899;
+  color: var(--color-blue);
   cursor: pointer;
   text-decoration: none;
   font-size: 14px;
@@ -503,9 +503,9 @@ border-radius: 50%;
   color: var(--color-greylight);
 }
 .body_comment .show_more{
-  background: #3578e5;
+  background: var(--color-blue);
   border: none;
-  color: #fff;
+  color: var(--color-white);
   font-size: 14px;
   margin-top: 24px;
   padding: 12px;
