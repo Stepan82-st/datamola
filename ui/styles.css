@@ -248,9 +248,9 @@ form.filter{
   width: 21rem;
 }
 .filter{
-    
+    overflow: hidden;
     background-color: var(--color-white);
-    height: 60%;
+    height: 100%;
   
 }
 .avator {
