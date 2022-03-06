@@ -292,6 +292,7 @@ form.filter{
 
 .tweet-info-counts {
   display: flex;
+  align-items: center;
   margin-left: 4rem;
   margin-top: 10px;
   justify-content: space-between;
