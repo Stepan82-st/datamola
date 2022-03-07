@@ -42,7 +42,7 @@ html, body {
     margin: 0 auto;
     padding: 0 20px;
     overflow: hidden;
-    height: calc(100% - var(--header-height) - var(--footer-height) - 3rem);
+    height: calc(100% - var(--header-height) - var(--footer-height) - 1rem);
   }
   .header{
       width: 100%;
