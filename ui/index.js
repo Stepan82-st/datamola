@@ -185,12 +185,9 @@ const tweets = [
    const tweetFunc = (function() {
       const user = 'Stepan Bryl'
    function getTweets(skip = 0, top = 10, filterConfig) { 
-     if(filterConfig){
-     filterTweets(filterConfig);
-     }
-     // sort here;
-      if(skip >= 0 && skip <= top){
-         return tweets.slice(skip, skip+10)
+     if(filterConfig && skip >= 0 && skip <= top){
+   
+         return tweets.slice(skip, top + skip) && filterTweets(filterConfig);
       }else{
      return "invalid parameter";
       }
@@ -200,10 +197,14 @@ const tweets = [
         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
         if(filterConfig?.author){
-        authorFilter = tweet.author.includes(filterConfig.author);
+         let textRight = tweet.author.toUpperCase();
+         let textLeft = filterConfig.author.toUpperCase();
+        textFilter = textRight.includes(textLeft);
          }
        if(filterConfig?.text){
-       textFilter = tweet.text.includes(filterConfig.text);
+        let textRight = tweet.text.toUpperCase();
+        let textLeft = filterConfig.text.toUpperCase();
+       textFilter = textRight.includes(textLeft);
        }
        if(filterConfig?.dateFrom){
           dateFromFilter = tweet.createdAt <= filterConfig.dateFrom;
@@ -224,9 +225,13 @@ const tweets = [
      })
     };   
     function validateTweet(tweet){
-      const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => !!comment.id && !!comment.text 
-          && !!comment.createdAt?.getMonth && !!comment.author));
+      if(tweet){
+      const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => !!comment.id && !!comment.text && 
+          !!comment.createdAt?.getMonth && !!comment.author));
          return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt?.getMonth && isValidComments;  
+  }else{
+         return "No tweet";
+  }
   }
    return {getTweets, getTweet, validateTweet};
   }());
