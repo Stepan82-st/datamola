@@ -255,6 +255,16 @@ function editTweet(id, text){
        return false;
    } 
 }
-   return {getTweets, getTweet, validateTweet, addTweet, editTweet};
+function removeTweet(id){
+   let tweet = getTwee(id);
+ const index = tweets.findIndex(elem => elem.id === id);
+ if (index !== -1 && tweet.author === user){
+     tweets.splice(index, 1); 
+return true;
+}else{
+    return false;
+}  
+}
+   return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet};
   }());
  
