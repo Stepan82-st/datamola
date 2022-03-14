@@ -265,6 +265,13 @@ return true;
     return false;
 }  
 }
-   return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet};
+function validateComment(com){
+   if(com){   
+return !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
+   }else{
+       return "false";
+}  
+}
+   return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet, validateComment};
   }());
  
