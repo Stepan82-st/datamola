@@ -183,7 +183,7 @@ const tweets = [
   ];
 
    const tweetFunc = (function() {
-      const user = 'Stepan Bryl'
+      const user = 'Брыль Степан';
    function getTweets(skip = 0, top = 10, filterConfig) { 
      if(filterConfig && skip >= 0 && skip <= top){
          return  filterTweets(filterConfig)  && tweets.slice(skip, top + skip);
@@ -225,13 +225,12 @@ const tweets = [
     };   
     function validateTweet(tweet){
       if(tweet){
-      const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => !!comment.id && !!comment.text && 
-          !!comment.createdAt?.getMonth && !!comment.author));
+      const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => validateComment(comment)));
          return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt?.getMonth && isValidComments;  
   }else{
-         return "false";
+     return false;
   }
-  };
+}
   function addTweet (text){
    if(text){
    const date = new Date();
@@ -248,15 +247,15 @@ const newTweet =  { id: tweets.length+1,
 };
 function editTweet(id, text){
    let tweet = getTweet(id);
-        tweet.text = text;
    if(tweet.author === user){
-   return  true;
+      tweet.text = text;
+   return true;
    }else{
        return false;
    } 
 }
 function removeTweet(id){
-   let tweet = getTwee(id);
+ const tweet = getTwee(id);
  const index = tweets.findIndex(elem => elem.id === id);
  if (index !== -1 && tweet.author === user){
      tweets.splice(index, 1); 
@@ -265,12 +264,8 @@ return true;
     return false;
 }  
 }
-function validateComment(com){
-   if(com){   
-return !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
-   }else{
-       return "false";
-}  
+function validateComment(com){   
+return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
 }
    return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet, validateComment};
   }());
