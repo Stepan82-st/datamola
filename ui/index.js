@@ -246,6 +246,15 @@ const newTweet =  { id: tweets.length+1,
       return false;
         }
 };
-   return {getTweets, getTweet, validateTweet, addTweet};
+function editTweet(id, text){
+   let tweet = getTweet(id);
+        tweet.text = text;
+   if(tweet.author === user){
+   return  true;
+   }else{
+       return false;
+   } 
+}
+   return {getTweets, getTweet, validateTweet, addTweet, editTweet};
   }());
  
