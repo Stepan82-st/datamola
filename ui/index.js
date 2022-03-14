@@ -229,7 +229,7 @@ const tweets = [
           !!comment.createdAt?.getMonth && !!comment.author));
          return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt?.getMonth && isValidComments;  
   }else{
-         return "No tweet";
+         return "false";
   }
   };
   function addTweet (text){
