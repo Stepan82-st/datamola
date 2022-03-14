@@ -186,8 +186,7 @@ const tweets = [
       const user = 'Stepan Bryl'
    function getTweets(skip = 0, top = 10, filterConfig) { 
      if(filterConfig && skip >= 0 && skip <= top){
-   
-         return tweets.slice(skip, top + skip) && filterTweets(filterConfig);
+         return  filterTweets(filterConfig)  && tweets.slice(skip, top + skip);
       }else{
      return "invalid parameter";
       }
@@ -232,7 +231,21 @@ const tweets = [
   }else{
          return "No tweet";
   }
-  }
-   return {getTweets, getTweet, validateTweet};
+  };
+  function addTweet (text){
+   if(text){
+   const date = new Date();
+const newTweet =  { id: tweets.length+1,
+                    text: text,
+                    createdAt: date,
+                    author: user,
+                    comments:[]};
+         tweets.push(newTweet);
+       return true;
+   }else{
+      return false;
+        }
+};
+   return {getTweets, getTweet, validateTweet, addTweet};
   }());
  
