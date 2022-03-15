@@ -186,7 +186,7 @@ const bedText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l;
    const tweetFunc = (function() {
       const user = 'Брыль Степан';
    function getTweets(skip = 0, top = 10, filterConfig) { 
-     if(filterConfig && skip >= 0 && skip <= top){
+     if(skip >= 0 && skip <= top){
          return  filterTweets(filterConfig)  && tweets.slice(skip, top + skip);
       }else{
      return "invalid parameter";
@@ -292,16 +292,16 @@ function addComment(id, text){
   }());
  
 
-console.log(tweetFunc.getTweets(0, 15, {text:'Привет'}))
-console.log(tweetFunc.getTweets(10, 10))
-console.log(tweetFunc.getTweets(10, 1))
-console.log(tweetFunc.validateTweet(tweet));
-console.log(tweetFunc.validateComment(comment));
-console.log(tweetFunc.removeTweet('2'))
-console.log(tweetFunc.removeTweet("3"))
+console.log(tweetFunc.getTweets(0, 15, {text:'Привет'}));
+console.log(tweetFunc.getTweets(10, 10));
+console.log(tweetFunc.getTweets(10, 1));
 console.log(tweetFunc.editTweet('2', text));
 console.log(tweetFunc.editTweet('2', bedText));
+console.log(tweetFunc.validateTweet(tweet));
+console.log(tweetFunc.validateComment(comment));
+console.log(tweetFunc.removeTweet('2'));
+console.log(tweetFunc.removeTweet("3"));
 console.log(tweetFunc.addTweet(text));
-console.log(tweetFunc.addComment('1', text))
-console.log(tweetFunc.addComment('1', bedText))
+console.log(tweetFunc.addComment('1', text));
+console.log(tweetFunc.addComment('1', bedText));
 console.log(tweets);
