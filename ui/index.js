@@ -173,21 +173,32 @@ const tweets = [
    createdAt: new Date(),
    author: 'Калякин Иван',
    comments: []
-
-}
+}; 
+const badTweet = {
+   id: '1',
+   text: 'Привет! #js #datamola',
+   author: 'Калякин Иван',
+   comments: []
+}; 
 const comment = {
    id: '912',
    text: 'Хорошо, а у тебя?',
    createdAt: new Date('2022-03-09T23:00:05'),
-   
+   author: 'Брыль Степан'
+};
+const badComment = {
+   id: '912',
+   text: 'Хорошо, а у тебя?',
+   createdAt: new Date('2022-03-09T23:00:05')
 };
 const text = 'hello';
-const bedText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l; ;l;jkjxcjzkjckjld;slf;l;dl;l ;l;ldssjnkjfnjkn njndsnfjnjsndj jnsjdfnjn hdsbfhbsb sbdhbbshbfbsbf bsbfuyefy sbfkjbdfkjkj sjkfnnjnsk sjnfkjndjknjsdnjnsjnfjkd nsdkjnfjnsjfdnjksn sjndfjnsjfsn jsdnfjdsknfjk jsnfdjndj dsjnfjs";
+const badText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l; ;l;jkjxcjzkjckjld;slf;l;dl;l ;l;ldssjnkjfnjkn njndsnfjnjsndj jnsjdfnjn hdsbfhbsb sbdhbbshbfbsbf bsbfuyefy sbfkjbdfkjkj sjkfnnjnsk sjnfkjndjknjsdnjnsjnfjkd nsdkjnfjnsjfdnjksn sjndfjnsjfsn jsdnfjdsknfjk jsnfdjndj dsjnfjs";
    const tweetFunc = (function() {
       const user = 'Брыль Степан';
    function getTweets(skip = 0, top = 10, filterConfig) { 
+      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
      if(skip >= 0 && skip <= top){
-         return  filterTweets(filterConfig)  && tweets.slice(skip, top + skip);
+         return  filterTweets(filterConfig)  && sortedTweets.slice(skip, top + skip);
       }else{
      return "invalid parameter";
       }
@@ -296,12 +307,17 @@ console.log(tweetFunc.getTweets(0, 15, {text:'Привет'}));
 console.log(tweetFunc.getTweets(10, 10));
 console.log(tweetFunc.getTweets(10, 1));
 console.log(tweetFunc.editTweet('2', text));
-console.log(tweetFunc.editTweet('2', bedText));
+console.log(tweetFunc.editTweet('2', badText));
+console.log(tweetFunc.getTweet('2'));
+console.log(tweetFunc.getTweet('21'));
 console.log(tweetFunc.validateTweet(tweet));
-console.log(tweetFunc.validateComment(comment));
+console.log(tweetFunc.validateTweet(badTweet));
 console.log(tweetFunc.removeTweet('2'));
-console.log(tweetFunc.removeTweet("3"));
+console.log(tweetFunc.removeTweet('3'));
 console.log(tweetFunc.addTweet(text));
+console.log(tweetFunc.addTweet(badText));
 console.log(tweetFunc.addComment('1', text));
-console.log(tweetFunc.addComment('1', bedText));
+console.log(tweetFunc.addComment('1', badText));
+console.log(tweetFunc.validateComment(comment));
+console.log(tweetFunc.validateComment(badComment));
 console.log(tweets);
