@@ -5,7 +5,6 @@ const tweets = [{
       createdAt: new Date('2022-03-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
-
    },
    {
       id: '2',
@@ -54,14 +53,14 @@ const tweets = [{
    },
    {
       id: '7',
-      text: 'Привет! #js #datamola',
+      text: 'Дела! #js #datamola',
       createdAt: new Date('2021-07-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
    },
    {
       id: '8',
-      text: 'Привет! #js #datamola',
+      text: 'Дела! #js #datamola',
       createdAt: new Date('2021-06-09T23:00:00'),
       author: 'Николаев Иван',
       comments: []
@@ -195,26 +194,28 @@ const text = 'hello';
 const badText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l; ;l;jkjxcjzkjckjld;slf;l;dl;l ;l;ldssjnkjfnjkn njndsnfjnjsndj jnsjdfnjn hdsbfhbsb sbdhbbshbfbsbf bsbfuyefy sbfkjbdfkjkj sjkfnnjnsk sjnfkjndjknjsdnjnsjnfjkd nsdkjnfjnsjfdnjksn sjndfjnsjfsn jsdnfjdsknfjk jsnfdjndj dsjnfjs";
 const tweetFunc = (function () {
    const user = 'Брыль Степан';
-
+  
    function getTweets(skip = 0, top = 10, filterConfig) {
-      if (skip >= 0 && skip <= top) {
-         return filterTweets(filterConfig).slice(skip, top + skip);
+      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
+      const filterAr = filterTweets(filterConfig);
+      if(skip >= 0 && skip <= top && filterConfig === -1){
+         return sortedTweets.slice(skip, top + skip);
+      }else if (filterConfig !== -1 && skip >= 0 && skip <= top) {
+         return filterAr.slice(skip, top + skip);
       } else {
          return "invalid parameter";
       }
    }
 
    function filterTweets(filterConfig) {
-      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
-      return sortedTweets.filter(tweet => {
+      return tweets.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
          if (filterConfig ?.author) {
             let textRight = tweet.author.toUpperCase();
-            let textLeft = filterConfig.author.toUpperCase();
-            textFilter = textRight.includes(textLeft);
+            textFilter = textRight.includes(filterConfig.author.toUpperCase());
          }
-         if (filterConfig ?.text) {
+         if (filterConfig?.text) {
             let textRight = tweet.text.toUpperCase();
             let textLeft = filterConfig.text.toUpperCase();
             textFilter = textRight.includes(textLeft);
@@ -323,16 +324,15 @@ const tweetFunc = (function () {
    };
 }());
 
-
+console.log(tweetFunc.getTweets(10, 10));
 console.log(tweetFunc.getTweets(0, 15, {
-   text: 'Привет'
+   text: 'дела'
 }));
 console.log(tweetFunc.getTweets(0, 15, {
    author: 'show'
 }));
-console.log(tweetFunc.getTweets(10, 10));
 console.log(tweetFunc.getTweets(10, 1));
-console.log(tweetFunc.editTweet('2', text));
+console.log(tweetFunc.editTweet('16', text));
 console.log(tweetFunc.editTweet('2', badText));
 console.log(tweetFunc.getTweet('2'));
 console.log(tweetFunc.getTweet('21'));
