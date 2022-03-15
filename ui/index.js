@@ -133,7 +133,7 @@ const tweets = [
         id: '16',
         text: 'Привет! #js #datamola',
         createdAt: new Date('2020-05-11T23:00:00'),
-        author: 'show',
+        author: 'Брыль Степан',
         comments: []
      },
      {
@@ -161,7 +161,7 @@ const tweets = [
      {
         id: '20',
         text: 'Привет! #js #datamola',
-        createdAt: new Date('2020-03-03T23:00:00'),
+        createdAt: new Date('2022-04-03T23:00:00'),
         author: 'Колугин Иван',
         comments: []
    
@@ -196,15 +196,15 @@ const badText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l;
    const tweetFunc = (function() {
       const user = 'Брыль Степан';
    function getTweets(skip = 0, top = 10, filterConfig) { 
-      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
      if(skip >= 0 && skip <= top){
-         return  filterTweets(filterConfig)  && sortedTweets.slice(skip, top + skip);
+         return  filterTweets(filterConfig).slice(skip, top + skip);
       }else{
      return "invalid parameter";
       }
     }
     function filterTweets(filterConfig) {
-      return tweets.filter(tweet => {
+      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
+      return sortedTweets.filter(tweet => {
         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
         if(filterConfig?.author){
@@ -261,7 +261,7 @@ function editTweet(id, text){
    const tweet = getTweet(id);
    if(tweet.author === user && text.length <= 280){
       tweet.text = text;
-   return true;
+   return validateTweet(tweet);
    }else{
        return false;
    } 
@@ -288,7 +288,7 @@ function addComment(id, text){
    const date = new Date();
    if(tweet && text.length <= 280){
    const newComment =  { 
-       id: tweets.length+1,
+       id: tweet.comments.length+101,
            text: text,
            createdAt: date,
            author: user
@@ -304,6 +304,7 @@ function addComment(id, text){
  
 
 console.log(tweetFunc.getTweets(0, 15, {text:'Привет'}));
+console.log(tweetFunc.getTweets(0, 15, {author:'show'}));
 console.log(tweetFunc.getTweets(10, 10));
 console.log(tweetFunc.getTweets(10, 1));
 console.log(tweetFunc.editTweet('2', text));
