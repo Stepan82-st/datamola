@@ -267,6 +267,10 @@ return true;
 function validateComment(com){   
 return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
 }
-   return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet, validateComment};
+function changeUser(name){
+   user = name;
+return user;
+}
+   return {getTweets, getTweet, validateTweet, addTweet, editTweet, removeTweet, validateComment, changeUser};
   }());
  
