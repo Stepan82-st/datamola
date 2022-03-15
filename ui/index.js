@@ -118,7 +118,7 @@ const tweets = [
      {
         id: '14',
         text: 'Привет! #js #datamola',
-        createdAt: new Date('2022-07-09T23:00:00'),
+        createdAt: new Date('2020-07-09T23:00:00'),
         author: 'Брыль Степан',
         comments: []
      },
@@ -161,7 +161,7 @@ const tweets = [
      {
         id: '20',
         text: 'Привет! #js #datamola',
-        createdAt: new Date('2022-04-03T23:00:00'),
+        createdAt: new Date('2020-03-02T23:00:00'),
         author: 'Колугин Иван',
         comments: []
    
