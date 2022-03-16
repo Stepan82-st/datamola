@@ -200,7 +200,7 @@ const tweetFunc = (function () {
       const filterAr = filterTweets(filterConfig);
       console.log(filterAr);
       if(skip >= 0 && skip <= top && filterConfig){
-         return  sortedTweets.slice(skip, top + skip) && filterAr;
+         return filterAr && filterAr.slice(skip, top + skip);
       }else if(!filterConfig && skip >= 0 && skip <= top){
          return sortedTweets.slice(skip, top + skip);
       }else{
@@ -212,17 +212,17 @@ const tweetFunc = (function () {
       return tweets.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-         if (filterConfig ?.author) {
+         if (filterConfig?.author) {
             authorFilter = tweet.author.toUpperCase().includes(filterConfig.author.toUpperCase());
          }
          if (filterConfig?.text) {
             textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
          }
          if (filterConfig?.dateFrom) {
-            dateFromFilter = tweet.createdAt <= filterConfig.dateFrom;
+            dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
          }
          if (filterConfig?.dateTo) {
-            dateToFilter = tweet.createdAt >= filterConfig.dateTo;
+            dateToFilter = tweet.createdAt <= filterConfig.dateTo;
          }
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
@@ -323,8 +323,7 @@ const tweetFunc = (function () {
    };
 }());
 
-console.log(tweetFunc.getTweets(10, 10, {createdAt: new Date('2020-09-09T23:00:00'),
-createdAt:new Date('2021-09-09T23:00:00')}));
+console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo: new Date('2022-09-09')}));
 //console.log(tweetFunc.getTweets(0, 15, {
   // text: 'дела'
 //}));
