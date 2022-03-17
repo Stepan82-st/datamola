@@ -251,7 +251,7 @@ const tweetFunc = (function () {
       if (text.length <= 280) {
          const date = new Date();
          const newTweet = {
-            id: tweets.length + 1,
+            id: (tweets.length + 1).toString(),
             text: text,
             createdAt: date,
             author: user,
@@ -268,7 +268,7 @@ const tweetFunc = (function () {
       const tweet = getTweet(id);
       if (tweet.author === user && text.length <= 280) {
          tweet.text = text;
-         return validateTweet(tweet);
+         return true;
       } else {
          return false;
       }
@@ -299,7 +299,7 @@ const tweetFunc = (function () {
       const date = new Date();
       if (tweet && text.length <= 280) {
          const newComment = {
-            id: tweet.comments.length + 101,
+            id: (tweet.comments.length + 101).toString(),
             text: text,
             createdAt: date,
             author: user
@@ -331,7 +331,7 @@ console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo
    // author: 'show'
 //}));
 //console.log(tweetFunc.getTweets(10, 1));
-//console.log(tweetFunc.editTweet('16', text));
+console.log(tweetFunc.editTweet('16', text));
 //console.log(tweetFunc.editTweet('2', badText));
 //console.log(tweetFunc.getTweet('2'));
 //console.log(tweetFunc.getTweet('21'));
@@ -339,10 +339,10 @@ console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo
 //console.log(tweetFunc.validateTweet(badTweet));
 //console.log(tweetFunc.removeTweet('2'));
 //console.log(tweetFunc.removeTweet('3'));
-//console.log(tweetFunc.addTweet(text));
+console.log(tweetFunc.addTweet(text));
 //console.log(tweetFunc.addTweet(badText));
 //console.log(tweetFunc.addComment('1', text));
 //console.log(tweetFunc.addComment('1', badText));
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
-//console.log(tweets);
+console.log(tweets);
