@@ -5,7 +5,6 @@ const tweets = [{
       createdAt: new Date('2022-03-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
-
    },
    {
       id: '2',
@@ -54,14 +53,14 @@ const tweets = [{
    },
    {
       id: '7',
-      text: 'Привет! #js #datamola',
+      text: 'Дела! #js #datamola',
       createdAt: new Date('2021-07-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
    },
    {
       id: '8',
-      text: 'Привет! #js #datamola',
+      text: 'Дела! #js #datamola',
       createdAt: new Date('2021-06-09T23:00:00'),
       author: 'Николаев Иван',
       comments: []
@@ -195,39 +194,39 @@ const text = 'hello';
 const badText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l; ;l;jkjxcjzkjckjld;slf;l;dl;l ;l;ldssjnkjfnjkn njndsnfjnjsndj jnsjdfnjn hdsbfhbsb sbdhbbshbfbsbf bsbfuyefy sbfkjbdfkjkj sjkfnnjnsk sjnfkjndjknjsdnjnsjnfjkd nsdkjnfjnsjfdnjksn sjndfjnsjfsn jsdnfjdsknfjk jsnfdjndj dsjnfjs";
 const tweetFunc = (function () {
    const user = 'Брыль Степан';
-
+  
    function getTweets(skip = 0, top = 10, filterConfig) {
-      if (skip >= 0 && skip <= top) {
-         return filterTweets(filterConfig).slice(skip, top + skip);
-      } else {
+      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
+      const filterAr = filterTweets(filterConfig);
+      if(skip >= 0 && skip <= top && filterConfig){
+         return filterAr && filterAr.slice(skip, top + skip);
+      }else if(!filterConfig && skip >= 0 && skip <= top){
+         return sortedTweets.slice(skip, top + skip);
+      }else{
          return "invalid parameter";
       }
    }
 
    function filterTweets(filterConfig) {
-      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
-      return sortedTweets.filter(tweet => {
+      return tweets.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-         if (filterConfig ?.author) {
-            let textRight = tweet.author.toUpperCase();
-            let textLeft = filterConfig.author.toUpperCase();
-            textFilter = textRight.includes(textLeft);
+         if (filterConfig?.author) {
+            authorFilter = tweet.author.toUpperCase().includes(filterConfig.author.toUpperCase());
          }
-         if (filterConfig ?.text) {
-            let textRight = tweet.text.toUpperCase();
-            let textLeft = filterConfig.text.toUpperCase();
-            textFilter = textRight.includes(textLeft);
+         if (filterConfig?.text) {
+            textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
          }
-         if (filterConfig ?.dateFrom) {
-            dateFromFilter = tweet.createdAt <= filterConfig.dateFrom;
+         if (filterConfig?.dateFrom) {
+            dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
          }
-         if (filterConfig ?.dateTo) {
-            dateToFilter = tweet.createdAt >= filterConfig.dateTo;
+         if (filterConfig?.dateTo) {
+            dateToFilter = tweet.createdAt <= filterConfig.dateTo;
          }
-         if (filterConfig ?.hashtags) {
+         if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
+        // console.log('filter', tweet, textFilter, authorFilter)
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -251,7 +250,7 @@ const tweetFunc = (function () {
       if (text.length <= 280) {
          const date = new Date();
          const newTweet = {
-            id: tweets.length + 1,
+            id: (tweets.length + 1).toString(),
             text: text,
             createdAt: date,
             author: user,
@@ -268,7 +267,7 @@ const tweetFunc = (function () {
       const tweet = getTweet(id);
       if (tweet.author === user && text.length <= 280) {
          tweet.text = text;
-         return validateTweet(tweet);
+         return true;
       } else {
          return false;
       }
@@ -299,7 +298,7 @@ const tweetFunc = (function () {
       const date = new Date();
       if (tweet && text.length <= 280) {
          const newComment = {
-            id: tweet.comments.length + 101,
+            id: (tweet.comments.length + 101).toString(),
             text: text,
             createdAt: date,
             author: user
@@ -323,27 +322,26 @@ const tweetFunc = (function () {
    };
 }());
 
-
-console.log(tweetFunc.getTweets(0, 15, {
-   text: 'Привет'
-}));
-console.log(tweetFunc.getTweets(0, 15, {
-   author: 'show'
-}));
-console.log(tweetFunc.getTweets(10, 10));
-console.log(tweetFunc.getTweets(10, 1));
-console.log(tweetFunc.editTweet('2', text));
-console.log(tweetFunc.editTweet('2', badText));
-console.log(tweetFunc.getTweet('2'));
-console.log(tweetFunc.getTweet('21'));
-console.log(tweetFunc.validateTweet(tweet));
-console.log(tweetFunc.validateTweet(badTweet));
-console.log(tweetFunc.removeTweet('2'));
-console.log(tweetFunc.removeTweet('3'));
+console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo: new Date('2022-09-09')}));
+//console.log(tweetFunc.getTweets(0, 15, {
+  // text: 'дела'
+//}));
+//console.log(tweetFunc.getTweets(0, 15, {
+   // author: 'show'
+//}));
+//console.log(tweetFunc.getTweets(10, 1));
+console.log(tweetFunc.editTweet('16', text));
+//console.log(tweetFunc.editTweet('2', badText));
+//console.log(tweetFunc.getTweet('2'));
+//console.log(tweetFunc.getTweet('21'));
+//console.log(tweetFunc.validateTweet(tweet));
+//console.log(tweetFunc.validateTweet(badTweet));
+//console.log(tweetFunc.removeTweet('2'));
+//console.log(tweetFunc.removeTweet('3'));
 console.log(tweetFunc.addTweet(text));
-console.log(tweetFunc.addTweet(badText));
-console.log(tweetFunc.addComment('1', text));
-console.log(tweetFunc.addComment('1', badText));
-console.log(tweetFunc.validateComment(comment));
-console.log(tweetFunc.validateComment(badComment));
+//console.log(tweetFunc.addTweet(badText));
+//console.log(tweetFunc.addComment('1', text));
+//console.log(tweetFunc.addComment('1', badText));
+//console.log(tweetFunc.validateComment(comment));
+//console.log(tweetFunc.validateComment(badComment));
 console.log(tweets);
