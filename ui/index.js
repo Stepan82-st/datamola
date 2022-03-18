@@ -198,7 +198,6 @@ const tweetFunc = (function () {
    function getTweets(skip = 0, top = 10, filterConfig) {
       const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
       const filterAr = filterTweets(filterConfig);
-      console.log(filterAr);
       if(skip >= 0 && skip <= top && filterConfig){
          return filterAr && filterAr.slice(skip, top + skip);
       }else if(!filterConfig && skip >= 0 && skip <= top){
@@ -227,7 +226,7 @@ const tweetFunc = (function () {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-         console.log('filter', tweet, textFilter, authorFilter)
+        // console.log('filter', tweet, textFilter, authorFilter)
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
