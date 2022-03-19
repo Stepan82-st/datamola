@@ -166,13 +166,13 @@ const tweets = [{
 
    }
 ];
-const tweet = {
-   id: '1',
-   text: 'Привет! #js #datamola',
-   createdAt: new Date(),
-   author: 'Калякин Иван',
-   comments: []
-};
+//const tweet = {
+  // id: '1',
+  // text: 'Привет! #js #datamola',
+  // createdAt: new Date(),
+ //  author: 'Калякин Иван',
+  // comments: []
+//};
 const badTweet = {
    id: '1',
    text: 'Привет! #js #datamola',
@@ -322,7 +322,7 @@ const tweetFunc = (function () {
    };
 }());
 
-console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo: new Date('2022-09-09')}));
+//console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo: new Date('2022-09-09')}));
 //console.log(tweetFunc.getTweets(0, 15, {
   // text: 'дела'
 //}));
@@ -330,7 +330,7 @@ console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo
    // author: 'show'
 //}));
 //console.log(tweetFunc.getTweets(10, 1));
-console.log(tweetFunc.editTweet('16', text));
+//console.log(tweetFunc.editTweet('16', text));
 //console.log(tweetFunc.editTweet('2', badText));
 //console.log(tweetFunc.getTweet('2'));
 //console.log(tweetFunc.getTweet('21'));
@@ -338,10 +338,143 @@ console.log(tweetFunc.editTweet('16', text));
 //console.log(tweetFunc.validateTweet(badTweet));
 //console.log(tweetFunc.removeTweet('2'));
 //console.log(tweetFunc.removeTweet('3'));
-console.log(tweetFunc.addTweet(text));
+//console.log(tweetFunc.addTweet(text));
 //console.log(tweetFunc.addTweet(badText));
 //console.log(tweetFunc.addComment('1', text));
 //console.log(tweetFunc.addComment('1', badText));
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
-console.log(tweets);
+//console.log(tweets);
+
+class Tweet{
+   _user = 'Степан Брыль';
+   constructor(id, text, author,createdAt, comments){
+ this.id = id;
+ this.text = text;
+ this.author = author;
+ this.createdAt = createdAt;
+ this.comments = comments;
+   }
+
+   getTweet(id){
+      return tweets.find(function (item) {
+         if (id)
+            return (item.id === id)
+      })
+   }
+
+   addComment(id, text){
+      const tweet = getTweet(id);
+      const date = new Date();
+      if (tweet && text.length <= 280) {
+         const newComment = {
+            id: (tweet.comments.length + 101).toString(),
+            text: text,
+            createdAt: date,
+            author: user
+         };
+         tweet.comments.push(newComment);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   static validate(tweet){
+      if (tweet) {
+         const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => validateComment(comment)));
+         return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt ?.getMonth && isValidComments;
+      } else {
+         return false;
+      }
+   }
+}
+
+class Comment{
+   constructor(id, text, createdAt, author){
+      this.id = id;
+      this.text = text;
+      this.createdAt = createdAt;
+      this.author = author;
+
+   }
+   static validate(com){
+      return !!com && !!com.id && !!com.text && !!com.createdAt ?.getMonth && !!com.author; 
+   }
+
+}
+
+class TweetCollection{
+
+   getPage(skip = 0, top = 10, filterConfig){
+      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
+      const filterAr = filterTweets(filterConfig);
+      if(skip >= 0 && skip <= top && filterConfig){
+         return filterAr && filterAr.slice(skip, top + skip);
+      }else if(!filterConfig && skip >= 0 && skip <= top){
+         return sortedTweets.slice(skip, top + skip);
+      }else{
+         return "invalid parameter";
+      }
+   }
+   filterTweets(filterConfig){
+      return tweets.filter(tweet => {
+         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
+         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
+         if (filterConfig?.author) {
+            authorFilter = tweet.author.toUpperCase().includes(filterConfig.author.toUpperCase());
+         }
+         if (filterConfig?.text) {
+            textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
+         }
+         if (filterConfig?.dateFrom) {
+            dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
+         }
+         if (filterConfig?.dateTo) {
+            dateToFilter = tweet.createdAt <= filterConfig.dateTo;
+         }
+         if (filterConfig?.hashtags) {
+            hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
+         }
+         return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
+      })
+   }
+
+   add(tweet) {
+      if (tweet.length <= 280) {
+         const date = new Date();
+         const newTweet = {
+            id: (tweets.length + 1).toString(),
+            text: tweet,
+            createdAt: date,
+            author: user,
+            comments: []
+         };
+         tweets.push(newTweet);
+         return true;
+      } else {
+         return false;
+      }
+   };
+
+   edit(id, text) {
+      const tweet = getTweet(id);
+      if (tweet.author === user && text.length <= 280) {
+         tweet.text = text;
+         return true;
+      } else {
+         return false;
+      }
+   }
+    remove(id) {
+      const tweet = getTweet(id);
+      const index = tweets.findIndex(elem => elem.id === id);
+      if (index !== -1 && tweet.author === user) {
+         tweets.splice(index, 1);
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+}
