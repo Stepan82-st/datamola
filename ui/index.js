@@ -346,34 +346,41 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.validateComment(badComment));
 //console.log(tweets);
 
+
 class Tweet{
-   _user = 'Степан Брыль';
-   constructor(id, text, author,createdAt, comments){
- this.id = id;
+   comments = []; 
+   _text;
+   set text(newText){
+      if(this.validateText(newText)){
+         this._text = newText;
+      }else{
+         throw new Error('Tweet text length should be less 280 symbols')
+      }
+   }
+   get text(){
+      return this._text;
+   }
+   id = this.generateId();
+   constructor(text){
  this.text = text;
- this.author = author;
- this.createdAt = createdAt;
- this.comments = comments;
+ this.author = user;
+ this.createdAt = new Date();
    }
-
-   getTweet(id){
-      return tweets.find(function (item) {
-         if (id)
-            return (item.id === id)
-      })
+  validateText(text){
+     return text.length <= 280;
+  }
+   generateId(){
+      return `${Math.random().toString(10).substr(2, 3)}`;
    }
-
-   addComment(id, text){
-      const tweet = getTweet(id);
-      const date = new Date();
-      if (tweet && text.length <= 280) {
+   addComment(text){
+      if (this.validateText(text)) {
          const newComment = {
-            id: (tweet.comments.length + 101).toString(),
+            id: this.generateId(),
             text: text,
-            createdAt: date,
+            createdAt: new Date(),
             author: user
          };
-         tweet.comments.push(newComment);
+         this.comments.push(newComment);
          return true;
       } else {
          return false;
@@ -389,27 +396,48 @@ class Tweet{
       }
    }
 }
-
 class Comment{
-   constructor(id, text, createdAt, author){
-      this.id = id;
-      this.text = text;
-      this.createdAt = createdAt;
-      this.author = author;
-
+   _text;
+   id = this.generateId();
+   set text(newText){
+      if(this.validateText(newText)){
+         this._text = newText;
+      }else{
+         throw new Error('Comment text length should be less 280 symbols')
+      }
    }
+   get text(){
+      return this._text;
+   }
+   constructor(){
+      this.text = text;
+      this.createdAt = new Date();
+      this.author = user;
+   }
+   validateText(text){
+      return text.length <= 280;
+   }
+    generateId(){
+       return `${Math.random().toString(10).substr(2, 3)}`;
+    }
    static validate(com){
       return !!com && !!com.id && !!com.text && !!com.createdAt ?.getMonth && !!com.author; 
    }
-
 }
-
 class TweetCollection{
+   skip = 0;
+   top = 10;
+   filterConfig = {};
+   constructor(){
+    this.skip = skip;
+    this.top = top;
+    this.dateFrom = dateFrom;
 
-   getPage(skip = 0, top = 10, filterConfig){
+   }
+   static getPage(){
       const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
-      const filterAr = filterTweets(filterConfig);
-      if(skip >= 0 && skip <= top && filterConfig){
+      const filterAr = this.filterTweets(filterConfig);
+      if(this.skip >= 0 && this.skip <= this.top && filterConfig){
          return filterAr && filterAr.slice(skip, top + skip);
       }else if(!filterConfig && skip >= 0 && skip <= top){
          return sortedTweets.slice(skip, top + skip);
@@ -427,7 +455,7 @@ class TweetCollection{
          if (filterConfig?.text) {
             textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
          }
-         if (filterConfig?.dateFrom) {
+         if (filterConfig?.this.dateFrom) {
             dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
          }
          if (filterConfig?.dateTo) {
