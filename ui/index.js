@@ -349,33 +349,42 @@ const tweetFunc = (function () {
 
 class Tweet{
    comments = []; 
-   _text;
    set text(newText){
-      if(this.validateText(newText)){
-         this._text = newText;
+      if(this._validateText(newText)){
+         this.text = newText;
       }else{
          throw new Error('Tweet text length should be less 280 symbols')
       }
    }
    get text(){
-      return this._text;
+      return this.text;
    }
-   id = this.generateId();
-   constructor(text){
+  get id() {
+    return this._id;
+  }
+  get author() {
+   return this._author;
+  }
+ get createdAt() {
+   return this._createdAt;
+  }
+ 
+   constructor(text, id, author){
  this.text = text;
- this.author = user;
- this.createdAt = new Date();
+ this._id = this.generateId(); 
+ this._author = user || author;
+ this._createdAt = new Date();
    }
-  validateText(text){
+  _validateText(text){
      return text.length <= 280;
   }
    generateId(){
       return `${Math.random().toString(10).substr(2, 3)}`;
    }
    addComment(text){
-      if (this.validateText(text)) {
+      if (this._validateText(text)) {
          const newComment = {
-            id: this.generateId(),
+            id: (this.generateId() + 101).toString(),
             text: text,
             createdAt: new Date(),
             author: user
@@ -397,32 +406,41 @@ class Tweet{
    }
 }
 class Comment{
-   _text;
-   id = this.generateId();
-   set text(newText){
-      if(this.validateText(newText)){
-         this._text = newText;
-      }else{
-         throw new Error('Comment text length should be less 280 symbols')
-      }
-   }
-   get text(){
-      return this._text;
-   }
-   constructor(text){
+text;
+  set text(newText){
+     if(this._validateText(newText)){
+        this.text = newText;
+     }else{
+        throw new Error('Comment text length should be less 280 symbols')
+     }
+  }
+  get text(){
+     return this.text;
+  }
+  get id(){
+     return this._id;
+  }
+  get author(){
+     return this._author;
+  }
+  get createdAt(){
+     return this._createdAt;
+  }
+  constructor(text, id, author, createdAt){
       this.text = text;
-      this.createdAt = new Date();
-      this.author = user;
+     this._id = this._generateId();
+     this._createdAt = new Date();
+     this._author = user || author;
+  }
+  _validateText(text){
+     return text.length <= 280;
+  }
+   _generateId(){
+      return `${Math.random().toString(10).substr(2, 3)}`;
    }
-   validateText(text){
-      return text.length <= 280;
-   }
-    generateId(){
-       return `${Math.random().toString(10).substr(2, 3)}`;
-    }
-   static validate(com){
-      return !!com && !!com.id && !!com.text && !!com.createdAt ?.getMonth && !!com.author; 
-   }
+  static validate(com){
+     return !!com && !!com.id && !!com.text && !!com.createdAt ?.getMonth && !!com.author; 
+  }
 }
 class TweetCollection{
    skip = 0;
