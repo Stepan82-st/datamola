@@ -409,7 +409,7 @@ class Comment{
    get text(){
       return this._text;
    }
-   constructor(){
+   constructor(text){
       this.text = text;
       this.createdAt = new Date();
       this.author = user;
