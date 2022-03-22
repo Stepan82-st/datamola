@@ -377,7 +377,7 @@ class Tweet{
  this._id = options.id;
  this._author = options.author || new TweetCollection()._user;
  this._createdAt = options.createdAt || new Date();
-   this.comments = options.comments.map((com)=> new Comment(com)) || new Comment();
+ this.comments = (options.comments)?options.comments.map((com)=> new Comment(com)):[];
    }
   _validateText(text){
      return text.length <= 280;
