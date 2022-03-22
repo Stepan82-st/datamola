@@ -348,7 +348,11 @@ const tweetFunc = (function () {
 
 
 class Tweet{
-   comments = []; 
+   _id;
+   _author;
+   text;
+   _createdAt;
+   comments = [];
    set text(newText){
       if(this._validateText(newText)){
          this.text = newText;
@@ -359,43 +363,25 @@ class Tweet{
    get text(){
       return this.text;
    }
-  get id() {
-    return this._id;
+  get id(){
+   return this._id;
   }
-  get author() {
-   return this._author;
-  }
- get createdAt() {
-   return this._createdAt;
-  }
- 
-   constructor(text, id, author){
- this.text = text;
- this._id = this.generateId(); 
- this._author = user || author;
- this._createdAt = new Date();
+  get author(){
+  return this._author;
+ }
+  get createdAt(){
+  return this._createdAt;
+ }
+   constructor(options){
+ this.text = options.text || options; 
+ this._id = options.id;
+ this._author = options.author || new TweetCollection()._user;
+ this._createdAt = options.createdAt || new Date();
+   this.comments = options.comments || new Comment();
    }
   _validateText(text){
      return text.length <= 280;
   }
-   generateId(){
-      return `${Math.random().toString(10).substr(2, 3)}`;
-   }
-   addComment(text){
-      if (this._validateText(text)) {
-         const newComment = {
-            id: (this.generateId() + 101).toString(),
-            text: text,
-            createdAt: new Date(),
-            author: user
-         };
-         this.comments.push(newComment);
-         return true;
-      } else {
-         return false;
-      }
-   }
-
    static validate(tweet){
       if (tweet) {
          const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => validateComment(comment)));
@@ -406,15 +392,15 @@ class Tweet{
    }
 }
 class Comment{
-text;
-  set text(newText){
+   text;
+  set textCom(newText){
      if(this._validateText(newText)){
         this.text = newText;
      }else{
         throw new Error('Comment text length should be less 280 symbols')
      }
   }
-  get text(){
+  get textCom(){
      return this.text;
   }
   get id(){
@@ -426,101 +412,108 @@ text;
   get createdAt(){
      return this._createdAt;
   }
-  constructor(text, id, author, createdAt){
-      this.text = text;
-     this._id = this._generateId();
-     this._createdAt = new Date();
-     this._author = user || author;
+  constructor(options){
+      this.text = options.text || options;
+     this._id = options.id;
+     this._createdAt = options.createdAt || new Date();
+     this._author = options.author || new TweetCollection()._user;
   }
   _validateText(text){
      return text.length <= 280;
   }
-   _generateId(){
-      return `${Math.random().toString(10).substr(2, 3)}`;
-   }
   static validate(com){
-     return !!com && !!com.id && !!com.text && !!com.createdAt ?.getMonth && !!com.author; 
+     return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author; 
   }
 }
 class TweetCollection{
-   skip = 0;
-   top = 10;
-   filterConfig = {};
-   constructor(){
-    this.skip = skip;
-    this.top = top;
-    this.dateFrom = dateFrom;
-
+   _user = 'Степан Брыль';
+   constructor(array){
+       this.array = array; 
    }
-   static getPage(){
-      const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
-      const filterAr = this.filterTweets(filterConfig);
-      if(this.skip >= 0 && this.skip <= this.top && filterConfig){
-         return filterAr && filterAr.slice(skip, top + skip);
-      }else if(!filterConfig && skip >= 0 && skip <= top){
-         return sortedTweets.slice(skip, top + skip);
-      }else{
-         return "invalid parameter";
-      }
+   set array(value){
+       if(!value){
+           return "No value";
+       }
+       this._array = value;
    }
-   filterTweets(filterConfig){
-      return tweets.filter(tweet => {
-         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
-         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-         if (filterConfig?.author) {
-            authorFilter = tweet.author.toUpperCase().includes(filterConfig.author.toUpperCase());
-         }
-         if (filterConfig?.text) {
-            textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
-         }
-         if (filterConfig?.this.dateFrom) {
-            dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
-         }
-         if (filterConfig?.dateTo) {
-            dateToFilter = tweet.createdAt <= filterConfig.dateTo;
-         }
-         if (filterConfig?.hashtags) {
-            hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
-         }
-         return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
-      })
+   get array(){
+       return this._array;
    }
+   
+   getPage(skip = 0, top = 10, filterConfig = {}){
+     const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
+     const filterAr = this._filterTweets(filterConfig);
+     if(skip >= 0 && skip <= top && filterConfig){
+        return filterAr && filterAr.slice(skip, top + skip);
+     }else if(!filterConfig && skip >= 0 && skip <= top){
+        return sortedTweets.slice(skip, top + skip);
+     }else{
+        return "invalid parameter";
+     }
+  }
+  _filterTweets(filterConfig){
+     return tweets.filter(tweet => {
+        let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
+        authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
+        if (filterConfig?.author) {
+           authorFilter = tweet.author.toUpperCase().includes(filterConfig.author.toUpperCase());
+        }
+        if (filterConfig?.text) {
+           textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
+        }
+        if (filterConfig?.this.dateFrom) {
+           dateFromFilter = tweet.createdAt >= filterConfig.dateFrom;
+        }
+        if (filterConfig?.dateTo) {
+           dateToFilter = tweet.createdAt <= filterConfig.dateTo;
+        }
+        if (filterConfig?.hashtags) {
+           hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
+        }
+        return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
+     })
+  }
 
-   add(tweet) {
-      if (tweet.length <= 280) {
-         const date = new Date();
-         const newTweet = {
-            id: (tweets.length + 1).toString(),
-            text: tweet,
-            createdAt: date,
-            author: user,
-            comments: []
-         };
-         tweets.push(newTweet);
-         return true;
-      } else {
-         return false;
-      }
-   };
+  add(tweet) {
+     if (tweet.length <= 280) {
+        const date = new Date();
+        const newTweet = {
+           id: (tweets.length + 1).toString(),
+           text: tweet,
+           createdAt: date,
+           author: user,
+           comments: []
+        };
+        tweets.push(newTweet);
+        return true;
+     } else {
+        return false;
+     }
+  };
 
-   edit(id, text) {
-      const tweet = getTweet(id);
-      if (tweet.author === user && text.length <= 280) {
+  edit(id, text) {
+     const tweet = this._getTweet(id);
+     if (tweet.author === user && text.length <= 280) {
          tweet.text = text;
-         return true;
-      } else {
-         return false;
-      }
-   }
-    remove(id) {
-      const tweet = getTweet(id);
-      const index = tweets.findIndex(elem => elem.id === id);
-      if (index !== -1 && tweet.author === user) {
-         tweets.splice(index, 1);
-         return true;
-      } else {
-         return false;
-      }
-   }
-
+        return true;
+     } else {
+        return false;
+     }
+  }
+   remove(id) {
+     const tweet = this._getTweet(id);
+     const index = tweets.findIndex(elem => elem.id === id);
+     if (index !== -1 && tweet.author === user) {
+        tweets.splice(index, 1);
+        return true;
+     } else {
+        return false;
+     }
+  }
+     _getTweet(id) {
+     return tweets.find(function (item) {
+        if (id)
+           return (item.id === id)
+     })
+  }
 }
