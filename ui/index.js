@@ -512,6 +512,9 @@ class TweetCollection{
        })
       return tweetNoValid;
    }
+   clear(tweetCollection){
+      return tweetCollection.splice();
+   }
 }
 class Comment{
     text;
