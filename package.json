@@ -1,0 +1,23 @@
+{
+  "name": "datamola",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stepan82-st/datamola.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stepan82-st/datamola/issues"
+  },
+  "homepage": "https://github.com/Stepan82-st/datamola#readme"
+}
