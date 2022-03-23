@@ -36,7 +36,6 @@ const tweets = [{
       id: '5',
       text: 'Привет! #js #datamola',
       createdAt: new Date('2021-09-09T23:00:00'),
-      author: 'Иванов Иван',
       comments: []
    },
    {
@@ -167,13 +166,13 @@ const tweets = [{
    }
 ];
 //const tweet = {
-  // id: '1',
-  // text: 'Привет! #js #datamola',
-  // createdAt: new Date(),
- //  author: 'Калякин Иван',
-  // comments: []
+// id: '1',
+// text: 'Привет! #js #datamola',
+// createdAt: new Date(),
+//  author: 'Калякин Иван',
+// comments: []
 //};
-const badTweet = {
+/* const badTweet = {
    id: '1',
    text: 'Привет! #js #datamola',
    author: 'Калякин Иван',
@@ -321,13 +320,13 @@ const tweetFunc = (function () {
       addComment
    };
 }());
-
+ */
 //console.log(tweetFunc.getTweets(0, 10, {dateFrom: new Date('2021-09-09'), dateTo: new Date('2022-09-09')}));
 //console.log(tweetFunc.getTweets(0, 15, {
-  // text: 'дела'
+// text: 'дела'
 //}));
 //console.log(tweetFunc.getTweets(0, 15, {
-   // author: 'show'
+// author: 'show'
 //}));
 //console.log(tweetFunc.getTweets(10, 1));
 //console.log(tweetFunc.editTweet('16', text));
@@ -347,86 +346,83 @@ const tweetFunc = (function () {
 //console.log(tweets);
 
 
-class Tweet{
+class Tweet {
    _id;
    _author;
    text;
    _createdAt;
    comments = [];
-   set textParam(newText){
-      if(this._validateText(newText)){
+   set textParam(newText) {
+      if (this._validateText(newText)) {
          this.text = newText;
-      }else{
+      } else {
          throw new Error('Tweet text length should be less 280 symbols')
       }
    }
-   get textParam(){
+   get textParam() {
       return this.text;
    }
-  get id(){
-   return this._id;
-  }
-  get author(){
-  return this._author;
- }
-  get createdAt(){
-  return this._createdAt;
- }
-   constructor(options){
- this.text = options.text || options; 
- this._id = options.id || this._uniqueID().toString();
- this._author = options.author || new TweetCollection()._user;
- this._createdAt = options.createdAt || new Date();
-   this.comments = (options.comments)?options.comments.map((com)=> new Comment(com)):[];
+   get id() {
+      return this._id;
    }
-  _validateText(text){
-     return text.length <= 280;
-  }
-   
+   get author() {
+      return this._author;
+   }
+   get createdAt() {
+      return this._createdAt;
+   }
+   constructor(options) {
+      this.text = options.text || options;
+      this._id = options.id || this._uniqueID().toString();
+      this._author = options.author || new TweetCollection()._user;
+      this._createdAt = options.createdAt || new Date();
+      this.comments = (options.comments) ? options.comments.map((com) => new Comment(com)) : [];
+   }
+   _validateText(text) {
+      return text.length <= 280;
+   }
+
    _uniqueID() {
-    return Math.floor(Math.random() * Date.now())
-     }
-   
-   static validate(tweet){
+      return Math.floor(Math.random() * Date.now())
+   }
+
+   static validate(tweet) {
       if (tweet) {
          const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => Comment.validate(comment)));
-         return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt ?.getMonth && isValidComments;
+         return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt?.getMonth && isValidComments;
       } else {
          return false;
       }
    }
 }
-const tweetArr = [];
+class TweetCollection {
+   _user;
+   constructor(array) {
+      this._user = 'Брыль Степан';
+      this.array = array;
+   }
+   set array(value) {
+      if (!value) {
+         return "No value";
+      }
+      this._array = value;
+   }
+   get array() {
+      return this._array;
+   }
 
-class TweetCollection{
-    _user;
-    constructor(array){
-        this._user = 'Брыль Степан';
-        this.array = array; 
-    }
-    set array(value){
-        if(!value){
-            return "No value";
-        }
-        this._array = value;
-    }
-    get array(){
-        return this._array;
-    }
-    
-    getPage(skip = 0, top = 10, filterConfig = {}){
+   getPage(skip = 0, top = 10, filterConfig = {}) {
       const sortedTweets = tweetArr.sort((a, b) => b._createdAt - a._createdAt);
       const filterAr = this._filterTweets(filterConfig);
-       console.log(filterAr);
-      if(skip >= 0 && skip <= top && filterConfig){
+      if (skip >= 0 && skip <= top && filterConfig) {
          return filterAr && filterAr.slice(skip, top + skip);
-      }else if(!filterConfig && skip >= 0 && skip <= top){
+      } else if (!filterConfig && skip >= 0 && skip <= top) {
          return sortedTweets.slice(skip, top + skip);
-      }else{
+      } else {
          return "invalid parameter";
       }
    }
-   _filterTweets(filterConfig){
+   _filterTweets(filterConfig) {
       return tweetArr.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
@@ -462,20 +458,18 @@ class TweetCollection{
 
    edit(id, text) {
       const tweet = this._getTweet(id);
-      console.log(tweet)
       if (tweet.author === this._user && text.length <= 280) {
-          tweet.text = text;
+         tweet.text = text;
          return true;
       } else {
          return false;
       }
    }
 
-    remove(id) {
+   remove(id) {
       const tweet = this._getTweet(id);
       const index = tweetArr.findIndex(elem => elem._id === id);
-       console.log(tweet._author)
-      if (index !== -1 && tweet._author ===this._user) {
+      if (index !== -1 && tweet._author === this._user) {
          tweetArr.splice(index, 1);
          return true;
       } else {
@@ -483,9 +477,8 @@ class TweetCollection{
       }
    }
 
-   addComment(id, text){
+   addComment(id, text) {
       const tweet = this._getTweet(id);
-      const date = new Date();
       if (tweet && text.length <= 280) {
          const newComment = new Comment(text)
          tweet.comments.push(newComment);
@@ -494,59 +487,77 @@ class TweetCollection{
          return false;
       }
    }
-      _getTweet(id) {
+   _getTweet(id) {
       return tweetArr.find(function (item) {
          if (id)
             return item._id === id;
       })
    }
 
-   addAll(tweetCollection){
+   addAll(tweetCollection) {
       const tweetNoValid = [];
-       tweetCollection.map((tw) => {
-             if(Tweet.validate(tw)){
-                tweetArr.push(new Tweet(tw));
-             }else{
-                tweetNoValid.push(tw);
-             } 
-       })
+      tweetCollection.map((tw) => {
+         if (Tweet.validate(tw)) {
+            tweetArr.push(new Tweet(tw));
+         } else {
+            tweetNoValid.push(tw);
+         }
+      })
       return tweetNoValid;
    }
-   clear(tweetCollection){
+   clear(tweetCollection) {
       return tweetCollection.splice();
    }
 }
-class Comment{
-    text;
-   set textCom(newText){
-      if(this._validateText(newText)){
+class Comment {
+   text;
+   set textCom(newText) {
+      if (this._validateText(newText)) {
          this.text = newText;
-      }else{
+      } else {
          throw new Error('Comment text length should be less 280 symbols')
       }
    }
-   get textCom(){
+   get textCom() {
       return this.text;
    }
-   get id(){
+   get id() {
       return this._id;
    }
-   get author(){
+   get author() {
       return this._author;
    }
-   get createdAt(){
+   get createdAt() {
       return this._createdAt;
    }
-   constructor(options){
-       this.text = options.text || options;
+   constructor(options) {
+      this.text = options.text || options;
       this._id = options.id;
       this._createdAt = options.createdAt || new Date();
       this._author = options.author || new TweetCollection()._user;
    }
-   _validateText(text){
+   _validateText(text) {
       return text.length <= 280;
    }
-   static validate(com){
-      return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author; 
+   static validate(com) {
+      return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
    }
 }
+
+const tweetArr = [];
+const tweetCollection = new TweetCollection();
+const tweetNoValid = tweetCollection.addAll(tweets);
+console.log(tweetNoValid);
+console.log(tweetArr);
+console.log(tweetCollection.getPage(10, 10, {hashtags: ['#js']}))
+console.log(tweetCollection.getPage(0, 10, {text: 'дела'}));
+tweetCollection.add('Hello my friend');
+console.log(tweetArr);
+tweetCollection.edit('2', 'Hello my edit tweet');
+tweetCollection.edit('3', 'Hello my second edit tweet');
+console.log(tweetArr);
+console.log(tweetCollection.remove('2'));
+console.log(tweetCollection.remove('3'));
+console.log(tweetArr);
+console.log(tweetCollection.addComment('3', 'What are you doing again?'));
+console.log(tweetCollection.clear(tweetArr));
