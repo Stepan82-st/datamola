@@ -401,7 +401,7 @@ const tweetArr = tweets.map((tw) => new Tweet(tw));
 class TweetCollection{
    _user;
    constructor(array){
-       this._user = 'Степан Брыль';
+       this._user = 'Брыль Степан';
        this.array = array; 
    }
    set array(value){
@@ -462,17 +462,19 @@ class TweetCollection{
 
   edit(id, text) {
      const tweet = this._getTweet(id);
-     if (tweet.author === _user && text.length <= 280) {
+     if (tweet.author === this._user && text.length <= 280) {
          tweet.text = text;
         return true;
      } else {
         return false;
      }
   }
+
    remove(id) {
      const tweet = this._getTweet(id);
-     const index = tweetArr.findIndex(elem => elem.id === id);
-     if (index !== -1 && tweet._author === _user) {
+     const index = tweetArr.findIndex(elem => elem._id === id);
+      console.log(tweet._author)
+     if (index !== -1 && tweet._author ===this._user) {
         tweetArr.splice(index, 1);
         return true;
      } else {
@@ -494,7 +496,7 @@ class TweetCollection{
      _getTweet(id) {
      return tweetArr.find(function (item) {
         if (id)
-           return (item.id === id)
+           return item._id === id;
      })
   }
 }
