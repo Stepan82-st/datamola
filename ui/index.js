@@ -389,116 +389,129 @@ class Tweet{
    
    static validate(tweet){
       if (tweet) {
-         const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => validateComment(comment)));
+         const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => Comment.validate(comment)));
          return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt ?.getMonth && isValidComments;
       } else {
          return false;
       }
    }
 }
-const tweetArr = tweets.map((tw) => new Tweet(tw));
+const tweetArr = [];
 
 class TweetCollection{
-   _user;
-   constructor(array){
-       this._user = 'Брыль Степан';
-       this.array = array; 
+    _user;
+    constructor(array){
+        this._user = 'Брыль Степан';
+        this.array = array; 
+    }
+    set array(value){
+        if(!value){
+            return "No value";
+        }
+        this._array = value;
+    }
+    get array(){
+        return this._array;
+    }
+    
+    getPage(skip = 0, top = 10, filterConfig = {}){
+      const sortedTweets = tweetArr.sort((a, b) => b._createdAt - a._createdAt);
+      const filterAr = this._filterTweets(filterConfig);
+       console.log(filterAr);
+      if(skip >= 0 && skip <= top && filterConfig){
+         return filterAr && filterAr.slice(skip, top + skip);
+      }else if(!filterConfig && skip >= 0 && skip <= top){
+         return sortedTweets.slice(skip, top + skip);
+      }else{
+         return "invalid parameter";
+      }
    }
-   set array(value){
-       if(!value){
-           return "No value";
-       }
-       this._array = value;
+   _filterTweets(filterConfig){
+      return tweetArr.filter(tweet => {
+         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
+         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
+         if (filterConfig?._author) {
+            authorFilter = tweet._author.toUpperCase().includes(filterConfig._author.toUpperCase());
+         }
+         if (filterConfig?.text) {
+            textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
+         }
+         if (filterConfig?.dateFrom) {
+            dateFromFilter = tweet._createdAt >= filterConfig.dateFrom;
+         }
+         if (filterConfig?.dateTo) {
+            dateToFilter = tweet._createdAt <= filterConfig.dateTo;
+         }
+         if (filterConfig?.hashtags) {
+            hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
+         }
+         //console.log('filter', tweet, textFilter, authorFilter)
+         return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
+      })
    }
-   get array(){
-       return this._array;
+
+   add(tweet) {
+      if (tweet.length <= 280) {
+         const newTweet = new Tweet(tweet);
+         tweetArr.push(newTweet);
+         return true;
+      } else {
+         return false;
+      }
+   };
+
+   edit(id, text) {
+      const tweet = this._getTweet(id);
+      console.log(tweet)
+      if (tweet.author === this._user && text.length <= 280) {
+          tweet.text = text;
+         return true;
+      } else {
+         return false;
+      }
    }
-   
-   getPage(skip = 0, top = 10, filterConfig = {}){
-     const sortedTweets = tweetArr.sort((a, b) => b._createdAt - a._createdAt);
-     const filterAr = this._filterTweets(filterConfig);
-      console.log(filterAr);
-     if(skip >= 0 && skip <= top && filterConfig){
-        return filterAr && filterAr.slice(skip, top + skip);
-     }else if(!filterConfig && skip >= 0 && skip <= top){
-        return sortedTweets.slice(skip, top + skip);
-     }else{
-        return "invalid parameter";
-     }
-  }
-  _filterTweets(filterConfig){
-     return tweetArr.filter(tweet => {
-        let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
-        authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-        if (filterConfig?._author) {
-           authorFilter = tweet._author.toUpperCase().includes(filterConfig._author.toUpperCase());
-        }
-        if (filterConfig?.text) {
-           textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
-        }
-        if (filterConfig?.dateFrom) {
-           dateFromFilter = tweet._createdAt >= filterConfig.dateFrom;
-        }
-        if (filterConfig?.dateTo) {
-           dateToFilter = tweet._createdAt <= filterConfig.dateTo;
-        }
-        if (filterConfig?.hashtags) {
-           hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
-        }
-        //console.log('filter', tweet, textFilter, authorFilter)
-        return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
-     })
-  }
 
-  add(tweet) {
-     if (tweet.length <= 280) {
-        const newTweet = new Tweet(tweet);
-        tweetArr.push(newTweet);
-        return true;
-     } else {
-        return false;
-     }
-  };
+    remove(id) {
+      const tweet = this._getTweet(id);
+      const index = tweetArr.findIndex(elem => elem._id === id);
+       console.log(tweet._author)
+      if (index !== -1 && tweet._author ===this._user) {
+         tweetArr.splice(index, 1);
+         return true;
+      } else {
+         return false;
+      }
+   }
 
-  edit(id, text) {
-     const tweet = this._getTweet(id);
-     if (tweet.author === this._user && text.length <= 280) {
-         tweet.text = text;
-        return true;
-     } else {
-        return false;
-     }
-  }
+   addComment(id, text){
+      const tweet = this._getTweet(id);
+      const date = new Date();
+      if (tweet && text.length <= 280) {
+         const newComment = new Comment(text)
+         tweet.comments.push(newComment);
+         return true;
+      } else {
+         return false;
+      }
+   }
+      _getTweet(id) {
+      return tweetArr.find(function (item) {
+         if (id)
+            return item._id === id;
+      })
+   }
 
-   remove(id) {
-     const tweet = this._getTweet(id);
-     const index = tweetArr.findIndex(elem => elem._id === id);
-      console.log(tweet._author)
-     if (index !== -1 && tweet._author ===this._user) {
-        tweetArr.splice(index, 1);
-        return true;
-     } else {
-        return false;
-     }
-  }
-
-  addComment(id, text){
-     const tweet = this._getTweet(id);
-     const date = new Date();
-     if (tweet && text.length <= 280) {
-        const newComment = new Comment(text)
-        tweet.comments.push(newComment);
-        return true;
-     } else {
-        return false;
-     }
-  }
-     _getTweet(id) {
-     return tweetArr.find(function (item) {
-        if (id)
-           return item._id === id;
-     })
-  }
+   addAll(tweetCollection){
+      const tweetNoValid = [];
+       tweetCollection.map((tw) => {
+             if(Tweet.validate(tw)){
+                tweetArr.push(new Tweet(tw));
+             }else{
+                tweetNoValid.push(tw);
+             } 
+       })
+      return tweetNoValid;
+   }
 }
 class Comment{
     text;
