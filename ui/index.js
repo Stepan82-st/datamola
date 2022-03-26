@@ -345,7 +345,6 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.validateComment(badComment));
 //console.log(tweets);
 
-
 class Tweet {
    _id;
    _author;
@@ -397,16 +396,26 @@ class Tweet {
 }
 class TweetCollection {
    _user;
+   set newName(newFirstName) {
+      _user = newFirstName;
+    };
+  
+    get newName() {
+      return _user;
+    }
+
    constructor(array) {
       this._user = 'Брыль Степан';
       this.array = array;
    }
+
    set array(value) {
       if (!value) {
          return "No value";
       }
       this._array = value;
    }
+
    get array() {
       return this._array;
    }
