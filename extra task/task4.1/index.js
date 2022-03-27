@@ -7,19 +7,15 @@ class Node {
       this.next = nextNode || null;
     }
   }
-  
   class List {
     root;
-  
     constructor(rootValue) {
       this.root = new Node(rootValue);
     }
-  
+
     addNode(value, i) {
-  
       let count = 0;
       const findNode = (node, i) => {
-       // console.log('find node', index, 'count -', count);
         if (node.next && ((count < i) || !i)) {
           count++;
           return findNode(node.next, i);
@@ -32,14 +28,14 @@ class Node {
   
       if (i !== undefined) {
         const previousNode = findNode(this.root, i - 1);
-        // previousNode.next = new Node(value, foundNode);
   
         console.log('foundNode', i, ' found:', foundNode, 'prev: ', previousNode);
   
       } else {
         foundNode.next = new Node(value);
+        return true;
       }
-  
+     return false;
     }
   
   }
