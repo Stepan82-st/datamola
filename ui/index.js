@@ -1,3 +1,4 @@
+/* eslint-disable no-setter-return */
 'use strict'
 const tweets = [{
       id: '1',
@@ -397,11 +398,15 @@ class Tweet {
 class TweetCollection {
    _user;
    set newName(newFirstName) {
-      _user = newFirstName;
-    };
+      if(newFirstName){
+      this._user = newFirstName;
+      }else{
+         return new Error('No user')
+      }
+    }
   
     get newName() {
-      return _user;
+      return this._user;
     }
 
    constructor(array) {
@@ -411,7 +416,7 @@ class TweetCollection {
 
    set array(value) {
       if (!value) {
-         return "No value";
+         return new Error("No value")
       }
       this._array = value;
    }
@@ -463,7 +468,7 @@ class TweetCollection {
       } else {
          return false;
       }
-   };
+   }
 
    edit(id, text) {
       const tweet = this._getTweet(id);
