@@ -1,5 +1,7 @@
 /* eslint-disable no-setter-return */
+/* eslint-disable no-unused-vars */
 'use strict'
+
 const tweets = [{
       id: '1',
       text: 'Привет! #js #datamola',
@@ -193,7 +195,7 @@ const badComment = {
 const text = 'hello';
 const badText = "helloo jkjxcjzkjckj kjkjksjfksjkdj ksjdkljfkjskd kjhhhhdfkdl;l; ;l;jkjxcjzkjckjld;slf;l;dl;l ;l;ldssjnkjfnjkn njndsnfjnjsndj jnsjdfnjn hdsbfhbsb sbdhbbshbfbsbf bsbfuyefy sbfkjbdfkjkj sjkfnnjnsk sjnfkjndjknjsdnjnsjnfjkd nsdkjnfjnsjfdnjksn sjndfjnsjfsn jsdnfjdsknfjk jsnfdjndj dsjnfjs";
 const tweetFunc = (function () {
-   const user = 'Брыль Степан';
+  
   
    function getTweets(skip = 0, top = 10, filterConfig) {
       const sortedTweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
@@ -345,7 +347,7 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
 //console.log(tweets);
-
+const user = 'Брыль Степан';
 class Tweet {
    _id;
    _author;
@@ -396,21 +398,21 @@ class Tweet {
    }
 }
 class TweetCollection {
-   _user;
+   user;
    set newName(newFirstName) {
       if(newFirstName){
-      this._user = newFirstName;
+      this.user = newFirstName;
       }else{
-         return new Error('No user')
+         return new Error('No user');
       }
     }
   
     get newName() {
-      return this._user;
+      return this.user;
     }
 
    constructor(array) {
-      this._user = 'Брыль Степан';
+      this.user = 'Брыль Степан';
       this.array = array;
    }
 
@@ -558,9 +560,7 @@ class Comment {
    }
 }
 
-const tweetArr = [];
-const tweetCollection = new TweetCollection();
-const tweetNoValid = tweetCollection.addAll(tweets);
+/*
 console.log(tweetNoValid);
 console.log(tweetArr);
 console.log(tweetCollection.getPage(10, 10, {hashtags: ['#js']}))
@@ -575,3 +575,55 @@ console.log(tweetCollection.remove('3'));
 console.log(tweetArr);
 console.log(tweetCollection.addComment('3', 'What are you doing again?'));
 console.log(tweetCollection.clear(tweetArr));
+*/
+
+// eslint-disable-next-line no-unused-vars
+class HeaderView {
+
+   constructor(idUser){
+      this.containerId = idUser;
+   }
+   display(params){
+     const header = document.getElementById(`name-user`); 
+     if(!params) params = this.containerId; 
+     header.innerHTML = `<h2>${params}</h2>`
+     console.log(header)
+   }
+}
+
+// eslint-disable-next-line no-unused-vars
+class TweetFeedView{
+    
+   constructor(id){
+      this.containerId = id;
+   }
+}
+
+class TweetView{
+   constructor(idTweet) {
+      this.containerId = idTweet;
+   }
+   display(params){
+      if(!params) params = this.containerId; 
+      const tweetId = tweetCollection._getTweet(`${params}`);
+      const myArticle = document.querySelector(`.tweet-body`);
+      myArticle.innerHTML = `
+      <div class="tweet-header-info" id = "${tweetId.id}">
+      <span class="name-autor">${tweetId.author}</span>
+      <span class="data-message">${tweetId.createdAt}</span>
+        </div>
+        <span class="text-message">${tweetId.text}</span>
+        <div class = "comments">${tweetId.comments.length}</div>`
+}
+}
+const tweetArr = []; // tweetCollection
+const tweetCollection = new TweetCollection();
+const tweetNoValid = tweetCollection.addAll(tweets);
+console.log(tweetArr)
+//const tweet1 = new Tweet('Hello I am showing this tweet');
+//let tweet2 = new Tweet('Hello my text!');
+let tweetV = new TweetView('1');
+tweetV.display("2");
+let userTweet = new HeaderView()
+userTweet.display('Stepan Bryl')
+console.log(userTweet);
