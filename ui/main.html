@@ -286,17 +286,17 @@
         <section class="section filter" id="filter">
             <form action="/somewhere_else.html" method="post" class="filter">
                 <label for="POST-tweet">Search name:</label>
-                <input class="input" type="text" name="name">
+                <input class="input" id="input-user" type="text" name="username">
                 <label for="POST-name">Search tweet:</label>
-                <input class="input" id="POST-name" autocomplete="on" type="text" name="name">
+                <input class="input" id="POST-name" autocomplete="on" type="text" name="value">
                 <label for="start">Date start:</label>
-                <input class="input" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2022-02-28"><br>
+                <input class="input" id="input-dateto" type="date" name="value" value="2018-07-22" min="2018-01-01" max="2022-04-28"><br>
                 <label for="end">Date end:</label>
-                <input class="input" type="date" id="end" name="trip-end" value="2021-08-22" min="2018-01-01" max="2022-02-28"><br>
+                <input class="input" type="date" id="input-datefrom" name="value" value="2021-08-22" min="2018-01-01" max="2022-04-28"><br>
                 <label for="heshtag">Search heshtags:</label>
-                <input class="input" type="text" name="add heshtag">
-                <input type="submit" name="add heshtag" class="btn input-btn heshtag-btn" value="Add heshtag"><br>
-                <input class="btn find-btn" type="submit" value="Find"><br>
+                <input class="input" id="input-hashtags" type="text" name="add heshtag">
+                <input type="submit" id="btn-hashtags" name="add heshtag" class="btn input-btn hashtag-btn" value="Add hashtag"><br>
+                <input class="btn find-btn" id="btn-find" type="submit" value="Find"><br>
     </form></section>
     </div>
   </main>
