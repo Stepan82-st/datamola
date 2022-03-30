@@ -376,8 +376,8 @@ class Tweet {
    constructor(options) {
       this.text = options.text || options;
       this._id = options.id || this._uniqueID().toString();
-      this._author = options.author || new TweetCollection()._user;
-      this._createdAt = options.createdAt || new Date();
+      this._author = options.author || new TweetCollection().user;
+      this._createdAt = options.createdAt || new Date().toLocaleString();
       this.comments = (options.comments) ? options.comments.map((com) => new Comment(com)) : [];
    }
    _validateText(text) {
@@ -400,19 +400,19 @@ class Tweet {
 class TweetCollection {
    user;
    set newName(newFirstName) {
-      if(newFirstName){
-      this.user = newFirstName;
-      }else{
+      if (newFirstName) {
+         this.user = newFirstName;
+      } else {
          return new Error('No user');
       }
-    }
-  
-    get newName() {
+   }
+
+   get newName() {
       return this.user;
-    }
+   }
 
    constructor(array) {
-      this.user = 'Брыль Степан';
+      this.user = user;
       this.array = array;
    }
 
@@ -427,11 +427,17 @@ class TweetCollection {
       return this._array;
    }
 
-   getPage(skip = 0, top = 10, filterConfig = {}) {
+   getPage(filterConfig = {}, skip, top) {
       const sortedTweets = tweetArr.sort((a, b) => b._createdAt - a._createdAt);
-      const filterAr = this._filterTweets(filterConfig);
-      if (skip >= 0 && skip <= top && filterConfig) {
-         return filterAr && filterAr.slice(skip, top + skip);
+      const filterArray = this._filterTweets(filterConfig);
+      console.log(filterArray)
+      if(!skip && !top && filterConfig){
+        skip = 0;
+        top = 10;
+        return filterArray.slice(skip, top + skip)
+      }
+      else if (skip >= 0 && skip <= top && filterConfig) {
+         return filterArray.slice(skip, top + skip);
       } else if (!filterConfig && skip >= 0 && skip <= top) {
          return sortedTweets.slice(skip, top + skip);
       } else {
@@ -439,11 +445,12 @@ class TweetCollection {
       }
    }
    _filterTweets(filterConfig) {
+      console.log(filterConfig);
       return tweetArr.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-         if (filterConfig?._author) {
-            authorFilter = tweet._author.toUpperCase().includes(filterConfig._author.toUpperCase());
+         if (filterConfig?.author) {
+            authorFilter = tweet._author.toUpperCase().includes(filterConfig.author.toUpperCase());
          }
          if (filterConfig?.text) {
             textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
@@ -457,7 +464,7 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-         //console.log('filter', tweet, textFilter, authorFilter)
+         console.log('filter', tweet, textFilter, authorFilter)
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -510,9 +517,9 @@ class TweetCollection {
       })
    }
 
-   addAll(tweetCollection) {
+   addAll(array) {
       const tweetNoValid = [];
-      tweetCollection.map((tw) => {
+      array.map((tw) => {
          if (Tweet.validate(tw)) {
             tweetArr.push(new Tweet(tw));
          } else {
@@ -549,8 +556,8 @@ class Comment {
    constructor(options) {
       this.text = options.text || options;
       this._id = options.id;
-      this._createdAt = options.createdAt || new Date();
-      this._author = options.author || new TweetCollection()._user;
+      this._createdAt = options.createdAt || new Date().toLocaleString();
+      this._author = options.author || new TweetCollection().user;
    }
    _validateText(text) {
       return text.length <= 280;
@@ -580,50 +587,133 @@ console.log(tweetCollection.clear(tweetArr));
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
 
-   constructor(idUser){
+   constructor(idUser) {
       this.containerId = idUser;
    }
-   display(params){
-     const header = document.getElementById(`name-user`); 
-     if(!params) params = this.containerId; 
-     header.innerHTML = `<h2>${params}</h2>`
-     console.log(header)
+   display(params) {
+      const header = document.getElementById(this.containerId);
+      header.innerHTML = `<h2>${params}</h2>`;
    }
 }
 
 // eslint-disable-next-line no-unused-vars
-class TweetFeedView{
-    
-   constructor(id){
-      this.containerId = id;
+class TweetFeedView {
+
+   constructor(idPage) {
+      this.containerId = idPage;
+   }
+   display(params) {
+      console.log(params)
+      const conteiner = document.getElementById(this.containerId);
+      let tweetLine = new TweetCollection();
+      let tweetItog = tweetLine.getPage(params);
+      console.log('tweetFeedView',tweetItog)
+      conteiner.innerHTML = tweetItog.map(item =>
+         (item.author === user) ?
+         `<article class="tweet-wrap ">
+        <div class="tweet-header">
+        <div class="tweet-header-info" id = "${item.id}">
+        <span class="name-autor">${item.author}</span>
+        <span class="data-message">${item.createdAt}</span>
+          </div>
+          <span class="text-message">${item.text}</span>
+          <div class = "comments">${item.comments.length}</div>
+          </div>
+          <input type="submit" name="delete" class="btn delete-btn" value="Delete">
+          <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
+           </article>
+          ` :
+         `<article class="tweet-wrap ">
+            <div class="tweet-header">
+            <div class="tweet-header-info" id = "${item.id}">
+            <span class="name-autor">${item.author}</span>
+            <span class="data-message">${item.createdAt}</span>
+              </div>
+              <span class="text-message">${item.text}</span>
+              <div class = "comments">${item.comments.length}</div>
+              </div> </article>
+              `
+      ).join(`\n`)
    }
 }
-
-class TweetView{
-   constructor(idTweet) {
-      this.containerId = idTweet;
+class TweetView {
+   constructor(idPage) {
+      this.containerId = idPage;
    }
-   display(params){
-      if(!params) params = this.containerId; 
+   display(params) {
       const tweetId = tweetCollection._getTweet(`${params}`);
-      const myArticle = document.querySelector(`.tweet-body`);
-      myArticle.innerHTML = `
-      <div class="tweet-header-info" id = "${tweetId.id}">
+      const myArticle = document.getElementById(this.containerId);
+      myArticle.innerHTML =
+         `<div class="tweet-header-info" id = "${tweetId.id}">
       <span class="name-autor">${tweetId.author}</span>
       <span class="data-message">${tweetId.createdAt}</span>
         </div>
         <span class="text-message">${tweetId.text}</span>
         <div class = "comments">${tweetId.comments.length}</div>`
+   }
 }
-}
-const tweetArr = []; // tweetCollection
+
+class FilterView{
+   constructor(idPage){
+      this.containerId = idPage;
+   }
+        display(params){
+        const result = document.getElementById(this.containerId);
+        const inputUser = document.getElementById('input-user');
+        const inputDateTo = document.getElementById('input-dateto'); 
+        const inputTweet = document.getElementById('POST-name');
+        const inputDateFrom = document.getElementById('input-datefrom');
+        const inputHashtags = document.getElementById('input-hashtags');
+        const btnHashtags = document.getElementById('btn-hashtags');
+        const btnFind = document.getElementById('btn-find');
+        inputUser.value = params;
+        console.log(params)
+        if(inputUser.value !== -1){  
+         return new TweetFeedView(this.containerId).display({author:params});
+        }
+        if(inputDateTo.value !== -1){
+         return new TweetFeedView(this.containerId).display({createdAt:params});
+        }
+        if(inputDateFrom.value !== -1){
+         return new TweetFeedView(this.containerId).display({createdAt:params});
+        }
+        if(inputTweet.value !== -1){
+         return new TweetFeedView(this.containerId).display({text:params});
+        }
+        if(inputHashtags.value !== -1){
+         return new TweetFeedView(this.containerId).display({hashtags:[params]});
+        }
+    }
+   }
+
+const tweetArr = []; // Глобальный массив валидных твитов;
 const tweetCollection = new TweetCollection();
-const tweetNoValid = tweetCollection.addAll(tweets);
-console.log(tweetArr)
-//const tweet1 = new Tweet('Hello I am showing this tweet');
-//let tweet2 = new Tweet('Hello my text!');
-let tweetV = new TweetView('1');
-tweetV.display("2");
-let userTweet = new HeaderView()
-userTweet.display('Stepan Bryl')
-console.log(userTweet);
+const tweetNoValid = tweetCollection.addAll(tweets); // отсортировал tweets в tweetArr!!!
+/*
+console.log(tweetCollection.getPage({
+   author: 'Брыль Степан'
+}))
+*/
+const myArt = document.getElementById('tweet-body');
+const inputUser = document.getElementById('input-user');
+inputUser.value = 'Ivan Stepanovich';
+console.log(inputUser.value);
+ 
+
+function setCurrentUser(newName){
+   let result = new TweetCollection();
+   let show = new HeaderView('name-user');
+   return show.display(newName),
+          result.user = newName;
+}
+setCurrentUser("Vasiy");
+let filterView = new FilterView('my-article');
+filterView.display('Брыль Степан');
+//let tweetV = new TweetView('tweet-body');
+//tweetV.display("2");
+//let userTweet = new HeaderView(`name-user`)
+//userTweet.display('Stepan Bryl')
+//let lineTweet = new TweetFeedView('my-article');
+//lineTweet.display(0, 10, {text:'дела'});
+//console.log(lineTweet)
+//console.log(userTweet);
