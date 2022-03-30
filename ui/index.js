@@ -146,7 +146,7 @@ const tweets = [{
    },
    {
       id: '18',
-      text: 'Привет! #js #datamola',
+      text: 'Привет! #hi #datamola',
       createdAt: new Date('2020-03-10T23:00:00'),
       author: 'Колугин Иван',
       comments: []
@@ -431,14 +431,15 @@ class TweetCollection {
       const sortedTweets = tweetArr.sort((a, b) => b._createdAt - a._createdAt);
       const filterArray = this._filterTweets(filterConfig);
       console.log(filterArray)
-      if(!skip && !top && filterConfig){
-        skip = 0;
-        top = 10;
-        return filterArray.slice(skip, top + skip)
-      }
-      else if (skip >= 0 && skip <= top && filterConfig) {
+      if (!skip && !top && filterConfig) {
+         skip = 0;
+         top = 10;
+         return filterArray.slice(skip, top + skip)
+      } else if (skip >= 0 && skip <= top && filterConfig) {
          return filterArray.slice(skip, top + skip);
-      } else if (!filterConfig && skip >= 0 && skip <= top) {
+      } else if (!filterConfig && !skip && !skip) {
+         skip = 0;
+         top = 10;
          return sortedTweets.slice(skip, top + skip);
       } else {
          return "invalid parameter";
@@ -464,7 +465,7 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-         console.log('filter', tweet, textFilter, authorFilter)
+        // console.log('filter', tweet, textFilter, authorFilter, hashtagsFilter)
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -603,11 +604,11 @@ class TweetFeedView {
       this.containerId = idPage;
    }
    display(params) {
-      console.log(params)
+      //console.log(params)
       const conteiner = document.getElementById(this.containerId);
       let tweetLine = new TweetCollection();
       let tweetItog = tweetLine.getPage(params);
-      console.log('tweetFeedView',tweetItog)
+      // console.log('tweetFeedView',tweetItog)
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === user) ?
          `<article class="tweet-wrap ">
@@ -653,42 +654,29 @@ class TweetView {
    }
 }
 
-class FilterView{
-   constructor(idPage){
+class FilterView {
+   constructor(idPage) {
       this.containerId = idPage;
    }
-        display(params){
-        const result = document.getElementById(this.containerId);
-        const inputUser = document.getElementById('input-user');
-        const inputDateTo = document.getElementById('input-dateto'); 
-        const inputTweet = document.getElementById('POST-name');
-        const inputDateFrom = document.getElementById('input-datefrom');
-        const inputHashtags = document.getElementById('input-hashtags');
-        const btnHashtags = document.getElementById('btn-hashtags');
-        const btnFind = document.getElementById('btn-find');
-        inputUser.value = params;
-        console.log(params)
-        if(inputUser.value !== -1){  
-         return new TweetFeedView(this.containerId).display({author:params});
-        }
-        if(inputDateTo.value !== -1){
-         return new TweetFeedView(this.containerId).display({createdAt:params});
-        }
-        if(inputDateFrom.value !== -1){
-         return new TweetFeedView(this.containerId).display({createdAt:params});
-        }
-        if(inputTweet.value !== -1){
-         return new TweetFeedView(this.containerId).display({text:params});
-        }
-        if(inputHashtags.value !== -1){
-         return new TweetFeedView(this.containerId).display({hashtags:[params]});
-        }
-    }
+
+   display(inputName, param) {
+      inputName.value = param;
+      console.log(inputName, param)
+      return new TweetFeedView(this.containerId).display({
+         author: inputUser.value,
+         createdAt: inputDateTo.value && inputDateFrom.value,
+         text: inputTweet.value,
+         hashtags: [inputHashtags.value]
+      });
+
    }
+}
 
 const tweetArr = []; // Глобальный массив валидных твитов;
 const tweetCollection = new TweetCollection();
 const tweetNoValid = tweetCollection.addAll(tweets); // отсортировал tweets в tweetArr!!!
+//tweetCollection.getPage({author: 'Николаев Иван',
+//hashtags: ['#hi']});
 /*
 console.log(tweetCollection.getPage({
    author: 'Брыль Степан'
@@ -696,24 +684,36 @@ console.log(tweetCollection.getPage({
 */
 const myArt = document.getElementById('tweet-body');
 const inputUser = document.getElementById('input-user');
-inputUser.value = 'Ivan Stepanovich';
-console.log(inputUser.value);
- 
+const inputDateTo = document.getElementById('input-dateto');
+const inputTweet = document.getElementById('POST-name');
+const inputDateFrom = document.getElementById('input-datefrom');
+const inputHashtags = document.getElementById('input-hashtags');
+const btnHashtags = document.getElementById('btn-hashtags');
+const btnFind = document.getElementById('btn-find');
 
-function setCurrentUser(newName){
+let filterView = new FilterView('my-article');
+filterView.display(inputUser, 'Николаев Иван');
+filterView.display(inputHashtags, '#hi');
+
+
+function setCurrentUser(newName) {
    let result = new TweetCollection();
    let show = new HeaderView('name-user');
    return show.display(newName),
-          result.user = newName;
+      result.user = newName;
 }
+
+function addTweet(text) {
+   let newTweet = new TweetCollection().add(text);
+   new TweetFeedView('my-article');
+}
+addTweet('Posmotri do you see this tweet?')
 setCurrentUser("Vasiy");
-let filterView = new FilterView('my-article');
-filterView.display('Брыль Степан');
+//let tweetFeedView = new TweetCollection('my-article');
+//   tweetFeedView.display();
+//let filterView = new FilterView('my-article');
+//filterView.display('Брыль Степан');
 //let tweetV = new TweetView('tweet-body');
 //tweetV.display("2");
 //let userTweet = new HeaderView(`name-user`)
-//userTweet.display('Stepan Bryl')
-//let lineTweet = new TweetFeedView('my-article');
-//lineTweet.display(0, 10, {text:'дела'});
-//console.log(lineTweet)
-//console.log(userTweet);
+//userTweet.display('Stepan Bryl');
