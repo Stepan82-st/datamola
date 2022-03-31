@@ -440,7 +440,6 @@ class TweetCollection {
    getPage(filterConfig = {}, skip, top) {
       const sortedTweets = _tweetArr.sort((a, b) => b._createdAt - a._createdAt);
       const filterArray = this._filterTweets(filterConfig);
-      console.log(filterArray)
       if (!skip && !top && filterConfig) {
          skip = 0;
          top = 10;
@@ -456,7 +455,6 @@ class TweetCollection {
       }
    }
    _filterTweets(filterConfig) {
-      console.log(filterConfig);
       return _tweetArr.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
@@ -475,7 +473,6 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-         console.log('filter', tweet, textFilter, authorFilter, hashtagsFilter)
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -614,7 +611,6 @@ class TweetFeedView {
       this.containerId = idPage;
    }
    display(params, skip, top) {
-      console.log(params)
       const conteiner = document.getElementById(this.containerId);
       let tweetLine = new TweetCollection();
       let nameUser = new User();
@@ -654,7 +650,6 @@ class TweetView {
    display(params) {
       const tweetId = tweetCollection._getTweet(params);
       const myArticle = document.getElementById(this.containerId);
-   
       myArticle.innerHTML =
          `<div class="tweet-header-info" id = "${tweetId.id}">
       <span class="name-autor">${tweetId.author}</span>
@@ -672,7 +667,6 @@ class FilterView {
 
    display(inputName, param) {
       inputName.value = param;
-      console.log(inputName, param)
       return new TweetFeedView(this.containerId).display({
          author: inputUser.value,
          createdAt: inputDateTo.value && inputDateFrom.value,
@@ -706,7 +700,8 @@ const btnFind = document.getElementById('btn-find');
 //let filterView = new FilterView('my-article');
 //filterView.display(inputUser, 'Николаев Иван');
 //filterView.display(inputHashtags, '#hi');
-
+//user.name = setCurrentUser('Иван Петрович');
+//console.log(user.name);
 function setCurrentUser(newName) {
    let result = new User(newName);
    USERS.push(result)
@@ -716,8 +711,7 @@ function setCurrentUser(newName) {
    show.display(user.name)
    return user.name;
 }
-user.name = setCurrentUser('Иван Петрович');
-console.log(user.name);
+
 function addTweet(text) {
    let newTweets = new TweetCollection().add(text);
    new TweetFeedView('my-article').display();
