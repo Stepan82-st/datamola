@@ -347,21 +347,17 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
 //console.log(tweets);
-class User {
-   constructor(name) {
-     this.name = name;
+class GetStageUser {
+   constructor(options) {
+     this.user = options.user || options;
+     this.stage = options.stage || new TweetCollection(options);
+   }
+   getStage(name){
+    
+    
    }
  }
  
- const USERS = [
-   new User('Брыль Степан'),
-   new User('Калякин Иван')
- ]
- function setUser(nameUser){
-return USERS.find(user => user.name === nameUser);
-}
-let user = setUser('Брыль Степан');
-console.log(user.name)
 class Tweet {
    _id;
    _author;
@@ -390,7 +386,7 @@ class Tweet {
    constructor(options) {
       this.text = options.text || options;
       this._id = options.id || this._uniqueID().toString();
-      this._author = options.author || new User().name;
+      this._author = options.author || new TweetCollection().user;
       this._createdAt = options.createdAt || new Date();//.toLocaleString()
       this.comments = (options.comments) ? options.comments.map((com) => new Comment(com)) : [];
    }
@@ -412,6 +408,7 @@ class Tweet {
    }
 }
 class TweetCollection {
+   user;
    set newName(newFirstName) {
       if (!newFirstName) {
          return new Error('No user');
@@ -423,7 +420,7 @@ class TweetCollection {
    }
 
    constructor(array) {
-      this.user = user || user.name;
+      this.user = 'Брыль Степан' || array.user;
       this.array = array;
    }
 
@@ -490,7 +487,7 @@ class TweetCollection {
 
    edit(id, text) {
       const tweet = this._getTweet(id);
-      if (tweet.author === this.user.name && text.length <= 280) {
+      if (tweet.author === this.user && text.length <= 280) {
          tweet.text = text;
          return true;
       } else {
@@ -501,7 +498,7 @@ class TweetCollection {
    remove(id) {
       const tweet = this._getTweet(id);
       const index = _tweetArr.findIndex(elem => elem._id === id);
-      if (index !== -1 && tweet.author === this.user.name) {
+      if (index !== -1 && tweet.author === this.user) {
          _tweetArr.splice(index, 1);
          return true;
       } else {
@@ -565,8 +562,8 @@ class Comment {
    constructor(options) {
       this.text = options.text || options;
       this._id = options.id;
-      this._createdAt = options.createdAt || new Date().toLocaleString();
-      this._author = options.author || new User().user;
+      this._createdAt = options.createdAt || new Date();
+      this._author = options.author || new TweetCollection().user;
    }
    _validateText(text) {
       return text.length <= 280;
@@ -614,32 +611,49 @@ class TweetFeedView {
    display(params, skip, top) {
       const conteiner = document.getElementById(this.containerId);
       let tweetLine = new TweetCollection();
-      let nameUser = new User();
+      let nameUser = tweetLine.user;
       let tweetItog = tweetLine.getPage(params, skip, top);
       conteiner.innerHTML = tweetItog.map(item =>
-         (item.author === nameUser.name) ?
-         `<article class="tweet-wrap ">
-        <div class="tweet-header">
-        <div class="tweet-header-info" id = "${item.id}">
-        <span class="name-autor">${item.author}</span>
-        <span class="data-message">${item.createdAt}</span>
-          </div>
-          <span class="text-message">${item.text}</span>
-          <div class = "comments">${item.comments.length}</div>
-          </div>
-          <input type="submit" name="delete" class="btn delete-btn" value="Delete">
-          <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
-           </article>
+         (item.author === nameUser) ?
+         ` <article class="tweet-wrap">
+           <div class="tweet-header">
+             <div class="tweet-header-info" id = "${item.id}">
+           <span class="name-autor">${item.author}</span>
+           <span class="data-message">${item.createdAt}</span>
+               <p class="text-message">🔥${item.text}</p> 
+             </div>
+           </div>
+           <div class="tweet-info-counts">
+             <div class="comments">
+               <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+               <div class="comment-count">${item.comments.length}</div>
+             </div>
+             <button class="btn message">
+               <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+             </button>
+           </div>
+           <input type="submit" name="delete" class="btn delete-btn" value="Delete">
+           <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
+         </article>
           ` :
-         `<article class="tweet-wrap ">
-            <div class="tweet-header">
-            <div class="tweet-header-info" id = "${item.id}">
-            <span class="name-autor">${item.author}</span>
-            <span class="data-message">${item.createdAt}</span>
-              </div>
-              <span class="text-message">${item.text}</span>
-              <div class = "comments">${item.comments.length}</div>
-              </div> </article>
+         `<article class="tweet-wrap">
+         <div class="tweet-header">
+           <div class="tweet-header-info" id = "${item.id}">
+         <span class="name-autor">${item.author}</span>
+         <span class="data-message">${item.createdAt}</span>
+             <p class="text-message">🔥${item.text}</p> 
+           </div>
+         </div>
+         <div class="tweet-info-counts">
+           <div class="comments">
+             <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+             <div class="comment-count">${item.comments.length}</div>
+           </div>
+           <button class="btn message">
+             <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+           </button>
+         </div>
+       </article>
               `
       ).join(`\n`)
    }
@@ -648,16 +662,23 @@ class TweetView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(params) {
+   display(params, idComments) {
       const tweetId = tweetCollection._getTweet(params);
       const myArticle = document.getElementById(this.containerId);
+      const andComents = document.getElementById(idComments);
       myArticle.innerHTML =
-         `<div class="tweet-header-info" id = "${tweetId.id}">
-      <span class="name-autor">${tweetId.author}</span>
-      <span class="data-message">${tweetId.createdAt}</span>
-        </div>
-        <span class="text-message">${tweetId.text}</span>
-        <div class = "comments">${tweetId.comments.length}</div>`
+         `<article class="tweet-wrap">
+         <div class="tweet-header">
+           <div class="tweet-header-info" id = "${tweetId.id}">
+         <span class="name-autor">${tweetId.author}</span>
+         <span class="data-message">${tweetId.createdAt}</span>
+             <p class="text-message">🔥${tweetId.text}</p> 
+           </div>
+         </div>
+         <div class="tweet-info-counts">
+
+         </div>
+       </article>`
    }
 }
 
@@ -704,13 +725,11 @@ const btnFind = document.getElementById('btn-find');
 //user.name = setCurrentUser('Иван Петрович');
 //console.log(user.name);
 function setCurrentUser(newName) {
-   let result = new User(newName);
-   USERS.push(result)
-   new TweetCollection(newName).user = user.name;
-   let user = setUser(newName);
+
+   new TweetCollection(newName).user = this.user;
+   
    let show = new HeaderView('name-user');
-   show.display(user.name)
-   return user.name;
+   
 }
 
 function addTweet(text) {
@@ -738,14 +757,14 @@ function showTweet(id){
    let tweetView = new TweetView('tweet-body');
    tweetView.display(id);
 }
-
-//showTweet('20');
+console.log(_tweetArr)
+showTweet('16');
 //showTweet('3');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(_tweetArr)
 //editTweet('16', 'I am edit this text!');
 //console.log(removeTweet('14'));
-//console.log(getFeed({hashtags:['#hi']}, 0, 1))
+getFeed({hashtags:['#hi']}, 0, 1)
 //let tweetFeedView = new TweetFeedView('my-article');
  //  tweetFeedView.display();
 //let filterView = new FilterView('my-article');
