@@ -360,7 +360,8 @@ class User {
  function setUser(nameUser){
 return USERS.find(user => user.name === nameUser);
 }
-let user = setUser('Брыль Степан')
+let user = setUser('Брыль Степан');
+console.log(user.name)
 class Tweet {
    _id;
    _author;
@@ -422,13 +423,13 @@ class TweetCollection {
    }
 
    constructor(array) {
-      this.user = user || new User().name;
+      this.user = user || user.name;
       this.array = array;
    }
 
    set array(value) {
       if (!value) {
-         return new Error("No value")
+         return new Error("No value");
       }
       this._array = value;
    }
@@ -443,7 +444,7 @@ class TweetCollection {
       if (!skip && !top && filterConfig) {
          skip = 0;
          top = 10;
-         return filterArray.slice(skip, top + skip)
+         return filterArray.slice(skip, top + skip);
       } else if (skip >= 0 && skip <= top && filterConfig) {
          return filterArray.slice(skip, top + skip);
       } else if (!filterConfig && !skip && !skip) {
@@ -705,8 +706,8 @@ const btnFind = document.getElementById('btn-find');
 function setCurrentUser(newName) {
    let result = new User(newName);
    USERS.push(result)
+   new TweetCollection(newName).user = user.name;
    let user = setUser(newName);
-   new TweetCollection().user = user.name;
    let show = new HeaderView('name-user');
    show.display(user.name)
    return user.name;
