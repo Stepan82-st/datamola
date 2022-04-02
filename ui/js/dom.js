@@ -408,22 +408,22 @@ class Tweet {
    }
 }
 class TweetCollection {
-   user;
-   set newName(newFirstName) {
-      if (!newFirstName) {
-         return new Error('No user');
-      }
-      this.user = newFirstName;
-   }
-   get newName() {
-      return this.user;
-   }
-
-   constructor(array) {
-      this.user = 'Брыль Степан' || array.user;
-      this.array = array;
-   }
-
+    _user;
+    set newUser(newFirstName) {
+       if (typeof newFirstName === 'string') {
+          this._user = newFirstName;
+       }
+       return new Error('No user');
+    }
+    get newUser() {
+       return this._user;
+    }
+ 
+    constructor(options) {
+       this._user = 'Брыль Степан';
+       this.array = options;
+    }
+ 
    set array(value) {
       if (!value) {
          return new Error("No value");
@@ -670,15 +670,12 @@ const inputDateFrom = document.getElementById('input-datefrom');
 const inputHashtags = document.getElementById('input-hashtags');
 const btnHashtags = document.getElementById('btn-hashtags');
 const btnFind = document.getElementById('btn-find');
-//setCurrentUser("Николаев Иван");
-//console.log(tweetCollection.user)
-//let filterView = new FilterView('my-article');
-//filterView.display(inputUser, 'Николаев Иван');
-//filterView.display(inputHashtags, '#hi');
-//user.name = setCurrentUser('Иван Петрович');
-//console.log(user.name);
+
+const user = new TweetCollection(); 
+setCurrentUser("Николаев Иван");
+console.log(user._user)
 function setCurrentUser(newName) {
- let userTwiter = new TweetCollection(newName).user;
+   user._user = newName;
    let show = new HeaderView('name-user');
    show.display(newName);
 }
@@ -708,3 +705,10 @@ setCurrentUser('Ivan');
 //let userTweet = new HeaderView(`name-user`)
 //userTweet.display('Stepan Bryl');
 //console.log(user.name)
+//setCurrentUser("Николаев Иван");
+//console.log(tweetCollection.user)
+//let filterView = new FilterView('my-article');
+//filterView.display(inputUser, 'Николаев Иван');
+//filterView.display(inputHashtags, '#hi');
+//user.name = setCurrentUser('Иван Петрович');
+//console.log(user.name);

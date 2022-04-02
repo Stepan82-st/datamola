@@ -408,20 +408,20 @@ class Tweet {
    }
 }
 class TweetCollection {
-   user;
-   set newName(newFirstName) {
-      if (!newFirstName) {
-         return new Error('No user');
+   _user;
+   set newUser(newFirstName) {
+      if (typeof newFirstName === 'string') {
+         this._user = newFirstName;
       }
-      this.user = newFirstName;
+      return new Error('No user');
    }
-   get newName() {
-      return this.user;
+   get newUser() {
+      return this._user;
    }
 
-   constructor(array) {
-      this.user = this.user || 'Брыль Степан';
-      this.array = array;
+   constructor(options) {
+      this._user = 'Брыль Степан';
+      this.array = options;
    }
 
    set array(value) {
@@ -447,7 +447,7 @@ class TweetCollection {
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
       } else if (skip >= 0 && skip <= top && !filterConfig) {
-         return filterArray.slice(skip, top + skip);
+         return sortedTweets.slice(skip, top + skip);
       } else {
          return "invalid parameter";
       }
@@ -602,7 +602,7 @@ class HeaderView {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
       header.innerHTML = `<h2>${nameUser}</h2>`;
-      console.log(newUser.user)
+      console.log(newUser._user)
       if(newUser.user === 'undefined'){
          btnRegister.innerHTML += 'Sing in';
       }else{
@@ -722,21 +722,14 @@ const inputDateFrom = document.getElementById('input-datefrom');
 const inputHashtags = document.getElementById('input-hashtags');
 const btnHashtags = document.getElementById('btn-hashtags');
 const btnFind = document.getElementById('btn-find');
+
+const user = new TweetCollection(); 
 setCurrentUser("Николаев Иван");
-//console.log(tweetCollection.user)
-//let filterView = new FilterView('my-article');
-//filterView.display(inputUser, 'Николаев Иван');
-//filterView.display(inputHashtags, '#hi');
-//user.name = setCurrentUser('Иван Петрович');
-//console.log(user.name);
+console.log(user._user)
 function setCurrentUser(newName) {
-   if(typeof newName === 'string'){
-   let userTwiter = new TweetCollection(newName).user;
+   user._user = newName;
    let show = new HeaderView('name-user');
    show.display(newName);
-}else{
-   return new TweetCollection().user = 'undefined';
-}
 }
 
 function addTweet(text) {
@@ -786,4 +779,9 @@ getFeed(0, 10, {hashtags:['#hi']});
 //tweetV.display("20");
 //let userTweet = new HeaderView(`name-user`)
 //userTweet.display('Stepan Bryl');
-//console.log(user.name)
+//console.log(tweetCollection.user)
+//let filterView = new FilterView('my-article');
+//filterView.display(inputUser, 'Николаев Иван');
+//filterView.display(inputHashtags, '#hi');
+//user.name = setCurrentUser('Иван Петрович');
+//console.log(user.name);
