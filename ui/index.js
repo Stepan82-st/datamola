@@ -592,19 +592,23 @@ console.log(tweetCollection.clear(tweetArr));
 
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
-
    constructor(idUser) {
       this.containerId = idUser;
    }
-   display(params) {
+   display(nameUser) {
       const header = document.getElementById(this.containerId);
-      header.innerHTML = `<h2>${params}</h2>`;
+      const btnRegister = document.getElementById('btn-register');
+      header.innerHTML = `<h2>${nameUser}</h2>`;
+      if(!nameUser){
+         btnRegister.innerHTML += 'Sing in';
+      }else{
+         btnRegister.innerHTML += 'Sing out';
+      }
    }
 }
 
 // eslint-disable-next-line no-unused-vars
 class TweetFeedView {
-
    constructor(idPage) {
       this.containerId = idPage;
    }
@@ -658,27 +662,44 @@ class TweetFeedView {
       ).join(`\n`)
    }
 }
+// Добавляем твит на страницу твитов с имеющимися коментариями.
 class TweetView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(params, idComments) {
-      const tweetId = tweetCollection._getTweet(params);
-      const myArticle = document.getElementById(this.containerId);
-      const andComents = document.getElementById(idComments);
+   display(idTweet) {
+      const tweetId = new TweetCollection()._getTweet(idTweet);
+      const myArticle = document.getElementById('tweet-conteiner');
+      const andComments = document.getElementById('list-comment');
+      const countMessage = document.getElementById('count-comments');
       myArticle.innerHTML =
-         `<article class="tweet-wrap">
-         <div class="tweet-header">
-           <div class="tweet-header-info" id = "${tweetId.id}">
-         <span class="name-autor">${tweetId.author}</span>
-         <span class="data-message">${tweetId.createdAt}</span>
-             <p class="text-message">🔥${tweetId.text}</p> 
-           </div>
-         </div>
-         <div class="tweet-info-counts">
-
-         </div>
-       </article>`
+         ` <div class="conteiner-massage" id = "${tweetId.id}>
+           <span class="name-autor">${tweetId.author}</span>
+           <span class="data-message">${tweetId.createdAt}</span>
+           <p class="text-message">
+           🔥${tweetId.text}
+          <a class="heshtag" href="#"> #food</a>
+          </p>
+          </div>`
+          countMessage.innerHTML =
+          `${tweetId.comments.length}`
+     andComments.innerHTML = tweetId.comments.map(item => 
+      (item)?
+     `<li class="box-result">
+     <div class="result-comment">
+       <h4>${item.author}</h4>
+       <p>
+         ${item.text}
+       </p>
+       <div class="tools-comment">
+         <span class="like">${item.createdAt}</span>
+       </div>
+     </div>
+   </li>
+     `:
+     []
+     ).join(`\n`)
+    
    }
 }
 
@@ -725,11 +746,9 @@ const btnFind = document.getElementById('btn-find');
 //user.name = setCurrentUser('Иван Петрович');
 //console.log(user.name);
 function setCurrentUser(newName) {
-
-   new TweetCollection(newName).user = this.user;
-   
+ let userTwiter = new TweetCollection(newName).user = this.user;
    let show = new HeaderView('name-user');
-   
+   show.display(newName);
 }
 
 function addTweet(text) {
@@ -753,18 +772,20 @@ function getFeed(filterConfig, skip, top){
 return true;
 }
 
-function showTweet(id){
-   let tweetView = new TweetView('tweet-body');
-   tweetView.display(id);
+//используем для отправки твита по его id на страницу твитов.
+function showTweet(idTweet){
+   let tweetView = new TweetView('conteiner-massage');
+      tweetView.display(idTweet);
 }
 console.log(_tweetArr)
-showTweet('16');
+showTweet('6');
+setCurrentUser('Ivan')
 //showTweet('3');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(_tweetArr)
 //editTweet('16', 'I am edit this text!');
 //console.log(removeTweet('14'));
-getFeed({hashtags:['#hi']}, 0, 1)
+//getFeed({hashtags:['#hi']}, 0, 1)
 //let tweetFeedView = new TweetFeedView('my-article');
  //  tweetFeedView.display();
 //let filterView = new FilterView('my-article');
