@@ -98,7 +98,7 @@ html, body {
   }
   .conteiner-massage{
     width: 57rem;
-    height: 4.5rem;
+    min-height: 4.5rem;
     padding: 1rem;
    
   }
