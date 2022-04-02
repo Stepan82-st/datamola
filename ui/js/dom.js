@@ -487,7 +487,7 @@ class TweetCollection {
 
    edit(id, text) {
       const tweet = this._getTweet(id);
-      if (tweet.author === this.user && text.length <= 280) {
+      if (tweet.author === this._user && text.length <= 280) {
          tweet.text = text;
          return true;
       } else {
@@ -498,7 +498,7 @@ class TweetCollection {
    remove(id) {
       const tweet = this._getTweet(id);
       const index = _tweetArr.findIndex(elem => elem._id === id);
-      if (index !== -1 && tweet.author === this.user) {
+      if (index !== -1 && tweet.author === this._user) {
          _tweetArr.splice(index, 1);
          return true;
       } else {

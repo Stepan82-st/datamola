@@ -489,7 +489,7 @@ class TweetCollection {
 
    edit(id, text) {
       const tweet = this._getTweet(id);
-      if (tweet.author === this.user && text.length <= 280) {
+      if (tweet.author === this._user && text.length <= 280) {
          tweet.text = text;
          return true;
       } else {
@@ -500,7 +500,7 @@ class TweetCollection {
    remove(id) {
       const tweet = this._getTweet(id);
       const index = _tweetArr.findIndex(elem => elem._id === id);
-      if (index !== -1 && tweet.author === this.user) {
+      if (index !== -1 && tweet.author === this._user) {
          _tweetArr.splice(index, 1);
          return true;
       } else {
@@ -680,10 +680,7 @@ class TweetView {
       myArticle.innerHTML =
           `<span class="name-autor">${tweetId.author}</span>
            <span class="data-message">${tweetId.createdAt}</span>
-           <p class="text-message">
-           🔥${tweetId.text}
-          <a class="heshtag" href="#"></a>
-          </p>
+           <p class="text-message">🔥${tweetId.text}</p>
           `
    }
 }
@@ -741,7 +738,7 @@ function addTweet(text) {
 
 function editTweet(id, text){
    let editTweets = new TweetCollection().edit(id, text);
-   new TweetFeedView('my-article').display();
+   new TweetView('tweet-conteiner-main').display(id);
    return editTweets;
 }
 function removeTweet(id){
