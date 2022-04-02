@@ -211,6 +211,12 @@ width: 100%;
    color: var(--color-white);
    
  }
+ .name-author{
+   color: var(--color-blue);
+ }
+ .data-message{
+   color: var(--color-blue);
+ }
  label {
   display: block;
   font: 1rem 'Fira Sans', sans-serif;

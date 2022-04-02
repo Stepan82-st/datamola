@@ -420,7 +420,7 @@ class TweetCollection {
    }
 
    constructor(array) {
-      this.user = 'Брыль Степан' || array.user;
+      this.user = this.user || 'Брыль Степан';
       this.array = array;
    }
 
@@ -435,24 +435,26 @@ class TweetCollection {
       return this._array;
    }
 
-   getPage(filterConfig = {}, skip, top) {
+   getPage(skip = 0, top = 10, filterConfig = arguments[0]) {
       const sortedTweets = _tweetArr.sort((a, b) => b._createdAt - a._createdAt);
+      console.log(filterConfig)
+      if(typeof skip !== 'number') 
+     skip = 0;
       const filterArray = this._filterTweets(filterConfig);
-      if (!skip && !top && filterConfig) {
-         skip = 0;
-         top = 10;
+      console.log(skip, top, filterConfig)
+      console.log(filterArray)
+      
+      if (filterConfig) {
          return filterArray.slice(skip, top + skip);
-      } else if (skip >= 0 && skip <= top && filterConfig) {
+      } else if (skip >= 0 && skip <= top && !filterConfig) {
          return filterArray.slice(skip, top + skip);
-      } else if (!filterConfig && !skip && !skip) {
-         skip = 0;
-         top = 10;
-         return sortedTweets.slice(skip, top + skip);
       } else {
          return "invalid parameter";
       }
    }
+         
    _filterTweets(filterConfig) {
+      console.log(filterConfig);
       return _tweetArr.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
@@ -596,10 +598,12 @@ class HeaderView {
       this.containerId = idUser;
    }
    display(nameUser) {
+      let newUser = new TweetCollection();
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
       header.innerHTML = `<h2>${nameUser}</h2>`;
-      if(!nameUser){
+      console.log(newUser.user)
+      if(newUser.user === 'undefined'){
          btnRegister.innerHTML += 'Sing in';
       }else{
          btnRegister.innerHTML += 'Sing out';
@@ -612,11 +616,12 @@ class TweetFeedView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(params, skip, top) {
+   display(...params) {
       const conteiner = document.getElementById(this.containerId);
       let tweetLine = new TweetCollection();
       let nameUser = tweetLine.user;
-      let tweetItog = tweetLine.getPage(params, skip, top);
+      let tweetItog = tweetLine.getPage(...params);
+      console.log(tweetItog)
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === nameUser) ?
          ` <article class="tweet-wrap">
@@ -671,37 +676,14 @@ class TweetView {
    display(idTweet) {
       const tweetId = new TweetCollection()._getTweet(idTweet);
       const myArticle = document.getElementById(this.containerId);
-      const listComments = document.getElementById('list-comment');
-      const countMessage = document.getElementById('count-comments');
       myArticle.innerHTML =
           `<span class="name-autor">${tweetId.author}</span>
            <span class="data-message">${tweetId.createdAt}</span>
            <p class="text-message">
            🔥${tweetId.text}
-          <a class="heshtag" href="#"> #food</a>
+          <a class="heshtag" href="#"></a>
           </p>
           `
-          if(countMessage)
-           countMessage.innerHTML =
-          `${tweetId.comments.length}`
-          if(listComments) 
-          listComments.innerHTML = tweetId.comments.map(item => 
-          (item)?
-     `<li class="box-result">
-     <div class="result-comment">
-       <h4>${item.author}</h4>
-       <p>
-         ${item.text}
-       </p>
-       <div class="tools-comment">
-         <span class="like">${item.createdAt}</span>
-       </div>
-     </div>
-   </li>
-     `:
-     []
-     ).join(`\n`)
-    
    }
 }
 
@@ -740,7 +722,7 @@ const inputDateFrom = document.getElementById('input-datefrom');
 const inputHashtags = document.getElementById('input-hashtags');
 const btnHashtags = document.getElementById('btn-hashtags');
 const btnFind = document.getElementById('btn-find');
-//setCurrentUser("Николаев Иван");
+setCurrentUser("Николаев Иван");
 //console.log(tweetCollection.user)
 //let filterView = new FilterView('my-article');
 //filterView.display(inputUser, 'Николаев Иван');
@@ -748,9 +730,13 @@ const btnFind = document.getElementById('btn-find');
 //user.name = setCurrentUser('Иван Петрович');
 //console.log(user.name);
 function setCurrentUser(newName) {
- let userTwiter = new TweetCollection(newName).user = this.user;
+   if(typeof newName === 'string'){
+   let userTwiter = new TweetCollection(newName).user;
    let show = new HeaderView('name-user');
    show.display(newName);
+}else{
+   return new TweetCollection().user = 'undefined';
+}
 }
 
 function addTweet(text) {
@@ -769,8 +755,8 @@ function removeTweet(id){
    new TweetFeedView('my-article').display();
    return removeTweets;
 }
-function getFeed(filterConfig, skip, top){
- new TweetFeedView('my-article').display(filterConfig, skip, top);
+function getFeed(...filterConfig){
+ new TweetFeedView('my-article').display(...filterConfig);
 return true;
 }
 
@@ -782,14 +768,16 @@ function showTweet(idTweet, idPage){
 }
 console.log(_tweetArr)
 //showTweet('6', 'tweet-conteiner');
-showTweet('6', 'tweet-conteiner');
-setCurrentUser('Ivan');
+showTweet('6', 'tweet-conteiner-main');
+//setCurrentUser('Николай');
 //showTweet('3');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(_tweetArr)
 //editTweet('16', 'I am edit this text!');
 //console.log(removeTweet('14'));
-//getFeed({hashtags:['#hi']}, 0, 1)
+getFeed(0, 10, {hashtags:['#hi']});
+//getFeed(0, 10);
+//getFeed({hashtags:['#hi']});
 //let tweetFeedView = new TweetFeedView('my-article');
  //  tweetFeedView.display();
 //let filterView = new FilterView('my-article');

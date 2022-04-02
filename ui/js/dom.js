@@ -608,60 +608,7 @@ class HeaderView {
 }
 
 // eslint-disable-next-line no-unused-vars
-class TweetFeedView {
-   constructor(idPage) {
-      this.containerId = idPage;
-   }
-   display(params, skip, top) {
-      const conteiner = document.getElementById(this.containerId);
-      let tweetLine = new TweetCollection();
-      let nameUser = tweetLine.user;
-      let tweetItog = tweetLine.getPage(params, skip, top);
-      conteiner.innerHTML = tweetItog.map(item =>
-         (item.author === nameUser) ?
-         ` <article class="tweet-wrap">
-           <div class="tweet-header">
-             <div class="tweet-header-info" id = "${item.id}">
-           <span class="name-autor">${item.author}</span>
-           <span class="data-message">${item.createdAt}</span>
-               <p class="text-message">🔥${item.text}</p> 
-             </div>
-           </div>
-           <div class="tweet-info-counts">
-             <div class="comments">
-               <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-               <div class="comment-count">${item.comments.length}</div>
-             </div>
-             <button class="btn message">
-               <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-             </button>
-           </div>
-           <input type="submit" name="delete" class="btn delete-btn" value="Delete">
-           <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
-         </article>
-          ` :
-         `<article class="tweet-wrap">
-         <div class="tweet-header">
-           <div class="tweet-header-info" id = "${item.id}">
-         <span class="name-autor">${item.author}</span>
-         <span class="data-message">${item.createdAt}</span>
-             <p class="text-message">🔥${item.text}</p> 
-           </div>
-         </div>
-         <div class="tweet-info-counts">
-           <div class="comments">
-             <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-             <div class="comment-count">${item.comments.length}</div>
-           </div>
-           <button class="btn message">
-             <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-           </button>
-         </div>
-       </article>
-              `
-      ).join(`\n`)
-   }
-}
+
 // Добавляем твит на страницу твитов с имеющимися коментариями
 // или в поле твита для редактирования твита.
 class TweetView {
@@ -705,23 +652,6 @@ class TweetView {
    }
 }
 
-class FilterView {
-   constructor(idPage) {
-      this.containerId = idPage;
-   }
-
-   display(inputName, param) {
-      inputName.value = param;
-      return new TweetFeedView(this.containerId).display({
-         author: inputUser.value,
-         createdAt: inputDateTo.value && inputDateFrom.value,
-         text: inputTweet.value,
-         hashtags: [inputHashtags.value]
-      });
-
-   }
-}
-
 const _tweetArr = []; // Глобальный массив валидных твитов;
 const tweetCollection = new TweetCollection();
 const tweetNoValid = tweetCollection.addAll(tweets); // отсортировал tweets в tweetArr!!!
@@ -751,27 +681,6 @@ function setCurrentUser(newName) {
  let userTwiter = new TweetCollection(newName).user;
    let show = new HeaderView('name-user');
    show.display(newName);
-}
-
-function addTweet(text) {
-   let newTweets = new TweetCollection().add(text);
-   new TweetFeedView('my-article').display();
-   return newTweets;
-}
-
-function editTweet(id, text){
-   let editTweets = new TweetCollection().edit(id, text);
-   new TweetFeedView('my-article').display();
-   return editTweets;
-}
-function removeTweet(id){
-   let removeTweets = new TweetCollection().remove(id);
-   new TweetFeedView('my-article').display();
-   return removeTweets;
-}
-function getFeed(filterConfig, skip, top){
- new TweetFeedView('my-article').display(filterConfig, skip, top);
-return true;
 }
 
 //используем для отправки твита по его id на страницу tweet 
