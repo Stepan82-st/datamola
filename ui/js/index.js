@@ -601,12 +601,13 @@ class HeaderView {
       let newUser = new TweetCollection();
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${nameUser}</h2>`;
+      newUser._user = nameUser;
+      header.innerHTML = `<h2>${newUser._user}</h2>`;
       console.log(newUser._user)
-      if(newUser.user === 'undefined'){
-         btnRegister.innerHTML += 'Sing in';
+      if(nameUser){
+         btnRegister.innerHTML = 'Sing out';
       }else{
-         btnRegister.innerHTML += 'Sing out';
+         btnRegister.innerHTML = 'Sing in';
       }
    }
 }

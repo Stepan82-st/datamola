@@ -596,15 +596,18 @@ class HeaderView {
       this.containerId = idUser;
    }
    display(nameUser) {
-      const header = document.getElementById(this.containerId);
-      const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${nameUser}</h2>`;
-      if(!nameUser){
-         btnRegister.innerHTML += 'Sing in';
-      }else{
-         btnRegister.innerHTML += 'Sing out';
-      }
-   }
+    let newUser = new TweetCollection();
+    const header = document.getElementById(this.containerId);
+    const btnRegister = document.getElementById('btn-register');
+    newUser._user = nameUser;
+    header.innerHTML = `<h2>${newUser._user}</h2>`;
+    console.log(newUser._user)
+    if(nameUser){
+       btnRegister.innerHTML = 'Sing out';
+    }else{
+       btnRegister.innerHTML = 'Sing in';
+    }
+ }
 }
 
 // eslint-disable-next-line no-unused-vars
