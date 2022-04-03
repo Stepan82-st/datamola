@@ -409,13 +409,13 @@ class Tweet {
 }
 class TweetCollection {
   _user;
-   set newUser(newFirstName) {
-      if (typeof newFirstName === 'string') {
+   setnewUser(newFirstName) {
+      if (newFirstName) {
          this._user = newFirstName;
       }
       return new Error('No user');
    }
-   get newUser() {
+   getnewUser() {
       return this._user;
    }
 
@@ -477,6 +477,7 @@ class TweetCollection {
       })
    }
 
+   
    add(tweet) {
       if (tweet.length <= 280) {
          const newTweet = new Tweet(tweet);
@@ -540,6 +541,8 @@ class TweetCollection {
       return tweetCollection.splice();
    }
 }
+
+const userThis = new TweetCollection(); // переменная для хранения имени user;
 class Comment {
    text;
    set textCom(newText) {
@@ -722,30 +725,33 @@ const btnHashtags = document.getElementById('btn-hashtags');
 const btnFind = document.getElementById('btn-find');
 
 
-setCurrentUser("Николаев Иван");
-
+console.log(userThis._user)
+setCurrentUser('Николаев Иван');
 function setCurrentUser(name) {
- const newUserName = new TweetCollection();
- newUserName.newUser = name;
-
-   let show = new HeaderView('name-user');
-   show.display(newUserName._user);
+userThis.setnewUser(name);
+let show = new HeaderView('name-user');
+    if(!userThis._user){
+       userThis._user = '';
+   show.display(userThis._user);
+}else{
+   show.display(userThis._user);
 }
-console.log(new TweetCollection()._user);
-
+}
+console.log(userThis._user);
+console.log(new TweetCollection()._user)
 function addTweet(text) {
-   let newTweets = new TweetCollection().add(text);
+   let newTweets = userThis.add(text);
    new TweetFeedView('my-article').display();
    return newTweets;
 }
 
 function editTweet(id, text){
-   let editTweets = new TweetCollection().edit(id, text);
+   let editTweets = userThis.edit(id, text);
    new TweetView('tweet-conteiner-main').display(id);
    return editTweets;
 }
 function removeTweet(id){
-   let removeTweets = new TweetCollection().remove(id);
+   let removeTweets = userThis.remove(id);
    new TweetFeedView('my-article').display();
    return removeTweets;
 }
@@ -767,7 +773,7 @@ showTweet('6', 'tweet-conteiner-main');
 //showTweet('3');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(_tweetArr)
-//editTweet('16', 'I am edit this text!');
+console.log(editTweet('16', 'I am edit this text!'));
 //console.log(removeTweet('14'));
 getFeed(0, 10, {hashtags:['#hi']});
 //getFeed(0, 10);
