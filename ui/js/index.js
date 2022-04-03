@@ -408,7 +408,7 @@ class Tweet {
    }
 }
 class TweetCollection {
-   _user;
+  _user;
    set newUser(newFirstName) {
       if (typeof newFirstName === 'string') {
          this._user = newFirstName;
@@ -421,7 +421,7 @@ class TweetCollection {
 
    constructor(options) {
       this._user = 'Брыль Степан';
-      this.array = options;
+      this._array = options;
    }
 
    set array(value) {
@@ -721,14 +721,17 @@ const inputHashtags = document.getElementById('input-hashtags');
 const btnHashtags = document.getElementById('btn-hashtags');
 const btnFind = document.getElementById('btn-find');
 
-const user = new TweetCollection(); 
+
 setCurrentUser("Николаев Иван");
-console.log(user._user)
-function setCurrentUser(newName) {
-   user._user = newName;
+
+function setCurrentUser(name) {
+ const newUserName = new TweetCollection();
+ newUserName.newUser = name;
+
    let show = new HeaderView('name-user');
-   show.display(newName);
+   show.display(newUserName._user);
 }
+console.log(new TweetCollection()._user);
 
 function addTweet(text) {
    let newTweets = new TweetCollection().add(text);
