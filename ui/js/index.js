@@ -5,40 +5,40 @@
 const tweets = [{
       id: '1',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2022-03-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
    },
    {
       id: '2',
       text: 'Какие дела?',
-      createdAt: new Date('2022-03-02T23:00:01').toLocaleString(),
+      createdAt: new Date('2022-03-02T23:00:01'),
       author: 'Брыль Степан',
       comments: [{
          id: '912',
          text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2022-03-09T23:00:05').toLocaleString(),
+         createdAt: new Date('2022-03-09T23:00:05'),
          author: 'Иванов Иван'
       }]
    },
    {
       id: '3',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-01T23:00:00').toLocaleString(),
+      createdAt: new Date('2022-03-01T23:00:00'),
       author: 'Иванов Степан',
       comments: []
    },
    {
       id: '4',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-10-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2021-10-09T23:00:00'),
       author: 'Николаев Иван',
       comments: []
    },
    {
       id: '5',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-09-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2021-09-09T23:00:00'),
       comments: []
    },
    {
@@ -625,7 +625,7 @@ class TweetFeedView {
       let tweetLine = new TweetCollection();
       let nameUser = tweetLine.user;
       let tweetItog = tweetLine.getPage(...params);
-      console.log(tweetItog)
+      console.log(tweetItog);
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === nameUser) ?
          ` <article class="tweet-wrap">
@@ -729,12 +729,14 @@ console.log(userThis._user)
 setCurrentUser('Николаев Иван');
 function setCurrentUser(name) {
 userThis.setnewUser(name);
-let show = new HeaderView('name-user');
+let showHeader = new HeaderView('name-user');
+let showTweets = new TweetFeedView('my-article');
     if(!userThis._user){
        userThis._user = '';
-   show.display(userThis._user);
+   showHeader.display(userThis._user);
 }else{
-   show.display(userThis._user);
+   showHeader.display(userThis._user);
+   showTweets.display();
 }
 }
 console.log(userThis._user);
@@ -773,10 +775,10 @@ showTweet('6', 'tweet-conteiner-main');
 //showTweet('3');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(_tweetArr)
-console.log(editTweet('16', 'I am edit this text!'));
+console.log(editTweet('19', 'I am edit this text!'));
 //console.log(removeTweet('14'));
-getFeed(0, 10, {hashtags:['#hi']});
-//getFeed(0, 10);
+//getFeed(0, 10, {hashtags:['#hi']});
+getFeed(10, 10);
 //getFeed({hashtags:['#hi']});
 //let tweetFeedView = new TweetFeedView('my-article');
  //  tweetFeedView.display();

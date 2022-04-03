@@ -5,40 +5,40 @@
 const tweets = [{
       id: '1',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2022-03-09T23:00:00'),
       author: 'Калякин Иван',
       comments: []
    },
    {
       id: '2',
       text: 'Какие дела?',
-      createdAt: new Date('2022-03-02T23:00:01').toLocaleString(),
+      createdAt: new Date('2022-03-02T23:00:01'),
       author: 'Брыль Степан',
       comments: [{
          id: '912',
          text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2022-03-09T23:00:05').toLocaleString(),
+         createdAt: new Date('2022-03-09T23:00:05'),
          author: 'Иванов Иван'
       }]
    },
    {
       id: '3',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-01T23:00:00').toLocaleString(),
+      createdAt: new Date('2022-03-01T23:00:00'),
       author: 'Иванов Степан',
       comments: []
    },
    {
       id: '4',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-10-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2021-10-09T23:00:00'),
       author: 'Николаев Иван',
       comments: []
    },
    {
       id: '5',
       text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-09-09T23:00:00').toLocaleString(),
+      createdAt: new Date('2021-09-09T23:00:00'),
       comments: []
    },
    {
@@ -346,18 +346,7 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.addComment('1', badText));
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
-//console.log(tweets);
-class GetStageUser {
-   constructor(options) {
-     this.user = options.user || options;
-     this.stage = options.stage || new TweetCollection(options);
-   }
-   getStage(name){
-    
-    
-   }
- }
- 
+
 class Tweet {
    _id;
    _author;
@@ -601,7 +590,7 @@ class HeaderView {
     const btnRegister = document.getElementById('btn-register');
     newUser._user = nameUser;
     header.innerHTML = `<h2>${newUser._user}</h2>`;
-    console.log(newUser._user)
+   // console.log(newUser._user)
     if(nameUser){
        btnRegister.innerHTML = 'Sing out';
     }else{
