@@ -684,6 +684,7 @@ class TweetView {
       const countMessage = document.getElementById('count-comments');
       if(this.containerId === 'tweet-conteiner'){
          location.href = 'tweet.html';
+         console.log('hello', tweetId.author, tweetId.createdAt);
          myArticle.innerHTML =
           `<span class="name-autor">${tweetId.author}</span>
            <span class="data-message">${tweetId.createdAt.toLocaleString()}</span>
@@ -804,8 +805,9 @@ function showTweet(idTweet, idPage){
 }
 
 setCurrentUser('Николаев Иван');
-//showTweet('6', 'tweet-conteiner');// Непаслухмяна сябе вядзе
-showTweet('6', 'tweet-conteiner-main');
+showTweet('6', 'tweet-conteiner');
+// Непаслухмяна сябе вядзе
+//showTweet('6', 'tweet-conteiner-main');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(editTweet('19', 'I am edit this text!'));
 //console.log(removeTweet('14'));
