@@ -347,17 +347,7 @@ const tweetFunc = (function () {
 //console.log(tweetFunc.validateComment(comment));
 //console.log(tweetFunc.validateComment(badComment));
 //console.log(tweets);
-class GetStageUser {
-   constructor(options) {
-     this.user = options.user || options;
-     this.stage = options.stage || new TweetCollection(options);
-   }
-   getStage(name){
-    
-    
-   }
- }
- 
+
 class Tweet {
    _id;
    _author;
@@ -581,36 +571,17 @@ const userThis = new TweetCollection(); // переменная для хран�
 const _tweetArr = []; // Глобальный массив валидных твитов;
 const tweetNoValid = userThis.addAll(tweets); // отсортировал tweets в tweetArr!!!
 
-
-
-/*
-console.log(tweetNoValid);
-console.log(tweetArr);
-console.log(tweetCollection.getPage(10, 10, {hashtags: ['#js']}))
-console.log(tweetCollection.getPage(0, 10, {text: 'дела'}));
-tweetCollection.add('Hello my friend');
-console.log(tweetArr);
-tweetCollection.edit('2', 'Hello my edit tweet');
-tweetCollection.edit('3', 'Hello my second edit tweet');
-console.log(tweetArr);
-console.log(tweetCollection.remove('2'));
-console.log(tweetCollection.remove('3'));
-console.log(tweetArr);
-console.log(tweetCollection.addComment('3', 'What are you doing again?'));
-console.log(tweetCollection.clear(tweetArr));
-*/
-
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
    constructor(idUser) {
       this.containerId = idUser;
    }
-   display() {
+   display(nameUser) {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${userThis._user}</h2>`;
-      //console.log(newUser._user)
-      if(userThis._user){
+      header.innerHTML = `<h2>${nameUser}</h2>`;
+      console.log(nameUser)
+      if(nameUser){
          btnRegister.innerHTML = 'Sing out';
       }else{
          btnRegister.innerHTML = 'Sing in';
@@ -648,7 +619,7 @@ class TweetFeedView {
            <input type="submit" name="delete" class="btn delete-btn" value="Delete">
            <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
          </article>
-          ` :
+         ` :
          `<article class="tweet-wrap">
          <div class="tweet-header">
            <div class="tweet-header-info" id = "${item.id}">
@@ -683,7 +654,7 @@ class TweetView {
       const listComments = document.getElementById('list-comment');
       const countMessage = document.getElementById('count-comments');
       if(this.containerId === 'tweet-conteiner'){
-         location.href = 'tweet.html';
+         location = 'tweet.html';
          console.log('hello', tweetId.author, tweetId.createdAt);
          myArticle.innerHTML =
           `<span class="name-autor">${tweetId.author}</span>
@@ -768,7 +739,7 @@ const btnFind = document.getElementById('btn-find');
 function setCurrentUser(name) {
 userThis.setnewUser(name);
 let showHeader = new HeaderView('name-user');
-    if(!userThis._user){
+    if(!name){
        userThis._user = '';
        showHeader.display(userThis._user)
     }else{
@@ -802,10 +773,17 @@ return true;
 function showTweet(idTweet, idPage){
    let tweetView = new TweetView(idPage);
       tweetView.display(idTweet);
-}
 
+}
+/*
+function show(shown, hidden) {
+   document.getElementById(shown).style.display='block';
+   document.getElementById(hidden).style.display='none';
+   return false;
+ }
+ */
 setCurrentUser('Николаев Иван');
-showTweet('6', 'tweet-conteiner');
+//showTweet('6', 'tweet-conteiner');
 // Непаслухмяна сябе вядзе
 //showTweet('6', 'tweet-conteiner-main');
 //console.log(addTweet('I am doing terrible this job!'));
