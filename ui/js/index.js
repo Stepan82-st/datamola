@@ -466,8 +466,8 @@ class TweetCollection {
       if(typeof skip !== 'number') 
      skip = 0;
       const filterArray = this._filterTweets(filterConfig);
-      console.log(skip, top, filterConfig)
-      console.log(filterArray)
+      //console.log(skip, top, filterConfig)
+      //console.log(filterArray)
       
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
@@ -567,6 +567,39 @@ class TweetCollection {
    }
 }
 
+class UserList {
+   constructor(name, password) {
+     this.name = name;
+     this.password = password;
+   }
+  setName(name){
+     if(!name){
+        return new Error('no name')
+     }
+     return this.name = name;
+  }
+  getName(){
+     return this.name;
+  }
+  getPassword(){
+     return this.password
+  }
+ }
+
+  function addNewUser(newUser, newPassword){
+  USERS.push(new UserList(newUser, newPassword))
+  };
+
+ const USERS = [
+   new UserList('Брыль Степан', '1234'),
+   new UserList('Николаев Иван', '4321')
+ ]
+ 
+
+ console.log(USERS)
+ let currentUser = USERS.find(user => user.name === 'Брыль Степан');
+ console.log(currentUser); 
+ 
 const userThis = new TweetCollection(); // переменная для хранения имени user;
 const _tweetArr = []; // Глобальный массив валидных твитов;
 const tweetNoValid = userThis.addAll(tweets); // отсортировал tweets в tweetArr!!!

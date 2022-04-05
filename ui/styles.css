@@ -200,6 +200,12 @@ width: 100%;
   color: var(--color-blue);
  }
  
+ #sing-in{
+   display: none;
+ }
+ #register{
+   display: none;
+ }
  .container-tweet{
    max-width: 58rem;
    min-width: 25rem;
