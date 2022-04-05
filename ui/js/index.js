@@ -728,7 +728,7 @@ class TweetView {
               <div class="bx-post">
                 <div class="pull-right">
                   <button onclick="submit_comment()" type="button" value="1">
-                    Post
+                    Add comment
                   </button>
                 </div>
               </div>
@@ -824,13 +824,13 @@ function show(shown, hidden) {
  
 setCurrentUser('Николаев Иван');
 //showTweet('6', 'tweets');
-//showTweet('6', 'comments');
+showTweet('6', 'comments');
 //console.log(addTweet('I am doing terrible this job!'));
-console.log(editTweet('19', 'I am edit this text!'));
+//console.log(editTweet('19', 'I am edit this text!'));
 //console.log(removeTweet('14'));
 //console.log(removeTweet('4'));
 //getFeed(0, 10, {hashtags:['#hi']});
-//getFeed(0, 10);
+getFeed(0, 10);
 //getFeed({hashtags:['#hi']});
 //let tweetFeedView = new TweetFeedView('my-article');
  //tweetFeedView.display();

@@ -37,7 +37,7 @@ html, body {
     overflow-y: auto;
   }
   .container-comments {
-    display: flex;
+    min-width: 100%;
     flex-direction: column;
     justify-content: space-between;
     margin: 0 auto;
@@ -100,7 +100,6 @@ html, body {
     width: 57rem;
     min-height: 4.5rem;
     padding: 1rem;
-   
   }
   .conteiner-massage span{
     color: var(--color-grey);
@@ -199,12 +198,23 @@ width: 100%;
   text-decoration: none;
   color: var(--color-blue);
  }
- 
+ #comments{
+   display: none;
+   
+ }
+ #conteiner{
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+ }
  #sing-in{
    display: none;
  }
  #register{
    display: none;
+ }
+ #tweet-conteiner{
+   padding-left: 3rem;
  }
  .container-tweet{
    max-width: 58rem;
@@ -275,6 +285,7 @@ padding-left: 20px;
 
 form.filter{
   width: 25rem;
+  padding-left: 1rem;
 }
 .filter{
     overflow: hidden;
