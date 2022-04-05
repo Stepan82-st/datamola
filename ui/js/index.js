@@ -603,6 +603,20 @@ class UserList {
 const userThis = new TweetCollection(); // переменная для хранения имени user;
 const _tweetArr = []; // Глобальный массив валидных твитов;
 const tweetNoValid = userThis.addAll(tweets); // отсортировал tweets в tweetArr!!!
+const myArt = document.getElementById('tweet-body');
+const inputUser = document.getElementById('input-user');
+const inputDateTo = document.getElementById('input-dateto');
+const inputTweet = document.getElementById('POST-name');
+const inputDateFrom = document.getElementById('input-datefrom');
+const inputHashtags = document.getElementById('input-hashtags');
+const btnAddHashtags = document.getElementById('btn-hashtags');
+const btnFind = document.getElementById('btn-find');
+const btnLoadMore = document.getElementById('load-more');
+const btnAddComment = document.getElementById('addCom');
+const btnRegister = document.getElementById('btn-register');
+const btnTweetPage = document.getElementById('btn-tweet-page');
+const btnDeleteMyTweet = document.getElementById('delete-tweet');
+const btnEditMyTweet = document.getElementById('edit-tweet');
 
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
@@ -648,8 +662,8 @@ class TweetFeedView {
                <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
              </button>
            </div>
-           <input type="submit" name="delete" class="btn delete-btn" value="Delete">
-           <input type="submit" name="Edit" class="btn input-btn edit-btn" value="Edit">
+           <button id="delete-tweet" type="submit" name="delete" class="btn delete-btn">Delete</button>
+           <button id="edit-tweet" type="submit" name="Edit" class="btn input-btn edit-btn">Edit</button>
          </article>
          ` :
          `<article class="tweet-wrap">
@@ -665,7 +679,7 @@ class TweetFeedView {
              <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
              <div class="comment-count">${item.comments.length}</div>
            </div>
-           <button class="btn message">
+           <button id="btn-tweet-page" class="btn message">
              <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
            </button>
          </div>
@@ -727,7 +741,7 @@ class TweetView {
               ></textarea>
               <div class="bx-post">
                 <div class="pull-right">
-                  <button onclick="submit_comment()" type="button" value="1">
+                  <button id="addCom" onclick="submit_comment()" type="button" value="1">
                     Add comment
                   </button>
                 </div>
@@ -766,14 +780,6 @@ class FilterView {
    }
 }
 
-const myArt = document.getElementById('tweet-body');
-const inputUser = document.getElementById('input-user');
-const inputDateTo = document.getElementById('input-dateto');
-const inputTweet = document.getElementById('POST-name');
-const inputDateFrom = document.getElementById('input-datefrom');
-const inputHashtags = document.getElementById('input-hashtags');
-const btnHashtags = document.getElementById('btn-hashtags');
-const btnFind = document.getElementById('btn-find');
 
 
 function setCurrentUser(name) {
@@ -823,8 +829,8 @@ function show(shown, hidden) {
  }
  
 setCurrentUser('Николаев Иван');
-//showTweet('6', 'tweets');
-showTweet('6', 'comments');
+showTweet('6', 'tweets');
+//showTweet('6', 'comments');
 //console.log(addTweet('I am doing terrible this job!'));
 //console.log(editTweet('19', 'I am edit this text!'));
 //console.log(removeTweet('14'));
