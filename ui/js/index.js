@@ -580,7 +580,6 @@ class HeaderView {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
       header.innerHTML = `<h2>${nameUser}</h2>`;
-      console.log(nameUser)
       if(nameUser){
          btnRegister.innerHTML = 'Sing out';
       }else{
@@ -653,21 +652,29 @@ class TweetView {
       let myArticle = document.getElementById(this.containerId);
       const listComments = document.getElementById('list-comment');
       const countMessage = document.getElementById('count-comments');
-      if(this.containerId === 'tweet-conteiner'){
-         location = 'tweet.html';
-         console.log('hello', tweetId.author, tweetId.createdAt);
-         myArticle.innerHTML =
-          `<span class="name-autor">${tweetId.author}</span>
+      const inputTweet = document.getElementById('tweet-conteiner')
+      const conteinTweet = document.getElementById("box-tweet");
+     
+      if(this.containerId === 'comments'){
+         show('comments','tweets');
+         inputTweet.style.display = 'none';
+         conteinTweet.innerHTML = 
+          ` <div class="col-md-12" id="fbcomment">
+          <div class="body-comment">
+            <ul id="list-comment" class="col-md-12"> 
+          <span class="name-autor">${tweetId.author}</span>
            <span class="data-message">${tweetId.createdAt.toLocaleString()}</span>
            <p class="text-message">
            🔥${tweetId.text}
           </p>
+          </ul>
+          </div>
+        </div>
           `
-          if(countMessage)
            countMessage.innerHTML =
           `${tweetId.comments.length}`
-          if(listComments) 
-          listComments.innerHTML = tweetId.comments.map(item => 
+         
+          myArticle.innerHTML = tweetId.comments.map(item => 
           (item)?
      `<li class="box-result">
      <div class="result-comment">
@@ -680,35 +687,35 @@ class TweetView {
        </div>
      </div>
    </li>
+   <div class="box-comment">
+              <textarea
+                class="commentar"
+                placeholder="Add a comment..."
+              ></textarea>
+              <div class="bx-post">
+                <div class="pull-right">
+                  <button onclick="submit_comment()" type="button" value="1">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
      `:
      []
      ).join(`\n`)
-          
-   }else{
-      myArticle.innerHTML =
-      `<span class="name-autor">${tweetId.author}</span>
-       <span class="data-message">${tweetId.createdAt.toLocaleString()}</span>
-       <p class="text-message">🔥${tweetId.text}</p>
+     
+   }if(this.containerId === 'tweets'){
+      show('tweets','comments');
+   
+      `${inputTweet.value = tweetId.text}
       `
+      if(countMessage)
+      countMessage.innerHTML =
+     `${tweetId.comments.length}`
    }
 }
 }
-/*
-class TweetView {
-   constructor(idPage) {
-      this.containerId = idPage;
-   }
-   display(idTweet) {
-      const tweetId = new TweetCollection()._getTweet(idTweet);
-      const myArticle = document.getElementById(this.containerId);
-      myArticle.innerHTML =
-          `<span class="name-autor">${tweetId.author}</span>
-           <span class="data-message">${tweetId.createdAt.toLocaleString()}</span>
-           <p class="text-message">🔥${tweetId.text}</p>
-          `
-   }
-}
-*/
+
 class FilterView {
    constructor(idPage) {
       this.containerId = idPage;
@@ -749,22 +756,22 @@ let showHeader = new HeaderView('name-user');
 
 function addTweet(text) {
    let newTweets = userThis.add(text);
-   new TweetFeedView('my-article').display();
+   new TweetFeedView('tweets').display();
    return newTweets;
 }
 
 function editTweet(id, text){
    let editTweets = userThis.edit(id, text);
-   new TweetView('tweet-conteiner-main').display(id);
+   new TweetView('tweets').display(id);
    return editTweets;
 }
 function removeTweet(id){
    let removeTweets = userThis.remove(id);
-   new TweetFeedView('my-article').display();
+   new TweetFeedView('tweets').display();
    return removeTweets;
 }
 function getFeed(...filterConfig){
- new TweetFeedView('my-article').display(...filterConfig);
+ new TweetFeedView('tweets').display(...filterConfig);
 return true;
 }
 
@@ -775,19 +782,18 @@ function showTweet(idTweet, idPage){
       tweetView.display(idTweet);
 
 }
-/*
+
 function show(shown, hidden) {
-   document.getElementById(shown).style.display='block';
+   document.getElementById(shown).style.display='flex'; /*container-comments*/
    document.getElementById(hidden).style.display='none';
    return false;
  }
- */
+ 
 setCurrentUser('Николаев Иван');
-//showTweet('6', 'tweet-conteiner');
-// Непаслухмяна сябе вядзе
-//showTweet('6', 'tweet-conteiner-main');
+//showTweet('6', 'tweets');
+//showTweet('6', 'comments');
 //console.log(addTweet('I am doing terrible this job!'));
-//console.log(editTweet('19', 'I am edit this text!'));
+console.log(editTweet('19', 'I am edit this text!'));
 //console.log(removeTweet('14'));
 //console.log(removeTweet('4'));
 //getFeed(0, 10, {hashtags:['#hi']});
