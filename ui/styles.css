@@ -98,7 +98,7 @@ html, body {
   }
   .conteiner-massage{
     width: 57rem;
-    height: 4.5rem;
+    min-height: 4.5rem;
     padding: 1rem;
    
   }
@@ -210,6 +210,12 @@ width: 100%;
    margin: 10px;
    color: var(--color-white);
    
+ }
+ .name-author{
+   color: var(--color-blue);
+ }
+ .data-message{
+   color: var(--color-blue);
  }
  label {
   display: block;
