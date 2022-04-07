@@ -21,8 +21,8 @@
             </ul>
           
     </div></header>
-    <main class="main" id="main">
-      <div class = "conteiner main-conteiner">
+    <main class="main" >
+      <div id="main" class = "conteiner main-conteiner">
     
         <section class="section list" id="list">
           <div class="conteiner" id="conteiner">
@@ -60,56 +60,27 @@
             <div id="comments" class="container-comments"></div>
             <button id="load-more" class="btn next-message">Load more</button>
           </div>
-          <div id="sing-in">
-            <form action="">
-                <div class="contain">
-                    <h1>Sing in</h1>
-                        <hr>
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
-        
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-        
-            <button type="submit" class="registerbtn">LogIn</button>
-            <span class="psw"> <a href="register.html">Register</a></span>
-           
-          </div>
-        </form>
-            </div>
-            <div id="register">
-              <form action="">
-                  <div class="contain">
-                    <h1>Register</h1>
-                    <hr>
-                    <label for="Uname"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="name" required>
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-                    <label for="psw-repeat"><b>Repeat Password</b></label>
-                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-                    <button type="submit" class="registerbtn">Register</button>
-                  <span class="psw"> <a href="register.html">Sing in</a></span>
-                  </div>
-                </form>
-              </div>
         </section>
+        
         <section class="section filter" id="filter">
-            <form action="/somewhere_else.html" method="post" class="filter">
+            <form action="" method="post" class="filter" name="form-filter">
                 <label for="POST-tweet">Search name:</label>
                 <input class="input" id="input-user" type="text" name="username">
                 <label for="POST-name">Search tweet:</label>
                 <input class="input" id="POST-name" autocomplete="on" type="text" name="value">
-                <label for="start">Date start:</label>
+                <label for="input-dateto">Date start:</label>
                 <input class="input" id="input-dateto" type="date" name="value" value="2018-07-22" min="2018-01-01" max="2022-04-28"><br>
-                <label for="end">Date end:</label>
+                <label for="input-datefrom">Date end:</label>
                 <input class="input" type="date" id="input-datefrom" name="value" value="2021-08-22" min="2018-01-01" max="2022-04-28"><br>
-                <label for="heshtag">Search heshtags:</label>
+                <label for="input-hashtags">Search heshtags:</label>
                 <input class="input" id="input-hashtags" type="text" name="add heshtag">
                 <input type="submit" id="btn-hashtags" name="add heshtag" class="btn input-btn hashtag-btn" value="Add hashtag"><br>
                 <input class="btn find-btn" id="btn-find" type="submit" value="Find"><br>
     </form></section>
     </div>
+    
+ 
+      
   </main>
     <footer class="footer"><div class = "conteiner">
         <nav class="nav">
