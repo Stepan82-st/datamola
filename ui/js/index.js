@@ -863,7 +863,7 @@ const btnRegisterSingin = document.getElementById('btn-register-singin')
 
 
 window.addEventListener('load', (event) => {
-
+new TweetController(tweets).getFeed();
 });
 
 function openPageSingin(){
