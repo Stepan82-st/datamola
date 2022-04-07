@@ -15,21 +15,20 @@
       <div class = "conteiner"> 
       
             <ul class="nav-list">
-              <li class="nav-item title"><a href="#" class="nav-link"><h1>Twitter</h1></a></li>
+              <li class="nav-item title"><a href="main.html" class="nav-link"><h1>Twitter</h1></a></li>
               <li id="name-user" class="nav-item user-name"></li>
-              <li class="nav-item "><button class="btn-sing-out" id="btn-register"></button></li>
+              <li class="nav-item "><button class="btn-sing-out" id="btn-register">Sing in</button></li>
             </ul>
           
     </div></header>
-    <main class="main" id="main">
-      <div class = "conteiner main-conteiner">
+    <main class="main" >
+      <div id="main" class = "conteiner main-conteiner">
     
         <section class="section list" id="list">
-          <div class="conteiner">
+          <div class="conteiner" id="conteiner">
             <div class="container-tweet">
               <div id="box-tweet"></div>
               <form class="form-tweet" action="">
-
                 <input class="conteiner-massage" type="text" id="tweet-conteiner">
 
                 <div class="footer-tweet">
@@ -58,28 +57,28 @@
               </form>
             </div>
             <div id="tweets" class="my-article"></div>
-            <div id="comments" class="container-comments">   
-             
-          </div>
-            <button class="btn next-message">Load more</button>
+            <div id="comments" class="container-comments"></div>
+            <button id="load-more" class="btn next-message">Load more</button>
           </div>
         </section>
+        
         <section class="section filter" id="filter">
-            <form action="/somewhere_else.html" method="post" class="filter">
+            <form action="" method="post" class="filter" name="form-filter">
                 <label for="POST-tweet">Search name:</label>
                 <input class="input" id="input-user" type="text" name="username">
                 <label for="POST-name">Search tweet:</label>
                 <input class="input" id="POST-name" autocomplete="on" type="text" name="value">
-                <label for="start">Date start:</label>
+                <label for="input-dateto">Date start:</label>
                 <input class="input" id="input-dateto" type="date" name="value" value="2018-07-22" min="2018-01-01" max="2022-04-28"><br>
-                <label for="end">Date end:</label>
+                <label for="input-datefrom">Date end:</label>
                 <input class="input" type="date" id="input-datefrom" name="value" value="2021-08-22" min="2018-01-01" max="2022-04-28"><br>
-                <label for="heshtag">Search heshtags:</label>
+                <label for="input-hashtags">Search heshtags:</label>
                 <input class="input" id="input-hashtags" type="text" name="add heshtag">
                 <input type="submit" id="btn-hashtags" name="add heshtag" class="btn input-btn hashtag-btn" value="Add hashtag"><br>
                 <input class="btn find-btn" id="btn-find" type="submit" value="Find"><br>
     </form></section>
     </div>
+    
   </main>
     <footer class="footer"><div class = "conteiner">
         <nav class="nav">
