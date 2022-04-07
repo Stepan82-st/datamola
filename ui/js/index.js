@@ -617,7 +617,65 @@ const btnRegister = document.getElementById('btn-register');
 const btnTweetPage = document.getElementById('btn-tweet-page');
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
+const conteinerAnyTweet = document.getElementById('some-tweet');
 
+class TweetController{
+   constructor(){
+      this.userList = new UserList();
+      this.tweet = new Tweet();
+      this.comment = new Comment();
+      this.tweetCollection = new TweetCollection();
+      this.tweetView = new TweetView();
+      this.headerView = new HeaderView();
+      this.tweetFeedView = new TweetFeedView();
+      this.filterView = new FilterView();
+   }
+     setCurrentUser(name) {
+      userThis.setnewUser(name);
+      let showHeader = new HeaderView('name-user');
+          if(!name){
+             userThis._user = '';
+             showHeader.display(userThis._user)
+          }else{
+             showHeader.display(userThis._user);
+      }
+      }
+      
+       addTweet(text) {
+         let newTweets = userThis.add(text);
+         new TweetFeedView('tweets').display();
+         return newTweets;
+      }
+      
+       editTweet(id, text){
+         let editTweets = userThis.edit(id, text);
+         new TweetView('tweets').display(id);
+         return editTweets;
+      }
+       removeTweet(id){
+         let removeTweets = userThis.remove(id);
+         new TweetFeedView('tweets').display();
+         return removeTweets;
+      }
+       getFeed(...filterConfig){
+       new TweetFeedView('tweets').display(...filterConfig);
+      return true;
+      }
+      
+      //используем для отправки твита по его id на страницу tweet 
+      //или в поле редактирования main(если он принадлежит user).
+       showTweet(idTweet, idPage){
+         let tweetView = new TweetView(idPage);
+            tweetView.display(idTweet);
+      
+      }
+      
+       show(shown, hidden) {
+         document.getElementById(shown).style.display='flex'; /*container-comments*/
+         document.getElementById(hidden).style.display='none';
+         return false;
+       }
+}
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
    constructor(idUser) {
@@ -645,7 +703,7 @@ class TweetFeedView {
       let tweetItog = userThis.getPage(...params);
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === userThis._user) ? // сравниваем с текущим юзером
-         ` <article class="tweet-wrap">
+         ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
            <span class="name-autor">${item.author}</span>
@@ -666,7 +724,7 @@ class TweetFeedView {
            <button id="edit-tweet" type="submit" name="Edit" class="btn input-btn edit-btn">Edit</button>
          </article>
          ` :
-         `<article class="tweet-wrap">
+         `<article id="some-tweet" class="tweet-wrap">
          <div class="tweet-header">
            <div class="tweet-header-info" id = "${item.id}">
          <span class="name-autor">${item.author}</span>

@@ -301,8 +301,8 @@ form.filter{
 .tweet-wrap {
   max-width:30rem;
   background: var(--color-white);
-  margin: 0;
-  margin-top: 10px;
+  margin-left: 3rem;
+  margin-top: 1rem;
   border-radius:3px;
   border-bottom: 1px solid #e6ecf0;
 
