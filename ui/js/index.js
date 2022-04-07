@@ -774,6 +774,7 @@ function show(shown, hidden) {
    document.getElementById(hidden).style.display='none';
    return false;
  }
+
 //showTweet('6', 'tweets');
 //showTweet('6', 'comments');
 //console.log(addTweet('I am doing terrible this job!'));
@@ -860,48 +861,112 @@ const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
 const btnRegisterSingin = document.getElementById('btn-register-singin')
 
+
+window.addEventListener('load', (event) => {
+
+});
+
 function openPageSingin(){
 conteinerPage.innerHTML = `
 <div id="sing-in">
-      <form action="">
+      <form action="" name="formsingin">
           <div class="contain">
               <h1>Sing in</h1>
                   <hr>
       <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
+      <input id="inputUserSing" type="text" placeholder="Enter Username" name="uname" required>
   
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
   
       <button type="submit" class="registerbtn">LogIn</button>
-       <button class='psw' id="btn-register-singin">Register</button>
+      <button class='ps' id="btn-register-singin">Register</button>
     </div>
     </form>
     </div>
 `;
 } 
+
 function openPageRegister(){
    conteinerPage.innerHTML = `
    <div id="register">
-        <form action="">
+        <form action="" id="formregister" name="form-register">
             <div class="contain">
               <h1>Register</h1>
               <hr>
               <label for="name"><b>Username</b></label>
-              <input type="text" placeholder="Enter Username" name="name" required>
-              <label for="psw"><b>Password</b></label>
-              <input type="password" placeholder="Enter Password" name="psw" required>
-              <label for="psw-repeat"><b>Repeat Password</b></label>
-              <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+              <input id="inputUserRegister" type="text" placeholder="Enter Username" name="name" required>
+              
+              <label for="password"><b>Password</b></label>
+              <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
+              
+              <label for="password-repeat"><b>Repeat Password</b></label>
+              <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="password-repeat" required>
+              
               <button type="submit" class="registerbtn">Register</button>
-            <button class='psw' id="btn-singin-register">Sing in</button>
+              <button class='psw' id="btn-singin-register">Sing in</button>
             </div>
           </form>
         </div>
-   `
+        `
+        const btnSinginRegister = document.getElementById('btn-singin-register');
+        btnSinginRegister.addEventListener('click',openPageSingin);
+       // btnSinginRegister.removeEventListener('click', openPageSingin);
 }
-btnRegister.addEventListener('click', openPageSingin);
-btnRegisterSingin.addEventListener('click', openPageRegister);
+
+btnRegister.addEventListener('click', openPageRegister);
+
+//btnRegisterSingin.addEventListener('submit', getSubmit);
+//tweetController.setCurrentUser('Ctepan');
+
+const inputUserSing = document.getElementById('inputUserSing');
+const inputPasswordSing = document.getElementById('inputUserSing');
+const inputUserRegister = document.getElementById('inputUserRegister');
+const inputPasswordRegister = document.getElementById('inputPasswordRegister');
+const inputPasswordRegisterRepeat = document.getElementById('inputPasswordRegisterRepeat');
+
+const formSingin = document.formsingin;
+const formRegister = document.getElementById('formregister');
+console.log(btnRegisterSingin);
+
+function getSubmit(event){
+event.preventDefault();
+console.log(formRegister.name.value)
+if(formRegister.password.value === formRegister.password-repeat.value){
+   tweetController.setCurrentUser(formRegister.name.value);
+   USERS.push(new UserList(formRegister.name.value, formRegister.password.value)); 
+   inputUserRegister.value = '';
+   inputPasswordRegister.value = ''; 
+   inputPasswordRegisterRepeat.value = '';
+}
+}
+
+
+function addUserRegister() {
+   const valueUserR = inputUserRegister.value;
+   const valuePasswordR = inputPasswordRegister.value;
+   const valuePasswordRegRepeat = inputPasswordRegisterRepeat.value;
+   if(!valueUserR && !valuePasswordR && !valuePasswordRegRepeat){
+     return;
+   }
+   if(valuePasswordR === valuePasswordRegRepit){
+USERS.push(new UserList(valueUserR, valuePasswordR));   
+inputUserRegister.value = '';
+inputPasswordRegister.value = ''; 
+inputPasswordRegisterRepid.value = '';
+ const list = JSON.parse(localStorage.getItem('USERS')) || [];
+ console.log(list);
+ list.push({user:valueUserR, password: valuePasswordR, done:false});
+ localStorage.setItem('USERS', JSON.stringify(list));
+   }else{
+      inputPasswordRegister.value = ''; 
+      inputPasswordRegisterRepeat.value = '';
+   }
+ }
+
+
+
+//btnRegisterSingin.addEventListener('click', openPageRegister);
 const workThis = new TweetController(tweets); // переменная для хранения имени user;
 //workThis.setCurrentUser('Брыль Степан');
 //workThis.addTweet('this very good tweet')
