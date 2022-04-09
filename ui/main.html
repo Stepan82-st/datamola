@@ -28,8 +28,8 @@
           <div class="conteiner" id="conteiner">
             <div class="container-tweet">
               <div id="box-tweet"></div>
-              <form class="form-tweet" action="">
-                <input class="conteiner-massage" type="text" id="tweet-conteiner">
+              <form class="form-tweet" name="formtweetadd" action="">
+                <textarea class="conteiner-massage" name="text" minlength="1" maxlength="280" type="text" id="tweet-conteiner"></textarea>
 
                 <div class="footer-tweet">
                   <div class="comments-message">
@@ -52,7 +52,7 @@
                     </svg>
                     <span class="footer-message" id="count-comments"></span>
                   </div>
-                  <button class="btn tweet-btn" type="submit">Tweet</button>
+                  <button  id="btn-add-tweet" class="btn tweet-btn" type="submit">Tweet</button>
                 </div>
               </form>
             </div>
