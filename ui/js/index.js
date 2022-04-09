@@ -166,6 +166,42 @@ const tweets = [{
       author: 'Колугин Иван',
       comments: []
 
+   },
+   {
+      id: '21',
+      text: 'Привет! #hi #datamola I am happy',
+      createdAt: new Date('2019-03-10T23:00:00'),
+      author: 'Колугин Иван',
+      comments: []
+   },
+   {
+      id: '22',
+      text: 'Привет! #hi #datamola what are you doing?',
+      createdAt: new Date('2019-02-08T23:00:00'),
+      author: 'Брыль Степан',
+      comments: []
+
+   },
+   {
+      id: '23',
+      text: 'Привет! #js #datamola',
+      createdAt: new Date('2019-01-02T23:00:00'),
+      author: 'Колугин Иван',
+      comments: [
+         {
+            id: '100',
+            text: 'Хорошо, а у тебя?',
+            createdAt: new Date('2020-10-19T23:00:05'),
+            author: 'Иванов Иван'
+         },
+         {
+            id: '101',
+            text: 'Хорошо, а у тебя?',
+            createdAt: new Date('2020-10-09T23:00:05'),
+            author: 'Иванов Иван'
+         }
+      ]
+
    }
 ];
 //const tweet = {
@@ -465,7 +501,7 @@ class TweetCollection {
 
    getPage(skip = 0, top = 10, filterConfig = arguments[0]) {
       const sortedTweets = tweetsValidate.sort((a, b) => b._createdAt - a._createdAt);
-      console.log(filterConfig)
+   console.log(skip, top)
       if(typeof skip !== 'number') 
      skip = 0;
       const filterArray = this._filterTweets(filterConfig);
@@ -474,7 +510,7 @@ class TweetCollection {
       
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
-      } else if (skip >= 0 && skip <= top && !filterConfig) {
+      } else if (skip >= 0 && top && !filterConfig) {
          return sortedTweets.slice(skip, top + skip);
       } else {
          return "invalid parameter";
@@ -796,12 +832,13 @@ class TweetController{
   
    constructor(tweets){
       this._userThis = new TweetCollection(tweets);
-      this.tweetsCollection = tweetsValidate;
+      this.headerView = new HeaderView('name-user');
+
    }
    
      setCurrentUser(name) {
       this._userThis.setnewUser(name); 
-      let showHeader = new HeaderView('name-user');
+      this.headerView;
           if(!name){
             this. _userThis._user = '';
              showHeader.display(this._userThis._user)
@@ -860,10 +897,22 @@ const formMyFilter = document.forms.form-filter;
 const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
 const btnRegisterSingin = document.getElementById('btn-register-singin')
+ 
 
+const tweetCollectionController = new TweetController(tweets);
 
 window.addEventListener('load', (event) => {
-new TweetController(tweets).getFeed();
+tweetCollectionController.getFeed();
+const btnLoadMore = document.getElementById('load-more');
+let count = 0;
+function addLoadMore(){
+   console.log(count)
+   if (document.onclick = btnLoadMore) {
+      tweetCollectionController.getFeed(10 + count, 10);               
+}
+count += 10;
+}
+btnLoadMore.addEventListener('click', addLoadMore);
 });
 
 function openPageSingin(){
@@ -885,6 +934,9 @@ conteinerPage.innerHTML = `
     </form>
     </div>
 `;
+const btnRegisterSingin = document.getElementById('btn-register-singin');
+        btnRegisterSingin.addEventListener('click',openPageRegister);
+        btnRegisterSingin.removeEventListener('click', openPageSingin);
 } 
 
 function openPageRegister(){
@@ -911,10 +963,11 @@ function openPageRegister(){
         `
         const btnSinginRegister = document.getElementById('btn-singin-register');
         btnSinginRegister.addEventListener('click',openPageSingin);
-       // btnSinginRegister.removeEventListener('click', openPageSingin);
+        btnSinginRegister.removeEventListener('click', openPageRegister);
+       
 }
 
-btnRegister.addEventListener('click', openPageRegister);
+btnRegister.addEventListener('click', openPageSingin);
 
 //btnRegisterSingin.addEventListener('submit', getSubmit);
 //tweetController.setCurrentUser('Ctepan');
@@ -967,11 +1020,10 @@ inputPasswordRegisterRepid.value = '';
 
 
 //btnRegisterSingin.addEventListener('click', openPageRegister);
-const workThis = new TweetController(tweets); // переменная для хранения имени user;
+
 //workThis.setCurrentUser('Брыль Степан');
-//workThis.addTweet('this very good tweet')
-console.log(tweetsValidate)
-console.log(workThis)
+//workThis.addTweet('this very good tweet');
+console.log(tweetsValidate);
 
 
 //btnTweetPage.addEventListener('click', myController.addTweet);
