@@ -321,11 +321,11 @@ class TweetCollection {
 
    getPage(skip = 0, top = 10, filterConfig = arguments[0]) {
       const sortedTweets = this._array.sort((a, b) => b._createdAt - a._createdAt);
-   console.log(skip, top)
+   console.log(skip, top, filterConfig)
       if(typeof skip !== 'number') 
      skip = 0;
       const filterArray = this._filterTweets(filterConfig);
-      
+      console.log(filterArray);
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
       } else if (skip >= 0 && top && !filterConfig) {
@@ -337,7 +337,7 @@ class TweetCollection {
          
    _filterTweets(filterConfig) {
       
-      return this._array.filter(tweet => {
+      return tweetCollectionController.tweetsValidate.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
          if (filterConfig?.author) {
@@ -451,10 +451,11 @@ class TweetFeedView {
       this.containerId = idPage;
    }
    display(...params) {
-      console.log(tweetCollectionController.tweetCollection._user)
+      console.log(tweetCollectionController.tweetsValidate)
       const conteiner = document.getElementById(this.containerId);
       let tweetItog = tweetCollectionController.tweetCollection.getPage(...params);
       document.getElementById('pageTweet').style.display = 'none';
+      document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === tweetCollectionController.tweetCollection._user) ? // сравниваем с текущим юзером
          ` <article id="some-tweet" class="tweet-wrap">
@@ -578,12 +579,12 @@ class FilterView {
       inputName.value = param;
       return new TweetFeedView(this.containerId).display({
          author: inputUser.value,
-         createdAt: inputDateTo.value && inputDateFrom.value,
+         createdAt: inputDateTo.value,
+         createdAt: inputDateFrom.value,
          text: inputTweet.value,
          hashtags: [inputHashtags.value]
       });
-
-   }
+}
 }
  
 // eslint-disable-next-line no-unused-vars
@@ -626,9 +627,15 @@ class TweetController{
          new TweetFeedView('tweets').display();
          return removeTweets;
       }
-       getFeed(...filterConfig){
-       new TweetFeedView('tweets').display(...filterConfig);
-      return true;
+       getFeed(inputName, param){
+          if(typeof inputName === 'number' && typeof param === 'number'){
+       this.tweetFeedView.display(inputName, param);
+          }
+          else if(!inputName && !param){
+      this.tweetFeedView.display();
+          }else if(typeof inputName !== 'number' && typeof param !== 'number'){
+      this.filterView.display(inputName, param);
+   }
       }
       //используем для отправки твита по его id на страницу tweet; 
        showTweet(id){
@@ -689,7 +696,7 @@ const inputTweet = document.getElementById('POST-name');
 const inputDateFrom = document.getElementById('input-datefrom');
 const inputHashtags = document.getElementById('input-hashtags');
 const btnAddHashtags = document.getElementById('btn-hashtags');
-const btnFind = document.getElementById('btn-find');
+
 const btnAddComment = document.getElementById('addCom');
 const btnRegister = document.getElementById('btn-register');
 
@@ -726,30 +733,44 @@ count += 10;
 
 btnLoadMore.addEventListener('click', addLoadMore);
 for (var i = 0; i < btnTweetPage.length; i++) {
-   btnTweetPage[i].addEventListener("click", function(e) {
+   btnTweetPage[i].addEventListener('click', function(e) {
       console.log(tweetCollectionController)
           tweetCollectionController.showTweet(e.currentTarget.id);      
    });
  }
+
+ const myFormFilterTweets = document.formfilter;
+const btnFind = document.getElementById('btn-find');
+
+function getFilterTweets(event){
+event.preventDefault();
+tweetCollectionController.getFeed(myFormFilterTweets.text, `${myFormFilterTweets.text.value}`) &&
+tweetCollectionController.getFeed(myFormFilterTweets.username,`${myFormFilterTweets.username.value}`) &&
+tweetCollectionController.getFeed(myFormFilterTweets.dateFrom, new Date(`${myFormFilterTweets.dateFrom.value}`)) &&
+tweetCollectionController.getFeed(myFormFilterTweets.dateTo, new Date(`${myFormFilterTweets.dateTo.value}`)) &&
+tweetCollectionController.getFeed(myFormFilterTweets.hashtags, [`${myFormFilterTweets.hashtags.value}`]);
+
+myFormFilterTweets.text.value = '';
+myFormFilterTweets.username.value = '';
+myFormFilterTweets.hashtags.value = '';
+}
+btnFind.addEventListener('click', getFilterTweets, false)
 
 });
 
 const listTweets = [];
 const myFormAddTweet = document.formtweetadd;
 
-
 function getAddTweet(event){
 event.preventDefault();
 tweetCollectionController.addTweet(myFormAddTweet.text.value);
-console.log(tweetCollectionController.tweetsValidate);
 myFormAddTweet.text.value = '';
-listTweets = JSON.parse(localStorage.getItem('tweetCollectionController.tweetsValidate')) || [];
-listTweets.push(new Tweet(myFormAddTweet.text.value));
-localStorage.setItem('tweetCollectionController.tweetsValidate', JSON.stringify(listTweets));
+//listTweets = JSON.parse(localStorage.getItem('tweetCollectionController.tweetsValidate')) || [];
+//listTweets.push(new Tweet(myFormAddTweet.text.value));
+//localStorage.setItem('tweetCollectionController.tweetsValidate', JSON.stringify(listTweets));
 }
 // Добавление твита
-btnAddTweets.addEventListener('click', getAddTweet);
-
+btnAddTweets.addEventListener('click', getAddTweet, false);
 
 function openPageSingin(){
 conteinerPage.innerHTML = `
@@ -816,7 +837,7 @@ const inputPasswordRegisterRepeat = document.getElementById('inputPasswordRegist
 
 const formSingin = document.formsingin;
 const formRegister = document.getElementById('formregister');
-console.log(btnRegisterSingin);
+
 
 /*
 function addUserRegister() {
