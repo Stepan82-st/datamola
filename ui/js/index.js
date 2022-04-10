@@ -454,6 +454,7 @@ class TweetFeedView {
       console.log(tweetCollectionController.tweetCollection._user)
       const conteiner = document.getElementById(this.containerId);
       let tweetItog = tweetCollectionController.tweetCollection.getPage(...params);
+      document.getElementById('pageTweet').style.display = 'none';
       conteiner.innerHTML = tweetItog.map(item =>
          (item.author === tweetCollectionController.tweetCollection._user) ? // сравниваем с текущим юзером
          ` <article id="some-tweet" class="tweet-wrap">
@@ -511,9 +512,10 @@ class TweetView {
       const countMessage = document.getElementById('count-comments');
       const inputTweet = document.getElementById('tweet-conteiner')
       const conteinTweet = document.getElementById("box-tweet");
-     
+      const conteinerAddComment = document.getElementById('conteinerAddComment');
+      document.getElementById('pageTweet').style.display = 'flex';
+      document.getElementById('tweets').style.display = 'none';
       if(this.containerId === 'pageTweet'){
-         show('pageTweet','tweets');
          inputTweet.style.display = 'none';
          conteinTweet.innerHTML = 
           ` <div class="col-md-12" id="fbcomment">
@@ -544,31 +546,25 @@ class TweetView {
        </div>
      </div>
    </li>
-   <div class="box-comment">
-              <textarea
-                class="commentar"
-                placeholder="Add a comment..."
-              ></textarea>
-              <div class="bx-post">
-                <div class="pull-right">
-                  <button id="addCom" onclick="submit_comment()" type="button" value="1">
-                    Add comment
-                  </button>
-                </div>
-              </div>
-            </div>
+   
      `:
      []
      ).join(`\n`)
-     
-   }if(this.containerId === 'tweets'){
-      show('tweets','pageTweet');
-   
-      `${inputTweet.value = tweetId.text}
-      `
-      if(countMessage)
-      countMessage.innerHTML =
-     `${tweetId.comments.length}`
+     conteinerAddComment.innerHTML =
+     ` <div class="box-comment">
+     <textarea
+       class="commentar"
+       placeholder="Add a comment..."
+     ></textarea>
+     <div class="bx-post">
+       <div class="pull-right">
+         <button id="addCom" onclick="submit_comment()" type="button" value="1">
+           Add comment
+         </button>
+       </div>
+     </div>
+   </div>
+     `
    }
 }
 }
@@ -636,9 +632,7 @@ class TweetController{
       }
       //используем для отправки твита по его id на страницу tweet; 
        showTweet(id){
-          let tweetViev = new TweetView('pageTweet');
-          console.log(tweetViev)
-      return  tweetViev.display(id);
+      return  this.tweetView.display(id);
       }
 }
 
@@ -713,24 +707,31 @@ window.addEventListener('load', (event) => {
    tweetCollectionController.setCurrentUser('');
    tweetCollectionController.getFeed(); // загрузили твиты на странницу;
 let count = 0;
+const btnTweetPage = document.querySelectorAll('.message');
 function addLoadMore(){
    if (document.onclick = btnLoadMore) {
-      tweetCollectionController.getFeed(10 + count, 10);               
-}
-count += 10;
-}
-
-btnLoadMore.addEventListener('click', addLoadMore);
-
+      tweetCollectionController.getFeed(10 + count, 10);    
+     
 const btnTweetPage = document.querySelectorAll('.message');
-
-console.log(btnTweetPage)
 for (var i = 0; i < btnTweetPage.length; i++) {
    btnTweetPage[i].addEventListener("click", function(e) {
       console.log(tweetCollectionController)
           tweetCollectionController.showTweet(e.currentTarget.id);      
    });
  }
+      
+}
+count += 10;
+}
+
+btnLoadMore.addEventListener('click', addLoadMore);
+for (var i = 0; i < btnTweetPage.length; i++) {
+   btnTweetPage[i].addEventListener("click", function(e) {
+      console.log(tweetCollectionController)
+          tweetCollectionController.showTweet(e.currentTarget.id);      
+   });
+ }
+
 });
 
 const listTweets = [];
