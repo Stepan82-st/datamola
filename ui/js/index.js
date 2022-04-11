@@ -336,7 +336,7 @@ class TweetCollection {
          
    _filterTweets(filterConfig) {
       
-      return tweetCollectionController.tweetsValidate.filter(tweet => {
+      return this._array.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
          if (filterConfig?.author) {
