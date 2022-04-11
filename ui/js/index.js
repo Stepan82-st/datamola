@@ -325,7 +325,6 @@ class TweetCollection {
       if(typeof skip !== 'number') 
      skip = 0;
       const filterArray = this._filterTweets(filterConfig);
-      console.log(filterArray);
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
       } else if (skip >= 0 && top && !filterConfig) {
@@ -337,7 +336,7 @@ class TweetCollection {
          
    _filterTweets(filterConfig) {
       
-      return tweetCollectionController.tweetsValidate.filter(tweet => {
+      return this._array.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
          if (filterConfig?.author) {
@@ -355,6 +354,7 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
+         console.log("filter",tweet, dateFromFilter, dateToFilter);
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -546,7 +546,7 @@ class TweetView {
          <span class="like">${item.createdAt.toLocaleString()}</span>
        </div>
      </div>
-   </li>
+     </li>
    
      `:
      []
@@ -577,10 +577,11 @@ class FilterView {
 
    display(inputName, param) {
       inputName.value = param;
+      console.log(inputDateTo.value, inputDateFrom.value);
       return new TweetFeedView(this.containerId).display({
          author: inputUser.value,
-         createdAt: inputDateTo.value,
-         createdAt: inputDateFrom.value,
+         dateTo: new Date(inputDateTo.value),
+         dateFrom: new Date(inputDateFrom.value),
          text: inputTweet.value,
          hashtags: [inputHashtags.value]
       });
@@ -746,8 +747,8 @@ function getFilterTweets(event){
 event.preventDefault();
 tweetCollectionController.getFeed(myFormFilterTweets.text, `${myFormFilterTweets.text.value}`) &&
 tweetCollectionController.getFeed(myFormFilterTweets.username,`${myFormFilterTweets.username.value}`) &&
-tweetCollectionController.getFeed(myFormFilterTweets.dateFrom, new Date(`${myFormFilterTweets.dateFrom.value}`)) &&
-tweetCollectionController.getFeed(myFormFilterTweets.dateTo, new Date(`${myFormFilterTweets.dateTo.value}`)) &&
+tweetCollectionController.getFeed(myFormFilterTweets.dateFrom,`${myFormFilterTweets.dateFrom.value}`) &&
+tweetCollectionController.getFeed(myFormFilterTweets.dateTo, `${myFormFilterTweets.dateTo.value}`) &&
 tweetCollectionController.getFeed(myFormFilterTweets.hashtags, [`${myFormFilterTweets.hashtags.value}`]);
 
 myFormFilterTweets.text.value = '';
