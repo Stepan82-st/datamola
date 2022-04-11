@@ -506,7 +506,6 @@ class TweetView {
       this.containerId = idPage;
    }
    display(idTweet) {
-      console.log(tweetCollectionController.tweetCollection)
       const tweetId = tweetCollectionController.tweetCollection._getTweet(idTweet);
       let myArticle = document.getElementById(this.containerId);
       const countMessage = document.getElementById('count-comments');
@@ -521,7 +520,7 @@ class TweetView {
           ` <div class="col-md-12" id="fbcomment">
           <div class="body-comment">
             <ul id="list-comment" class="col-md-12"> 
-          <span class="name-autor">${tweetId.author}</span>
+          <span id="${tweetId.id}"  class="name-author">${tweetId.author}</span>
            <span class="data-message">${tweetId.createdAt.toLocaleString()}</span>
            <p class="text-message">
            🔥${tweetId.text}
@@ -535,7 +534,7 @@ class TweetView {
          
           myArticle.innerHTML = tweetId.comments.map(item => 
           (item)?
-     `<li class="box-result">
+     `<li class="box-result" id="${item.id}">
      <div class="result-comment">
        <h4>${item.author}</h4>
        <p>
@@ -558,7 +557,7 @@ class TweetView {
      ></textarea>
      <div class="bx-post">
        <div class="pull-right">
-         <button id="addCom" onclick="submit_comment()" type="button" value="1">
+         <button id="addCom" type="submit">
            Add comment
          </button>
        </div>
@@ -633,6 +632,12 @@ class TweetController{
             btnEditTweetAdd.innerHTML = 'Tweet';
          })
       }
+      addComment(id){
+         let tweet = this.tweetCollection._getTweet(id);
+         const pageComment = docuent.querySelector('.commentar');
+         const btnAddComment = document.getElementById('addCom');
+
+      };
        removeTweet(id){
          let removeTweets = this.tweetCollection.remove(id);
          new TweetFeedView('tweets').display();
@@ -655,7 +660,7 @@ class TweetController{
 }
 
 const tweetCollectionController = new TweetController(tweets);
-
+const myTweetArray = tweetCollectionController.tweetsValidate;
 function show(shown, hidden) {
    document.getElementById(shown).style.display='flex'; /*container-comments*/
    document.getElementById(hidden).style.display='none';
@@ -708,7 +713,7 @@ const inputDateFrom = document.getElementById('input-datefrom');
 const inputHashtags = document.getElementById('input-hashtags');
 const btnAddHashtags = document.getElementById('btn-hashtags');
 
-const btnAddComment = document.getElementById('addCom');
+
 const btnRegister = document.getElementById('btn-register');
 
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
@@ -747,6 +752,7 @@ for (var i = 0; i < btnTweetPage.length; i++) {
           tweetCollectionController.showTweet(e.currentTarget.id);      
    });
  }
+
       
 }
 count += 10;
@@ -765,7 +771,19 @@ for (let i = 0; i < btnEditTweet.length; i++) {
 
 for (let i = 0; i < btnTweetPage.length; i++) {
    btnTweetPage[i].addEventListener('click', function(e) {
-          tweetCollectionController.showTweet(e.currentTarget.id);      
+          tweetCollectionController.showTweet(e.currentTarget.id);  
+          let myTweet = document.querySelector('.name-author').id; 
+          let tweet = tweetCollectionController.tweetCollection._getTweet(myTweet);
+          let pageComment = document.querySelector('.commentar');
+          const btnAddComment = document.getElementById('addCom');
+          btnAddComment.addEventListener('click', addComment, false);
+          function addComment(){
+            const comment = new Comment(pageComment.value);
+            let tweet = tweetCollectionController.tweetCollection._getTweet(myTweet);
+             tweet.comments.push(comment);
+             tweetCollectionController.showTweet(myTweet);
+             btnAddComment.addEventListener('click', addComment, false)
+          }
    });
  }
 
