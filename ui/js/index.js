@@ -336,7 +336,7 @@ class TweetCollection {
          
    _filterTweets(filterConfig) {
       
-      return this._array.filter(tweet => {
+      return tweetCollectionController.tweetsValidate.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
          if (filterConfig?.author) {
@@ -354,7 +354,7 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-         console.log("filter",tweet, dateFromFilter, dateToFilter);
+        // console.log("filter",tweet, dateFromFilter, dateToFilter);
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
@@ -451,7 +451,6 @@ class TweetFeedView {
       this.containerId = idPage;
    }
    display(...params) {
-      console.log(tweetCollectionController.tweetsValidate)
       const conteiner = document.getElementById(this.containerId);
       let tweetItog = tweetCollectionController.tweetCollection.getPage(...params);
       document.getElementById('pageTweet').style.display = 'none';
@@ -475,8 +474,8 @@ class TweetFeedView {
                <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
              </button>
            </div>
-           <button id="delete-tweet" type="submit" name="delete" class="btn delete-btn">Delete</button>
-           <button id="edit-tweet" type="submit" name="Edit" class="btn input-btn edit-btn">Edit</button>
+           <button id="${item.id}" type="submit" name="delete" class="btn delete-btn">Delete</button>
+           <button id="${item.id}" type="submit" name="Edit" class="btn input-btn edit-btn">Edit</button>
          </article>
          ` :
          `<article id="some-tweet" class="tweet-wrap">
@@ -577,7 +576,6 @@ class FilterView {
 
    display(inputName, param) {
       inputName.value = param;
-      console.log(inputDateTo.value, inputDateFrom.value);
       return new TweetFeedView(this.containerId).display({
          author: inputUser.value,
          dateTo: new Date(inputDateTo.value),
@@ -590,8 +588,8 @@ class FilterView {
  
 // eslint-disable-next-line no-unused-vars
 const listAddTweets =  document.formtweetadd;
-const btnAddTweets = document.getElementById('btn-add-tweet');
-console.log(listAddTweets)
+
+
 class TweetController{
   
    constructor(tweets){
@@ -618,10 +616,22 @@ class TweetController{
          return newTweets;
       }
       
-       editTweet(id, text){
-         let editTweets = this.tweetCollection.edit(id, text);
-         this.tweetView.display(id);
-         return editTweets;
+       editTweet(id){
+          let tweet = this.tweetCollection._getTweet(id)
+          
+         const formTweetEdit = document.formtweetadd;
+         formTweetEdit.text.value = tweet.text;
+         let btnNewEditTweetAdd = document.getElementById('new-edit');
+   
+         btnNewEditTweetAdd.addEventListener('click', function(e){
+            
+            tweet.text = formTweetEdit.text.value;
+            tweetCollectionController.getFeed();
+            formTweetEdit.text.value = '';
+            let btnEditTweetAdd = document.getElementById('new-edit');
+            btnEditTweetAdd.id="btn-add-tweet";
+            btnEditTweetAdd.innerHTML = 'Tweet';
+         })
       }
        removeTweet(id){
          let removeTweets = this.tweetCollection.remove(id);
@@ -715,15 +725,25 @@ window.addEventListener('load', (event) => {
    tweetCollectionController.setCurrentUser('');
    tweetCollectionController.getFeed(); // загрузили твиты на странницу;
 let count = 0;
-const btnTweetPage = document.querySelectorAll('.message');
+
 function addLoadMore(){
    if (document.onclick = btnLoadMore) {
       tweetCollectionController.getFeed(10 + count, 10);    
-     
+ 
+      const btnEditTweet = document.querySelectorAll('.edit-btn');
+for (let i = 0; i < btnEditTweet.length; i++) {
+   btnEditTweet[i].addEventListener('click', function(e){
+      count = 0;
+      let btnEditTweetAdd = document.getElementById('btn-add-tweet');
+      btnEditTweetAdd.id ="new-edit";
+      btnEditTweetAdd.innerHTML = 'Edit';
+      tweetCollectionController.editTweet(e.currentTarget.id);
+   })
+}
+      
 const btnTweetPage = document.querySelectorAll('.message');
 for (var i = 0; i < btnTweetPage.length; i++) {
    btnTweetPage[i].addEventListener("click", function(e) {
-      console.log(tweetCollectionController)
           tweetCollectionController.showTweet(e.currentTarget.id);      
    });
  }
@@ -731,11 +751,20 @@ for (var i = 0; i < btnTweetPage.length; i++) {
 }
 count += 10;
 }
-
 btnLoadMore.addEventListener('click', addLoadMore);
-for (var i = 0; i < btnTweetPage.length; i++) {
+const btnTweetPage = document.querySelectorAll('.message');
+const btnEditTweet = document.querySelectorAll('.edit-btn');
+for (let i = 0; i < btnEditTweet.length; i++) {
+   btnEditTweet[i].addEventListener('click', function(e){
+      let btnEditTweetAdd = document.getElementById('btn-add-tweet');
+      btnEditTweetAdd.id ="new-edit";
+      btnEditTweetAdd.innerHTML = 'Edit';
+      tweetCollectionController.editTweet(e.currentTarget.id);
+   })
+}
+
+for (let i = 0; i < btnTweetPage.length; i++) {
    btnTweetPage[i].addEventListener('click', function(e) {
-      console.log(tweetCollectionController)
           tweetCollectionController.showTweet(e.currentTarget.id);      
    });
  }
@@ -757,21 +786,25 @@ myFormFilterTweets.hashtags.value = '';
 }
 btnFind.addEventListener('click', getFilterTweets, false)
 
+function getAddTweet(event){
+   event.preventDefault();
+   if(document.getElementById('btn-add-tweet')){
+   tweetCollectionController.addTweet(myFormAddTweet.text.value);
+   myFormAddTweet.text.value = '';
+   //listTweets = JSON.parse(localStorage.getItem('tweetCollectionController.tweetsValidate')) || [];
+   //listTweets.push(new Tweet(myFormAddTweet.text.value));
+   //localStorage.setItem('tweetCollectionController.tweetsValidate', JSON.stringify(listTweets));
+   }
+}
+   // Добавление твита
+   let btnAddTweets = document.getElementById('btn-add-tweet');
+   btnAddTweets.addEventListener('click', getAddTweet, false);
 });
 
 const listTweets = [];
 const myFormAddTweet = document.formtweetadd;
 
-function getAddTweet(event){
-event.preventDefault();
-tweetCollectionController.addTweet(myFormAddTweet.text.value);
-myFormAddTweet.text.value = '';
-//listTweets = JSON.parse(localStorage.getItem('tweetCollectionController.tweetsValidate')) || [];
-//listTweets.push(new Tweet(myFormAddTweet.text.value));
-//localStorage.setItem('tweetCollectionController.tweetsValidate', JSON.stringify(listTweets));
-}
-// Добавление твита
-btnAddTweets.addEventListener('click', getAddTweet, false);
+
 
 function openPageSingin(){
 conteinerPage.innerHTML = `
