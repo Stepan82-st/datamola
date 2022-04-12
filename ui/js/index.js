@@ -772,23 +772,26 @@ for (let i = 0; i < btnEditTweet.length; i++) {
 for (let i = 0; i < btnTweetPage.length; i++) {
    btnTweetPage[i].addEventListener('click', function(e) {
           tweetCollectionController.showTweet(e.currentTarget.id);  
-          let myTweet = document.querySelector('.name-author').id; 
-          let tweet = tweetCollectionController.tweetCollection._getTweet(myTweet);
-          let pageComment = document.querySelector('.commentar');
           const btnAddComment = document.getElementById('addCom');
           btnAddComment.addEventListener('click', addComment, false);
-          function addComment(){
-            const comment = new Comment(pageComment.value);
-            let tweet = tweetCollectionController.tweetCollection._getTweet(myTweet);
-             tweet.comments.push(comment);
-             tweetCollectionController.showTweet(myTweet);
-             btnAddComment.addEventListener('click', addComment, false)
-          }
    });
  }
-
+   
+   
+   
+ function addComment(){
+   const pageComment = document.querySelector('.commentar');
+   let comment = new Comment(pageComment.value);
+   const myTweet = document.querySelector('.name-author').id;
+   let tweet = tweetCollectionController.tweetCollection._getTweet(myTweet);
+   tweet.comments.push(comment);
+   tweetCollectionController.showTweet(myTweet);
+   const btnAddComment = document.getElementById('addCom');
+   btnAddComment.addEventListener('click', addComment, false)
+ }
+ 
  const myFormFilterTweets = document.formfilter;
-const btnFind = document.getElementById('btn-find');
+ const btnFind = document.getElementById('btn-find');
 
 function getFilterTweets(event){
 event.preventDefault();
