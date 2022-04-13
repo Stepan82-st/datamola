@@ -187,8 +187,7 @@ const tweets = [{
       text: 'Привет! #js #datamola',
       createdAt: new Date('2019-01-02T23:00:00'),
       author: 'Колугин Иван',
-      comments: [
-         {
+      comments: [{
             id: '100',
             text: 'Хорошо, а у тебя?',
             createdAt: new Date('2020-10-19T23:00:05'),
@@ -291,11 +290,11 @@ class Comment {
       return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
    }
 }
- 
+
 
 const _tweetArr = []; // Глобальный массив невалидных твитов;
 class TweetCollection {
-  _user;
+   _user;
    setnewUser(newFirstName) {
       if (newFirstName) {
          this._user = newFirstName;
@@ -307,7 +306,7 @@ class TweetCollection {
    }
 
    constructor(options) {
-      this._user = 'Брыль Степан';
+      this._user = 'Брыль Степан' || options._user;
       this._array = this.addAll(options);
    }
 
@@ -324,9 +323,9 @@ class TweetCollection {
 
    getPage(skip = 0, top = 10, filterConfig = arguments[0]) {
       const sortedTweets = this._array.sort((a, b) => b._createdAt - a._createdAt);
-   console.log(skip, top, filterConfig)
-      if(typeof skip !== 'number') 
-     skip = 0;
+
+      if (typeof skip !== 'number')
+         skip = 0;
       const filterArray = this._filterTweets(filterConfig);
       if (filterConfig) {
          return filterArray.slice(skip, top + skip);
@@ -336,9 +335,9 @@ class TweetCollection {
          return "invalid parameter";
       }
    }
-         
+
    _filterTweets(filterConfig) {
-      
+
       return this._array.filter(tweet => {
          let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
          authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
@@ -357,17 +356,17 @@ class TweetCollection {
          if (filterConfig?.hashtags) {
             hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
          }
-        // console.log("filter",tweet, dateFromFilter, dateToFilter);
+         // console.log("filter",tweet, dateFromFilter, dateToFilter);
          return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
       })
    }
 
-   
+
    add(tweet) {
       if (tweet.length <= 280) {
          const newTweet = new Tweet(tweet);
          this._array.push(newTweet);
-      
+
          return true;
       } else {
          return false;
@@ -430,7 +429,7 @@ class TweetCollection {
 
 const tweetCollection = new TweetCollection(tweets);
 const mainTweetsArr = tweetCollection._array;
-console.log(mainTweetsArr)
+//console.log(mainTweetsArr)
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
    constructor(idUser) {
@@ -440,11 +439,11 @@ class HeaderView {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
       header.innerHTML = `<h2>${nameUser}</h2>`;
-      if(nameUser){
+      if (nameUser) {
          btnRegister.innerText = 'Sing out';
-      }else{
+      } else {
          btnRegister.innerText = 'Sing in';
-      } 
+      }
    }
 }
 
@@ -516,10 +515,10 @@ class TweetView {
       const conteinerAddComment = document.getElementById('conteinerAddComment');
       document.getElementById('pageTweet').style.display = 'flex';
       document.getElementById('tweets').style.display = 'none';
-      if(this.containerId === 'pageTweet'){
+      if (this.containerId === 'pageTweet') {
          inputTweet.style.display = 'none';
-         conteinTweet.innerHTML = 
-          ` <div class="col-md-12" id="fbcomment">
+         conteinTweet.innerHTML =
+            ` <div class="col-md-12" id="fbcomment">
           <div class="body-comment">
             <ul id="list-comment" class="col-md-12"> 
           <span id="${tweetId.id}"  class="name-author">${tweetId.author}</span>
@@ -531,12 +530,12 @@ class TweetView {
           </div>
         </div>
           `
-           countMessage.innerHTML =
-          `${tweetId.comments.length}`
-         
-          myArticle.innerHTML = tweetId.comments.map(item => 
-          (item)?
-     `<li class="box-result" id="${item.id}">
+         countMessage.innerHTML =
+            `${tweetId.comments.length}`
+
+         myArticle.innerHTML = tweetId.comments.map(item =>
+            (item) ?
+            `<li class="box-result" id="${item.id}">
      <div class="result-comment">
        <h4>${item.author}</h4>
        <p>
@@ -548,11 +547,10 @@ class TweetView {
      </div>
      </li>
    
-     `:
-     []
-     ).join(`\n`)
-     conteinerAddComment.innerHTML =
-     ` <div class="box-comment">
+     ` : []
+         ).join(`\n`)
+         conteinerAddComment.innerHTML =
+            ` <div class="box-comment">
      <textarea
        class="commentar"
        placeholder="Add a comment..."
@@ -566,8 +564,8 @@ class TweetView {
      </div>
    </div>
      `
+      }
    }
-}
 }
 
 class FilterView {
@@ -584,83 +582,87 @@ class FilterView {
          text: inputTweet.value,
          hashtags: [inputHashtags.value]
       });
+   }
 }
-}
- 
+
 // eslint-disable-next-line no-unused-vars
 
-class TweetController{
-  
-   constructor(tweets){
+class TweetController {
+
+   constructor(tweets) {
       this.tweetCollection = new TweetCollection(tweets);
       this.headerView = new HeaderView('name-user');
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
    }
-     setCurrentUser(name) {
-        if(name){
-      this.tweetCollection.setnewUser(name); 
-      this.headerView.display(this.tweetCollection._user)
-             return name;  
-   }else{
-      this.headerView.display(this.tweetCollection._user);
-   }
- }
-      
-       addTweet(text) {
-         let newTweets = this.tweetCollection.add(text);
-         this.tweetFeedView.display();
-         return newTweets;
+   setCurrentUser(name) {
+      console.log(name);
+      if (name) {
+         tweetCollection.setnewUser(name);
+         this.headerView.display(tweetCollection._user)
+         return name;
+      } else {
+         this.headerView.display(tweetCollection._user);
       }
-      
-       editTweet(id){
-         let tweet = this.tweetCollection._getTweet(id)
-         const formTweetEdit = document.formtweetadd;
-         formTweetEdit.text.value = tweet.text; //tweet.id
+   }
 
-         let btnEditTweetAdd = document.getElementById('btn-add-tweet');
-         console.log(btnEditTweetAdd.id)
-         btnEditTweetAdd.id = "new-edit";
-           btnEditTweetAdd.innerHTML = 'Edit';
-           let btnNewEditTweetAdd = document.getElementById('new-edit');
-         btnNewEditTweetAdd.addEventListener('click', function(e){
-            
-            tweet.text = formTweetEdit.text.value;
-            console.log(tweet.id, tweet.text);
-            tweetCollection.edit(tweet.id, tweet.text);
-            let tweetFeelView = new TweetFeedView('tweets');
-            tweetFeelView.display();
-            formTweetEdit.text.value = '';
-            let btnEditTweetAdd = document.getElementById('new-edit');
-            console.log(btnEditTweetAdd);
-            btnEditTweetAdd.innerHTML = 'Tweet';
-            btnEditTweetAdd.id = "btn-add-tweet";
-         })
-      }
-       removeTweet(id){
-         let removeTweets = this.tweetCollection.remove(id);
-         new TweetFeedView('tweets').display();
-         return removeTweets;
-      }
-       getFeed(inputName, param){
-          if(typeof inputName === 'number' && typeof param === 'number'){
-       this.tweetFeedView.display(inputName, param);
-          }
-          else if(!inputName && !param){
+   addTweet(text) {
+      let newTweets = this.tweetCollection.add(text);
       this.tweetFeedView.display();
-          }else if(typeof inputName !== 'number' && typeof param !== 'number'){
-      this.filterView.display(inputName, param);
+      return newTweets;
    }
+
+   editTweet(id) {
+      let tweet = this.tweetCollection._getTweet(id)
+      const formTweetEdit = document.formtweetadd;
+      formTweetEdit.text.value = tweet.text; //tweet.id
+
+      let btnEditTweetAdd = document.getElementById('btn-add-tweet');
+      console.log(btnEditTweetAdd.id)
+      btnEditTweetAdd.id = "new-edit";
+      btnEditTweetAdd.innerHTML = 'Edit';
+      let btnNewEditTweetAdd = document.getElementById('new-edit');
+      btnNewEditTweetAdd.addEventListener('click', function (e) {
+
+         tweet.text = formTweetEdit.text.value;
+         console.log(tweet.id, tweet.text);
+         tweetCollection.edit(tweet.id, tweet.text);
+         let tweetFeelView = new TweetFeedView('tweets');
+         tweetFeelView.display();
+         formTweetEdit.text.value = '';
+         let btnEditTweetAdd = document.getElementById('new-edit');
+         console.log(btnEditTweetAdd);
+         btnEditTweetAdd.innerHTML = 'Tweet';
+         btnEditTweetAdd.id = "btn-add-tweet";
+      })
+   }
+   removeTweet(id) {
+      let removeTweets = this.tweetCollection.remove(id);
+      new TweetFeedView('tweets').display();
+      return removeTweets;
+   }
+   getFeed(inputName, param) {
+      if (typeof inputName === 'number' && typeof param === 'number') {
+         this.tweetFeedView.display(inputName, param);
+      } else if (!inputName && !param) {
+         this.tweetFeedView.display();
+      } else if (typeof inputName !== 'number' && typeof param !== 'number') {
+         this.filterView.display(inputName, param);
       }
-      //используем для отправки твита по его id на страницу tweet; 
-       showTweet(id){
-      return  this.tweetView.display(id);
-      }
-      save(){
-         
-      }
-      
+   }
+   //используем для отправки твита по его id на страницу tweet; 
+   showTweet(id) {
+      return this.tweetView.display(id);
+   }
+   save(user, array) {
+    localStorage.setItem(`${user}`, JSON.stringify(array));
+   }
+   restore(user){
+      let newArray = JSON.parse(localStorage.getItem(`${user}`));
+      return newArray;
+   }
+
 }
 
 const tweetCollectionController = new TweetController(tweets);
@@ -669,35 +671,50 @@ const tweetCollectionController = new TweetController(tweets);
 // Реализует управление вывода страницу твитов, добавления твита, добавление коментария,  аторизации пользователя
 //(пользователь находится в TweetCollection._user смена с помощью метода TweetController.setCurrentUser)
 //для реализации создаю глобальный экземпляр tweetController
- 
 
+const USERS = [
+   {name:'Брыль Степан',
+       password:'1234'},
+   {name:'Николаев Иван',
+       password:'1234'}
+]
 class UserList {
    constructor(name, password) {
-     this.name = name;
-     this.password = password;
+      this.name = name;
+      this.password = password;
    }
-  setName(name){
-     if(!name){
-        return new Error('no name')
-     }
-     return this.name = name;
-  }
-  getName(){
-     return this.name;
-  }
-  getPassword(){
-     return this.password
-  }
-  addNewUser(newUser, newPassword){
+   setName(name) {
+      if (!name) {
+         return new Error('no name')
+      }
+      return this.name = name;
+   }
+   getName() {
+      return this.name;
+   }
+   getPassword() {
+      return this.password;
+   }
+   addNewUser() {
+      if(document.getElementById('sing-in')){
+   let inputUserSing = document.formsingin;
+  // let newUser = new UserList(inputUserSing.uname.value, inputUserSing.password.value);
   
-   };
- }
- const USERS = [
-   new UserList('Брыль Степан', '1234'),
-   new UserList('Николаев Иван', '4321')
- ]
- 
- console.log(USERS)
+  let currentUser = USERS.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
+  console.log(currentUser)
+  
+  if(currentUser){
+   tweetCollection._user = inputUserSing.uname.value;
+   tweetCollectionController.headerView;
+   }else{
+      return currentUser = 'No user, you need register';
+   }
+      }
+};
+}
+console.log(tweetCollection._user)
+let currentUser = USERS.find(user => user.name === 'Брыль Степан');
+//console.log(currentUser)
 const tweetsConteiner = document.getElementById('tweets');
 const pageTweet = document.getElementById('pageTweet');
 const singIn = document.getElementById('sing-in');
@@ -711,100 +728,13 @@ const btnAddHashtags = document.getElementById('btn-hashtags');
 const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
 const btnRegister = document.getElementById('btn-register');
-
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
-window.addEventListener('load', (event) => {
-
-   tweetCollectionController.setCurrentUser('');
-   tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
-let count = 0;
-
-function addLoadMore(){
-   if (document.onclick = btnLoadMore) {
-      tweetCollectionController.getFeed(10 + count, 10);    
- 
-      const btnEditTweet = document.querySelectorAll('.edit-btn');
-for (let i = 0; i < btnEditTweet.length; i++) {
-   btnEditTweet[i].addEventListener('click', function(e){
-      count = 0;
-      console.log(e.currentTarget.id)
-      tweetCollectionController.editTweet(e.currentTarget.id);
-   })
-}
-      
-const btnTweetPage = document.querySelectorAll('.message');
-for (var i = 0; i < btnTweetPage.length; i++) {
-   btnTweetPage[i].addEventListener("click", function(e) {
-          tweetCollectionController.showTweet(e.currentTarget.id);      
-   });
- }      
-}
-count += 10;
-}
-btnLoadMore.addEventListener('click', addLoadMore);
-const btnTweetPage = document.querySelectorAll('.message');
-const btnEditTweet = document.querySelectorAll('.edit-btn');
-for (let i = 0; i < btnEditTweet.length; i++) {
-   btnEditTweet[i].addEventListener('click', function(e){
-      tweetCollectionController.editTweet(e.currentTarget.id);
-   })
-}
-
-for (let i = 0; i < btnTweetPage.length; i++) {
-   btnTweetPage[i].addEventListener('click', function(e) {
-          tweetCollectionController.showTweet(e.currentTarget.id);  
-          const btnAddComment = document.getElementById('addCom');
-          btnAddComment.addEventListener('click', addComment, false);
-   });
- }
-    
- function addComment(){
-   const pageComment = document.querySelector('.commentar');
-   let comment = new Comment(pageComment.value);
-   const myTweet = document.querySelector('.name-author').id;
-   let tweet = tweetCollection._getTweet(myTweet);
-   tweet.comments.push(comment);
-   tweetCollectionController.showTweet(myTweet);
-   const btnAddComment = document.getElementById('addCom');
-   btnAddComment.addEventListener('click', addComment, false)
- }
- 
- const myFormFilterTweets = document.formfilter;
- const btnFind = document.getElementById('btn-find');
-
-function getFilterTweets(event){
-event.preventDefault();
-tweetCollectionController.getFeed(myFormFilterTweets.text, `${myFormFilterTweets.text.value}`) &&
-tweetCollectionController.getFeed(myFormFilterTweets.username,`${myFormFilterTweets.username.value}`) &&
-tweetCollectionController.getFeed(myFormFilterTweets.dateFrom,`${myFormFilterTweets.dateFrom.value}`) &&
-tweetCollectionController.getFeed(myFormFilterTweets.dateTo, `${myFormFilterTweets.dateTo.value}`) &&
-tweetCollectionController.getFeed(myFormFilterTweets.hashtags, [`${myFormFilterTweets.hashtags.value}`]);
-
-myFormFilterTweets.text.value = '';
-myFormFilterTweets.username.value = '';
-myFormFilterTweets.hashtags.value = '';
-}
-btnFind.addEventListener('click', getFilterTweets, false)
-
-function getAddTweet(event){
-   event.preventDefault();
-   if(document.getElementById('btn-add-tweet')){
-   tweetCollectionController.addTweet(myFormAddTweet.text.value);
-   myFormAddTweet.text.value = '';
-   }
-}
-   // Добавление твита
-   let btnAddTweets = document.getElementById('btn-add-tweet');
-   btnAddTweets.addEventListener('click', getAddTweet, false);
-});
 
 
-const myFormAddTweet = document.formtweetadd;
-
-function openPageSingin(){
-conteinerPage.innerHTML = `
+function openPageSingin() {
+   conteinerPage.innerHTML = `
 <div id="sing-in">
       <form action="" name="formsingin">
           <div class="contain">
@@ -822,33 +752,48 @@ conteinerPage.innerHTML = `
     </form>
     </div>
 `;
-const btnRegisterSingin = document.getElementById('btn-register-singin');
-        btnRegisterSingin.addEventListener('click',openPageRegister);
-        btnRegisterSingin.removeEventListener('click', openPageSingin);
-        const formSingin = document.formsingin;
-      
-      
-} 
-function getNewUser(){
-   let formSingin = document.formsingin;
-   new UserList(formSingin.uname.value);
-   USERS.push(new UserList(newUser, newPassword));
+
+   const btnRegisterSingin = document.getElementById('btn-register-singin');
+   btnRegisterSingin.addEventListener('click', openPageRegister);
+   btnRegisterSingin.removeEventListener('click', openPageSingin);
+   let btnLogin = document.querySelector('.registerbtn');
+   btnLogin.addEventListener('click', getNewUser, false)
 }
 
-function setNewUser(){
+function getNewUser() {
+   if(document.getElementById('sing-in')){
+      let inputUserSing = document.formsingin;
+      console.log(inputUserSing)
+     // let newUser = new UserList(inputUserSing.uname.value, inputUserSing.password.value);
+     console.log(inputUserSing.uname.value)
+     let currentUser = USERS.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
+     console.log(currentUser)
+     console.log(inputUserSing.uname.value)
+     if(currentUser){
+      //tweetCollection._user = currentUser.name;
+      return tweetCollectionController.setCurrentUser(currentUser.name);
+      console.log(tweetCollection._user)
+      }else{
+         return currentUser = 'No user, you need register';
+      }
+         }
+   };
+
+
+function setNewUser() {
    let formRegister = document.formregister;
    let currentUser = USERS.find(user => user.name === formRegister.name.value);
-   if(formRegister.password.value === formRegister.passwordrepeat.value && !currentUser){
-   USERS.push(new UserList(formRegister.name.value, formRegister.password.value));
-   console.log(USERS);
-   console.log(formRegister.name.value);
-   tweetCollectionController.setCurrentUser(formRegister.name.value);
-   }else{
+   if (formRegister.password.value === formRegister.passwordrepeat.value && !currentUser) {
+      USERS.push(new UserList(formRegister.name.value, formRegister.password.value));
+      console.log(USERS);
+      console.log(formRegister.name.value);
+      tweetCollectionController.setCurrentUser(formRegister.name.value);
+   } else {
       throw new Error('password entered incorrectly');
-}
+   }
 }
 
-function openPageRegister(){
+function openPageRegister() {
    conteinerPage.innerHTML = `
    <div id="register">
         <form action method="post" id="formregister" name="formregister">
@@ -870,44 +815,103 @@ function openPageRegister(){
           </form>
         </div>
         `
-        const btnSinginRegister = document.getElementById('btn-singin-register');
-        btnSinginRegister.addEventListener('click',openPageSingin);
-        btnSinginRegister.removeEventListener('click', openPageRegister);
-       const btnAddNewUser = document.querySelector('.registerbtn');
-       console.log(btnAddNewUser)
-       btnAddNewUser.addEventListener('click', setNewUser, false);
+   const btnSinginRegister = document.getElementById('btn-singin-register');
+   btnSinginRegister.addEventListener('click', openPageSingin);
+   btnSinginRegister.removeEventListener('click', openPageRegister);
+   const btnAddNewUser = document.querySelector('.registerbtn');
+   console.log(btnAddNewUser)
+   btnAddNewUser.addEventListener('click', setNewUser, false);
 }
 
 btnRegister.addEventListener('click', openPageSingin);
 
-//btnRegisterSingin.addEventListener('submit', getSubmit);
-//tweetController.setCurrentUser('Ctepan');
 
-/*
-function addUserRegister() {
-   const valueUserR = inputUserRegister.value;
-   const valuePasswordR = inputPasswordRegister.value;
-   const valuePasswordRegRepeat = inputPasswordRegisterRepeat.value;
-   if(!valueUserR && !valuePasswordR && !valuePasswordRegRepeat){
-     return;
+window.addEventListener('load', (event) => {
+
+   tweetCollectionController.setCurrentUser(tweetCollection._user);
+   tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
+   let count = 0;
+
+   function addLoadMore() {
+      if (document.onclick = btnLoadMore) {
+         tweetCollectionController.getFeed(10 + count, 10);
+
+         const btnEditTweet = document.querySelectorAll('.edit-btn');
+         for (let i = 0; i < btnEditTweet.length; i++) {
+            btnEditTweet[i].addEventListener('click', function (e) {
+               count = 0;
+               console.log(e.currentTarget.id)
+               tweetCollectionController.editTweet(e.currentTarget.id);
+            })
+         }
+
+         const btnTweetPage = document.querySelectorAll('.message');
+         for (var i = 0; i < btnTweetPage.length; i++) {
+            btnTweetPage[i].addEventListener("click", function (e) {
+               tweetCollectionController.showTweet(e.currentTarget.id);
+            });
+         }
+      }
+      count += 10;
    }
-   if(valuePasswordR === valuePasswordRegRepit){
-USERS.push(new UserList(valueUserR, valuePasswordR));   
-inputUserRegister.value = '';
-inputPasswordRegister.value = ''; 
-inputPasswordRegisterRepid.value = '';
- const list = JSON.parse(localStorage.getItem('USERS')) || [];
- console.log(list);
- list.push({user:valueUserR, password: valuePasswordR, done:false});
- localStorage.setItem('USERS', JSON.stringify(list));
-   }else{
-      inputPasswordRegister.value = ''; 
-      inputPasswordRegisterRepeat.value = '';
+   btnLoadMore.addEventListener('click', addLoadMore);
+   const btnTweetPage = document.querySelectorAll('.message');
+   const btnEditTweet = document.querySelectorAll('.edit-btn');
+   for (let i = 0; i < btnEditTweet.length; i++) {
+      btnEditTweet[i].addEventListener('click', function (e) {
+         tweetCollectionController.editTweet(e.currentTarget.id);
+      })
    }
- }
- */
+
+   for (let i = 0; i < btnTweetPage.length; i++) {
+      btnTweetPage[i].addEventListener('click', function (e) {
+         tweetCollectionController.showTweet(e.currentTarget.id);
+         const btnAddComment = document.getElementById('addCom');
+         btnAddComment.addEventListener('click', addComment, false);
+      });
+   }
+
+   function addComment() {
+      const pageComment = document.querySelector('.commentar');
+      let comment = new Comment(pageComment.value);
+      const myTweet = document.querySelector('.name-author').id;
+      let tweet = tweetCollection._getTweet(myTweet);
+      tweet.comments.push(comment);
+      tweetCollectionController.showTweet(myTweet);
+      const btnAddComment = document.getElementById('addCom');
+      btnAddComment.addEventListener('click', addComment, false)
+   }
+
+   const myFormFilterTweets = document.formfilter;
+   const btnFind = document.getElementById('btn-find');
+
+   function getFilterTweets(event) {
+      event.preventDefault();
+      tweetCollectionController.getFeed(myFormFilterTweets.text, `${myFormFilterTweets.text.value}`) &&
+         tweetCollectionController.getFeed(myFormFilterTweets.username, `${myFormFilterTweets.username.value}`) &&
+         tweetCollectionController.getFeed(myFormFilterTweets.dateFrom, `${myFormFilterTweets.dateFrom.value}`) &&
+         tweetCollectionController.getFeed(myFormFilterTweets.dateTo, `${myFormFilterTweets.dateTo.value}`) &&
+         tweetCollectionController.getFeed(myFormFilterTweets.hashtags, [`${myFormFilterTweets.hashtags.value}`]);
+
+      myFormFilterTweets.text.value = '';
+      myFormFilterTweets.username.value = '';
+      myFormFilterTweets.hashtags.value = '';
+   }
+   btnFind.addEventListener('click', getFilterTweets, false)
+
+   function getAddTweet(event) {
+      event.preventDefault();
+      if (document.getElementById('btn-add-tweet')) {
+         tweetCollectionController.addTweet(myFormAddTweet.text.value);
+         myFormAddTweet.text.value = '';
+      }
+   }
+   // Добавление твита
+   let btnAddTweets = document.getElementById('btn-add-tweet');
+   btnAddTweets.addEventListener('click', getAddTweet, false);
+  
+});
 
 
+const myFormAddTweet = document.formtweetadd;
 
-//btnRegisterSingin.addEventListener('click', openPageRegister);
-//btnTweetPage.addEventListener('click', myController.addTweet);
