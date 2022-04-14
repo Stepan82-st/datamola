@@ -295,9 +295,9 @@ class Comment {
 const _tweetArr = []; // Глобальный массив невалидных твитов;
 class TweetCollection {
    _user;
-   setnewUser(newFirstName) {
-      if (newFirstName) {
-         this._user = newFirstName;
+   setnewUser(user) {
+      if (user) {
+         this._user = user;
       }
       return new Error('No user');
    }
@@ -305,8 +305,8 @@ class TweetCollection {
       return this._user;
    }
 
-   constructor(options) {
-      this._user = 'Брыль Степан' || options._user;
+   constructor(options, user) {
+      this._user = user;
       this._array = this.addAll(options);
    }
 
@@ -427,7 +427,7 @@ class TweetCollection {
    }
 }
 
-const tweetCollection = new TweetCollection(tweets);
+const tweetCollection = new TweetCollection(tweets, 'Брыль Степан');
 const mainTweetsArr = tweetCollection._array;
 //console.log(mainTweetsArr)
 // eslint-disable-next-line no-unused-vars
@@ -453,7 +453,8 @@ class TweetFeedView {
    }
    display(...params) {
       const conteiner = document.getElementById(this.containerId);
-      const tweetNewCollection = tweetCollection.getPage(...params);
+      console.log(tweetCollectionController.tweetCollection._user)
+      const tweetNewCollection = tweetCollectionController.tweetCollection.getPage(...params);
       document.getElementById('pageTweet').style.display = 'none';
       document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = tweetNewCollection.map(item =>
@@ -590,7 +591,7 @@ class FilterView {
 class TweetController {
 
    constructor(tweets) {
-      this.tweetCollection = new TweetCollection(tweets);
+      this.tweetCollection = new TweetCollection(tweets, 'Брыль Степан');
       this.headerView = new HeaderView('name-user');
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
@@ -599,11 +600,11 @@ class TweetController {
    setCurrentUser(name) {
       console.log(name);
       if (name) {
-         tweetCollection.setnewUser(name);
-         this.headerView.display(tweetCollection._user)
+         this.tweetCollection.setnewUser(name);
+         this.headerView.display(this.tweetCollection._user)
          return name;
       } else {
-         this.headerView.display(tweetCollection._user);
+         this.headerView.display(this.tweetCollection._user);
       }
    }
 
@@ -639,7 +640,7 @@ class TweetController {
    }
    removeTweet(id) {
       let removeTweets = this.tweetCollection.remove(id);
-      new TweetFeedView('tweets').display();
+      this.tweetFeedView.display();
       return removeTweets;
    }
    getFeed(inputName, param) {
@@ -659,18 +660,13 @@ class TweetController {
     localStorage.setItem(`${user}`, JSON.stringify(array));
    }
    restore(user){
-      let newArray = JSON.parse(localStorage.getItem(`${user}`));
-      return newArray;
+      return JSON.parse(localStorage.getItem(`${user}`));
    }
 
 }
 
 const tweetCollectionController = new TweetController(tweets);
 
-
-// Реализует управление вывода страницу твитов, добавления твита, добавление коментария,  аторизации пользователя
-//(пользователь находится в TweetCollection._user смена с помощью метода TweetController.setCurrentUser)
-//для реализации создаю глобальный экземпляр tweetController
 
 const USERS = [
    {name:'Брыль Степан',
@@ -704,15 +700,16 @@ class UserList {
   console.log(currentUser)
   
   if(currentUser){
-   tweetCollection._user = inputUserSing.uname.value;
-   tweetCollectionController.headerView;
+   tweetCollectionController.tweetCollection._user = inputUserSing.uname.value;
+   //tweetCollectionController.headerView;
    }else{
       return currentUser = 'No user, you need register';
    }
       }
 };
 }
-console.log(tweetCollection._user)
+
+console.log(tweetCollectionController.tweetCollection._user)
 let currentUser = USERS.find(user => user.name === 'Брыль Степан');
 //console.log(currentUser)
 const tweetsConteiner = document.getElementById('tweets');
@@ -756,11 +753,13 @@ function openPageSingin() {
    const btnRegisterSingin = document.getElementById('btn-register-singin');
    btnRegisterSingin.addEventListener('click', openPageRegister);
    btnRegisterSingin.removeEventListener('click', openPageSingin);
-   let btnLogin = document.querySelector('.registerbtn');
-   btnLogin.addEventListener('click', getNewUser, false)
+   const btnLogin = document.querySelector('.registerbtn');
+   btnLogin.addEventListener('click', getNewUser, false);
 }
 
-function getNewUser() {
+
+function getNewUser(event) {
+  
    if(document.getElementById('sing-in')){
       let inputUserSing = document.formsingin;
       console.log(inputUserSing)
@@ -770,15 +769,17 @@ function getNewUser() {
      console.log(currentUser)
      console.log(inputUserSing.uname.value)
      if(currentUser){
+      event.preventDefault();
       //tweetCollection._user = currentUser.name;
-      return tweetCollectionController.setCurrentUser(currentUser.name);
-      console.log(tweetCollection._user)
+      tweetCollectionController.setCurrentUser(currentUser.name);
+      
+      return tweetCollectionController.getFeed(0, 10);
+      
       }else{
          return currentUser = 'No user, you need register';
       }
          }
    };
-
 
 function setNewUser() {
    let formRegister = document.formregister;
@@ -788,6 +789,7 @@ function setNewUser() {
       console.log(USERS);
       console.log(formRegister.name.value);
       tweetCollectionController.setCurrentUser(formRegister.name.value);
+     return tweetCollection._user = formRegister.name.value;
    } else {
       throw new Error('password entered incorrectly');
    }
@@ -823,13 +825,16 @@ function openPageRegister() {
    btnAddNewUser.addEventListener('click', setNewUser, false);
 }
 
-btnRegister.addEventListener('click', openPageSingin);
+
 
 
 window.addEventListener('load', (event) => {
 
-   tweetCollectionController.setCurrentUser(tweetCollection._user);
+   btnRegister.addEventListener('click', openPageSingin);
+   console.log(tweetCollectionController.tweetCollection._user)
+   tweetCollectionController.setCurrentUser(tweetCollectionController.tweetCollection._user);
    tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
+   
    let count = 0;
 
    function addLoadMore() {
@@ -871,7 +876,7 @@ window.addEventListener('load', (event) => {
       });
    }
 
-   function addComment() {
+   function addComment(event) {
       const pageComment = document.querySelector('.commentar');
       let comment = new Comment(pageComment.value);
       const myTweet = document.querySelector('.name-author').id;
@@ -898,6 +903,7 @@ window.addEventListener('load', (event) => {
       myFormFilterTweets.hashtags.value = '';
    }
    btnFind.addEventListener('click', getFilterTweets, false)
+   const myFormAddTweet = document.formtweetadd;
 
    function getAddTweet(event) {
       event.preventDefault();
@@ -906,6 +912,7 @@ window.addEventListener('load', (event) => {
          myFormAddTweet.text.value = '';
       }
    }
+
    // Добавление твита
    let btnAddTweets = document.getElementById('btn-add-tweet');
    btnAddTweets.addEventListener('click', getAddTweet, false);
@@ -913,5 +920,4 @@ window.addEventListener('load', (event) => {
 });
 
 
-const myFormAddTweet = document.formtweetadd;
 
