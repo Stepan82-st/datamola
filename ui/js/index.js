@@ -231,7 +231,7 @@ class Tweet {
    constructor(options) {
       this.text = options.text || options;
       this._id = options.id || this._uniqueID().toString();
-      this._author = options.author;
+      this._author = options.author || JSON.parse(localStorage.getItem('currentUser')).name;
       this._createdAt = options.createdAt || new Date();
       this.comments = (options.comments) ? options.comments.map((com) => new Comment(com)) : [];
    }
@@ -278,7 +278,7 @@ class Comment {
       this.text = options.text || options;
       this._id = options.id || this._uniqueID().toString();
       this._createdAt = options.createdAt || new Date();
-      this._author = options.author;
+      this._author = options.author || JSON.parse(localStorage.getItem('currentUser')).name;
    }
    _uniqueID() {
       return tweets.length + 1;
@@ -291,7 +291,7 @@ class Comment {
    }
 }
 
-
+localStorage.setItem('currentUser', JSON.stringify({name:'Брыль Степан', password:'1234'}));
 const _tweetArr = []; // Глобальный массив невалидных твитов;
 class TweetCollection {
    _user;
@@ -305,8 +305,8 @@ class TweetCollection {
       return this._user;
    }
 
-   constructor(options, user) {
-      this._user = user;
+   constructor(options) {
+      this._user = JSON.parse(localStorage.getItem('currentUser')).name;
       this._array = this.addAll(options);
    }
 
@@ -453,7 +453,6 @@ class TweetFeedView {
    }
    display(...params) {
       const conteiner = document.getElementById(this.containerId);
-      console.log(tweetCollectionController.tweetCollection._user)
       const tweetNewCollection = tweetCollectionController.tweetCollection.getPage(...params);
       document.getElementById('pageTweet').style.display = 'none';
       document.getElementById('tweets').style.display = 'flex';
@@ -586,6 +585,41 @@ class FilterView {
    }
 }
 
+class User {
+   name;
+   password;
+ 
+   constructor(name, password) {
+     this.name = name;
+     this.password = password;
+   }
+ }
+
+ const setToLocalStorage = (key, value) => {
+   return localStorage.setItem(key, value);
+ }
+ const getFromLocalStorage = (key) => {
+  return  JSON.parse(localStorage.getItem(key));
+ }
+class UserList {
+   static users = [];
+   static currentUser;
+
+   static addUser(user, password) {    
+    return this.users.push(new User(user, password));
+   }
+ 
+   static setCurrentUser(username) {
+     this.currentUser = this.users.find(user => user.name === username);
+     if(this.currentUser)
+     setToLocalStorage('currentUser', JSON.stringify(this.currentUser));
+     return this.currentUser;
+   }
+
+   static getCurrentUser(){
+     return getFromLocalStorage('currentUser');
+   }
+}
 // eslint-disable-next-line no-unused-vars
 
 class TweetController {
@@ -597,14 +631,15 @@ class TweetController {
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
    }
-   setCurrentUser(name) {
-      console.log(name);
+   setCurrentUser(name){
       if (name) {
-         this.tweetCollection.setnewUser(name);
-         this.headerView.display(this.tweetCollection._user)
-         return name;
+         UserList.setCurrentUser(name);
+         UserList.getCurrentUser();
+         this.headerView;
+         this.tweetFeedView.display()
       } else {
-         this.headerView.display(this.tweetCollection._user);
+         UserList.setCurrentUser('Брыль Степан')
+         this.headerView;
       }
    }
 
@@ -656,62 +691,17 @@ class TweetController {
    showTweet(id) {
       return this.tweetView.display(id);
    }
-   save(user, array) {
-    localStorage.setItem(`${user}`, JSON.stringify(array));
-   }
-   restore(user){
-      return JSON.parse(localStorage.getItem(`${user}`));
-   }
+   static save() {
+      return  localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
+      }
+      static restore(){
+         return new TweetCollection(JSON.parse(localStorage.getItem(`tweets`)));
+      }
 
 }
 
 const tweetCollectionController = new TweetController(tweets);
 
-
-const USERS = [
-   {name:'Брыль Степан',
-       password:'1234'},
-   {name:'Николаев Иван',
-       password:'1234'}
-]
-class UserList {
-   constructor(name, password) {
-      this.name = name;
-      this.password = password;
-   }
-   setName(name) {
-      if (!name) {
-         return new Error('no name')
-      }
-      return this.name = name;
-   }
-   getName() {
-      return this.name;
-   }
-   getPassword() {
-      return this.password;
-   }
-   addNewUser() {
-      if(document.getElementById('sing-in')){
-   let inputUserSing = document.formsingin;
-  // let newUser = new UserList(inputUserSing.uname.value, inputUserSing.password.value);
-  
-  let currentUser = USERS.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-  console.log(currentUser)
-  
-  if(currentUser){
-   tweetCollectionController.tweetCollection._user = inputUserSing.uname.value;
-   //tweetCollectionController.headerView;
-   }else{
-      return currentUser = 'No user, you need register';
-   }
-      }
-};
-}
-
-console.log(tweetCollectionController.tweetCollection._user)
-let currentUser = USERS.find(user => user.name === 'Брыль Степан');
-//console.log(currentUser)
 const tweetsConteiner = document.getElementById('tweets');
 const pageTweet = document.getElementById('pageTweet');
 const singIn = document.getElementById('sing-in');
@@ -759,41 +749,23 @@ function openPageSingin() {
 
 
 function getNewUser(event) {
-  
+   event.preventDefault();
    if(document.getElementById('sing-in')){
       let inputUserSing = document.formsingin;
-      console.log(inputUserSing)
-     // let newUser = new UserList(inputUserSing.uname.value, inputUserSing.password.value);
      console.log(inputUserSing.uname.value)
-     let currentUser = USERS.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
+     let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
      console.log(currentUser)
      console.log(inputUserSing.uname.value)
      if(currentUser){
-      event.preventDefault();
-      //tweetCollection._user = currentUser.name;
-      tweetCollectionController.setCurrentUser(currentUser.name);
-      
-      return tweetCollectionController.getFeed(0, 10);
-      
+      UserList.setCurrentUser(currentUser.name);
+      return TweetController.setCurrentUser(currentUser.name)
       }else{
          return currentUser = 'No user, you need register';
       }
          }
    };
 
-function setNewUser() {
-   let formRegister = document.formregister;
-   let currentUser = USERS.find(user => user.name === formRegister.name.value);
-   if (formRegister.password.value === formRegister.passwordrepeat.value && !currentUser) {
-      USERS.push(new UserList(formRegister.name.value, formRegister.password.value));
-      console.log(USERS);
-      console.log(formRegister.name.value);
-      tweetCollectionController.setCurrentUser(formRegister.name.value);
-     return tweetCollection._user = formRegister.name.value;
-   } else {
-      throw new Error('password entered incorrectly');
-   }
-}
+  
 
 function openPageRegister() {
    conteinerPage.innerHTML = `
@@ -808,7 +780,7 @@ function openPageRegister() {
               <label for="password"><b>Password</b></label>
               <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
               
-              <label for="password-repeat"><b>Repeat Password</b></label>
+              <label for="passwordrepeat"><b>Repeat Password</b></label>
               <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
               
               <button type="submit" class="registerbtn">Register</button>
@@ -817,6 +789,21 @@ function openPageRegister() {
           </form>
         </div>
         `
+        const formRegister = document.formregister
+        function setNewUser(event){
+         event.preventDefault();
+         console.log(formRegister.password.repeat)
+         if(formRegister.password.value === formRegister.passwordrepeat.value){
+      console.log(formRegister.name.value, formRegister.password.value)
+      UserList.addUser(formRegister.name.value, formRegister.password.value);
+      UserList.setCurrentUser(formRegister.name.value);
+      console.log(UserList.currentUser);
+      UserList.getCurrentUser();
+      tweetCollectionController.tweetCollection;
+      }else{
+         return formRegister.passwordrepeat.value = "no repeat password";
+      }
+      }
    const btnSinginRegister = document.getElementById('btn-singin-register');
    btnSinginRegister.addEventListener('click', openPageSingin);
    btnSinginRegister.removeEventListener('click', openPageRegister);
@@ -827,6 +814,8 @@ function openPageRegister() {
 
 
 
+UserList.addUser('Брыль Степан', '1234');
+UserList.addUser('Николаев Иван', '1234');
 
 window.addEventListener('load', (event) => {
 
