@@ -203,6 +203,46 @@ const tweets = [{
 
    }
 ];
+
+
+class User {
+   name;
+   password;
+ 
+   constructor(name, password) {
+     this.name = name;
+     this.password = password;
+   }
+ }
+
+ const setToLocalStorage = (key, value) => {
+   return localStorage.setItem(key, value);
+ }
+ const getFromLocalStorage = (key) => {
+  return  JSON.parse(localStorage.getItem(key));
+ }
+ const userList = [];
+class UserList {
+   static users = [];
+   static currentUser;
+
+   static addUser(user, password) {    
+    return this.users.push(new User(user, password));
+   }
+ 
+   static setCurrentUser(username) {
+     this.currentUser = this.users.find(user => user.name === username.name);
+     if(this.currentUser)
+     setToLocalStorage('currentUser', JSON.stringify(this.currentUser));
+     return this.currentUser;
+   }
+
+   static getCurrentUser(){
+     return getFromLocalStorage('currentUser');
+   }
+}
+// eslint-disable-next-line no-unused-vars
+
 class Tweet {
    _id;
    _author;
@@ -290,7 +330,7 @@ class Comment {
       return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
    }
 }
-
+if(!JSON.parse(localStorage.getItem('currentUser')))
 localStorage.setItem('currentUser', JSON.stringify({name:'Брыль Степан', password:'1234'}));
 const _tweetArr = []; // Глобальный массив невалидных твитов;
 class TweetCollection {
@@ -427,7 +467,7 @@ class TweetCollection {
    }
 }
 
-const tweetCollection = new TweetCollection(tweets, 'Брыль Степан');
+const tweetCollection = new TweetCollection(tweets);
 const mainTweetsArr = tweetCollection._array;
 //console.log(mainTweetsArr)
 // eslint-disable-next-line no-unused-vars
@@ -454,8 +494,8 @@ class TweetFeedView {
    display(...params) {
       const conteiner = document.getElementById(this.containerId);
       const tweetNewCollection = tweetCollectionController.tweetCollection.getPage(...params);
-      document.getElementById('pageTweet').style.display = 'none';
-      document.getElementById('tweets').style.display = 'flex';
+      //document.getElementById('pageTweet').style.display = 'none';
+      //document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = tweetNewCollection.map(item =>
          (item.author === tweetCollection._user) ? // сравниваем с текущим юзером
          ` <article id="some-tweet" class="tweet-wrap">
@@ -585,64 +625,17 @@ class FilterView {
    }
 }
 
-class User {
-   name;
-   password;
- 
-   constructor(name, password) {
-     this.name = name;
-     this.password = password;
-   }
- }
-
- const setToLocalStorage = (key, value) => {
-   return localStorage.setItem(key, value);
- }
- const getFromLocalStorage = (key) => {
-  return  JSON.parse(localStorage.getItem(key));
- }
-class UserList {
-   static users = [];
-   static currentUser;
-
-   static addUser(user, password) {    
-    return this.users.push(new User(user, password));
-   }
- 
-   static setCurrentUser(username) {
-     this.currentUser = this.users.find(user => user.name === username);
-     if(this.currentUser)
-     setToLocalStorage('currentUser', JSON.stringify(this.currentUser));
-     return this.currentUser;
-   }
-
-   static getCurrentUser(){
-     return getFromLocalStorage('currentUser');
-   }
-}
-// eslint-disable-next-line no-unused-vars
 
 class TweetController {
 
    constructor(tweets) {
-      this.tweetCollection = new TweetCollection(tweets, 'Брыль Степан');
-      this.headerView = new HeaderView('name-user');
+      this.tweetCollection = new TweetCollection(tweets);
+      this.headerView = new HeaderView('name-user').display(this.tweetCollection._user);
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
    }
-   setCurrentUser(name){
-      if (name) {
-         UserList.setCurrentUser(name);
-         UserList.getCurrentUser();
-         this.headerView;
-         this.tweetFeedView.display()
-      } else {
-         UserList.setCurrentUser('Брыль Степан')
-         this.headerView;
-      }
-   }
-
+   
    addTweet(text) {
       let newTweets = this.tweetCollection.add(text);
       this.tweetFeedView.display();
@@ -719,6 +712,9 @@ const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 
+UserList.addUser('Брыль Степан', '1234');
+UserList.addUser('Николаев Иван', '1234');
+UserList.addUser('Калякин Иван', '1234');
 
 function openPageSingin() {
    conteinerPage.innerHTML = `
@@ -733,7 +729,7 @@ function openPageSingin() {
       <label for="psw"><b>Password</b></label>
       <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
   
-      <button type="submit" class="registerbtn">LogIn</button>
+      <button type="submit" class="loginbtn">LogIn</button>
       <button class='ps' id="btn-register-singin">Register</button>
     </div>
     </form>
@@ -743,34 +739,22 @@ function openPageSingin() {
    const btnRegisterSingin = document.getElementById('btn-register-singin');
    btnRegisterSingin.addEventListener('click', openPageRegister);
    btnRegisterSingin.removeEventListener('click', openPageSingin);
-   const btnLogin = document.querySelector('.registerbtn');
+   const btnLogin = document.querySelector('.loginbtn');
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
 
 function getNewUser(event) {
-   event.preventDefault();
-   if(document.getElementById('sing-in')){
-      let inputUserSing = document.formsingin;
-     console.log(inputUserSing.uname.value)
+   //event.preventDefault();
+     let inputUserSing = document.formsingin;
      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-     console.log(currentUser)
-     console.log(inputUserSing.uname.value)
-     if(currentUser){
-      UserList.setCurrentUser(currentUser.name);
-      return TweetController.setCurrentUser(currentUser.name)
-      }else{
-         return currentUser = 'No user, you need register';
-      }
-         }
-   };
-
-  
+     UserList.setCurrentUser(currentUser);
+}
 
 function openPageRegister() {
    conteinerPage.innerHTML = `
    <div id="register">
-        <form action method="post" id="formregister" name="formregister">
+        <form action="main.html" method="post" id="formregister" name="formregister">
             <div class="contain">
               <h1>Register</h1>
               <hr>
@@ -789,17 +773,14 @@ function openPageRegister() {
           </form>
         </div>
         `
-        const formRegister = document.formregister
+        
         function setNewUser(event){
-         event.preventDefault();
-         console.log(formRegister.password.repeat)
+         //event.preventDefault();
+         const formRegister = document.formregister;
          if(formRegister.password.value === formRegister.passwordrepeat.value){
-      console.log(formRegister.name.value, formRegister.password.value)
       UserList.addUser(formRegister.name.value, formRegister.password.value);
-      UserList.setCurrentUser(formRegister.name.value);
-      console.log(UserList.currentUser);
-      UserList.getCurrentUser();
-      tweetCollectionController.tweetCollection;
+      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
+      UserList.setCurrentUser(currentUser);
       }else{
          return formRegister.passwordrepeat.value = "no repeat password";
       }
@@ -813,15 +794,10 @@ function openPageRegister() {
 }
 
 
-
-UserList.addUser('Брыль Степан', '1234');
-UserList.addUser('Николаев Иван', '1234');
-
+console.log(UserList.users);
 window.addEventListener('load', (event) => {
 
    btnRegister.addEventListener('click', openPageSingin);
-   console.log(tweetCollectionController.tweetCollection._user)
-   tweetCollectionController.setCurrentUser(tweetCollectionController.tweetCollection._user);
    tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
    
    let count = 0;
@@ -905,7 +881,7 @@ window.addEventListener('load', (event) => {
    // Добавление твита
    let btnAddTweets = document.getElementById('btn-add-tweet');
    btnAddTweets.addEventListener('click', getAddTweet, false);
-  
+
 });
 
 
