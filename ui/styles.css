@@ -97,7 +97,8 @@ html, body {
     padding-right: 1rem;
   }
   .conteiner-massage{
-    width: 57rem;
+    width: 100%;
+    max-width: 57rem;
     min-height: 4.5rem;
     padding: 1rem;
   }
@@ -556,6 +557,17 @@ input[type=text]:focus, input[type=password]:focus {
 }
 hr {
   border: 1px solid  var(--color-white);
+}
+.loginbtn{
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  padding: 14px 15px;
+  margin: 0;
+  border: none;
+  border-radius: 10px 10px;
+  cursor: pointer;
+  width: 100px;
+  opacity: 0.9;
 }
 .registerbtn {
   background-color: var(--color-blue);

@@ -28,8 +28,8 @@
           <div class="conteiner" id="conteiner">
             <div class="container-tweet">
               <div id="box-tweet"></div>
-              <form class="form-tweet" action="">
-                <input class="conteiner-massage" type="text" id="tweet-conteiner">
+              <form class="form-tweet" name="formtweetadd" action="">
+                <textarea class="conteiner-massage" name="text" minlength="1" maxlength="280" type="text" id="tweet-conteiner"></textarea>
 
                 <div class="footer-tweet">
                   <div class="comments-message">
@@ -52,29 +52,30 @@
                     </svg>
                     <span class="footer-message" id="count-comments"></span>
                   </div>
-                  <button class="btn tweet-btn" type="submit">Tweet</button>
+                  <button  id="btn-add-tweet" class="btn tweet-btn" type="submit">Tweet</button>
                 </div>
               </form>
             </div>
             <div id="tweets" class="my-article"></div>
-            <div id="comments" class="container-comments"></div>
+            <div id="pageTweet" class="container-comments"></div>
+            <div id="conteinerAddComment"></div>
             <button id="load-more" class="btn next-message">Load more</button>
           </div>
         </section>
         
         <section class="section filter" id="filter">
-            <form action="" method="post" class="filter" name="form-filter">
+            <form action="" method="post" class="filter" name="formfilter">
                 <label for="POST-tweet">Search name:</label>
                 <input class="input" id="input-user" type="text" name="username">
                 <label for="POST-name">Search tweet:</label>
-                <input class="input" id="POST-name" autocomplete="on" type="text" name="value">
+                <input class="input" id="POST-name" autocomplete="on" type="text" name="text">
                 <label for="input-dateto">Date start:</label>
-                <input class="input" id="input-dateto" type="date" name="value" value="2018-07-22" min="2018-01-01" max="2022-04-28"><br>
+                <input class="input" id="input-datefrom" type="date" name="dateFrom" value="2018-01-01" min="2018-01-01" max="2022-05-28"><br>
                 <label for="input-datefrom">Date end:</label>
-                <input class="input" type="date" id="input-datefrom" name="value" value="2021-08-22" min="2018-01-01" max="2022-04-28"><br>
-                <label for="input-hashtags">Search heshtags:</label>
-                <input class="input" id="input-hashtags" type="text" name="add heshtag">
-                <input type="submit" id="btn-hashtags" name="add heshtag" class="btn input-btn hashtag-btn" value="Add hashtag"><br>
+                <input class="input" type="date" id="input-dateto" name="dateTo" value="2022-05-28" min="2018-01-01" max="2022-05-28"><br>
+                <label for="input-hashtags">Search hashtags:</label>
+                <input class="input" id="input-hashtags" type="text" name="hashtags">
+                <input type="submit" id="btn-hashtags" name="add hashtag" class="btn input-btn hashtag-btn" value="Add hashtag"><br>
                 <input class="btn find-btn" id="btn-find" type="submit" value="Find"><br>
     </form></section>
     </div>
