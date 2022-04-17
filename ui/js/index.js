@@ -2,208 +2,6 @@
 /* eslint-disable no-unused-vars */
 'use strict'
 
-const tweets = [{
-      id: '1',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '2',
-      text: 'Какие дела?',
-      createdAt: new Date('2022-03-02T23:00:01'),
-      author: 'Брыль Степан',
-      comments: [{
-         id: '912',
-         text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2022-03-09T23:00:05'),
-         author: 'Иванов Иван'
-      }]
-   },
-   {
-      id: '3',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-01T23:00:00'),
-      author: 'Иванов Степан',
-      comments: []
-   },
-   {
-      id: '4',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-10-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-   },
-   {
-      id: '5',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-09-09T23:00:00'),
-      comments: []
-   },
-   {
-      id: '6',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-08-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: [{
-         id: '111',
-         text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2021-10-09T23:00:05'),
-         author: 'Иванов Иван'
-      }]
-   },
-   {
-      id: '7',
-      text: 'Дела! #js #datamola',
-      createdAt: new Date('2021-07-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '8',
-      text: 'Дела! #js #datamola',
-      createdAt: new Date('2021-06-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-   },
-   {
-      id: '9',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-05-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-   },
-   {
-      id: '10',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-04-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-
-   },
-   {
-      id: '11',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-03-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-
-   },
-   {
-      id: '12',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-09-09T23:00:00'),
-      author: 'Колугин Иван',
-      comments: [{
-            id: '100',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-19T23:00:05'),
-            author: 'Иванов Иван'
-         },
-         {
-            id: '101',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-09T23:00:05'),
-            author: 'Иванов Иван'
-         }
-      ]
-   },
-   {
-      id: '13',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-08-09T23:00:00'),
-      author: 'Иванов Иван',
-      comments: []
-   },
-   {
-      id: '14',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-07-09T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-   },
-   {
-      id: '15',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-06-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-   },
-   {
-      id: '16',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-05-11T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-   },
-   {
-      id: '17',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-04-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '18',
-      text: 'Привет! #hi #datamola',
-      createdAt: new Date('2020-03-10T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-   },
-   {
-      id: '19',
-      text: 'Привет! #hi #datamola',
-      createdAt: new Date('2020-03-08T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-
-   },
-   {
-      id: '20',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-03-02T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-
-   },
-   {
-      id: '21',
-      text: 'Привет! #hi #datamola I am happy',
-      createdAt: new Date('2019-03-10T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-   },
-   {
-      id: '22',
-      text: 'Привет! #hi #datamola what are you doing?',
-      createdAt: new Date('2019-02-08T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-
-   },
-   {
-      id: '23',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2019-01-02T23:00:00'),
-      author: 'Колугин Иван',
-      comments: [{
-            id: '100',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-19T23:00:05'),
-            author: 'Иванов Иван'
-         },
-         {
-            id: '101',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-09T23:00:05'),
-            author: 'Иванов Иван'
-         }
-      ]
-
-   }
-];
-
 
 class User {
    name;
@@ -467,9 +265,6 @@ class TweetCollection {
    }
 }
 
-const tweetCollection = new TweetCollection(tweets);
-const mainTweetsArr = tweetCollection._array;
-//console.log(mainTweetsArr)
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
    constructor(idUser) {
@@ -478,7 +273,7 @@ class HeaderView {
    display(nameUser) {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${nameUser}</h2>`;
+      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser')).name}</h2>`;
       if (nameUser) {
          btnRegister.innerText = 'Sing out';
       } else {
@@ -491,13 +286,13 @@ class TweetFeedView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(...params) {
+   display(params) {
       const conteiner = document.getElementById(this.containerId);
-      const tweetNewCollection = tweetCollectionController.tweetCollection.getPage(...params);
+     
       //document.getElementById('pageTweet').style.display = 'none';
       //document.getElementById('tweets').style.display = 'flex';
-      conteiner.innerHTML = tweetNewCollection.map(item =>
-         (item.author === tweetCollection._user) ? // сравниваем с текущим юзером
+      conteiner.innerHTML = params.map(item =>
+         (item.author === 'Stapan') ? // сравниваем с текущим юзером
          ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
@@ -629,8 +424,7 @@ class FilterView {
 class TweetController {
 
    constructor(tweets) {
-      this.tweetCollection = new TweetCollection(tweets);
-      this.headerView = new HeaderView('name-user').display(this.tweetCollection._user);
+      this.headerView = new HeaderView('name-user').display(JSON.parse(localStorage.getItem('currentUser')));
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
@@ -648,7 +442,6 @@ class TweetController {
       formTweetEdit.text.value = tweet.text; //tweet.id
 
       let btnEditTweetAdd = document.getElementById('btn-add-tweet');
-      console.log(btnEditTweetAdd.id)
       btnEditTweetAdd.id = "new-edit";
       btnEditTweetAdd.innerHTML = 'Edit';
       let btnNewEditTweetAdd = document.getElementById('new-edit');
@@ -693,7 +486,7 @@ class TweetController {
 
 }
 
-const tweetCollectionController = new TweetController(tweets);
+const tweetCollectionController = new TweetController();
 
 const tweetsConteiner = document.getElementById('tweets');
 const pageTweet = document.getElementById('pageTweet');
@@ -707,98 +500,22 @@ const inputHashtags = document.getElementById('input-hashtags');
 const btnAddHashtags = document.getElementById('btn-hashtags');
 const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
-const btnRegister = document.getElementById('btn-register');
+const btnSingOut = document.getElementById('btn-register');
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 
 UserList.addUser('Брыль Степан', '1234');
-UserList.addUser('Николаев Иван', '1234');
+UserList.addUser('Stepan', '123');
 UserList.addUser('Калякин Иван', '1234');
 
-function openPageSingin() {
-   conteinerPage.innerHTML = `
-<div id="sing-in">
-      <form action="" name="formsingin">
-          <div class="contain">
-              <h1>Sing in</h1>
-                  <hr>
-      <label for="uname"><b>Username</b></label>
-      <input id="inputUserSing" type="text" placeholder="Enter Username" name="uname" required>
-  
-      <label for="psw"><b>Password</b></label>
-      <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
-  
-      <button type="submit" class="loginbtn">LogIn</button>
-      <button class='ps' id="btn-register-singin">Register</button>
-    </div>
-    </form>
-    </div>
-`;
-
-   const btnRegisterSingin = document.getElementById('btn-register-singin');
-   btnRegisterSingin.addEventListener('click', openPageRegister);
-   btnRegisterSingin.removeEventListener('click', openPageSingin);
-   const btnLogin = document.querySelector('.loginbtn');
-   btnLogin.addEventListener('click', getNewUser, false);
-}
 
 
-function getNewUser(event) {
-   //event.preventDefault();
-     let inputUserSing = document.formsingin;
-     let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-     UserList.setCurrentUser(currentUser);
-}
-
-function openPageRegister() {
-   conteinerPage.innerHTML = `
-   <div id="register">
-        <form action="main.html" method="post" id="formregister" name="formregister">
-            <div class="contain">
-              <h1>Register</h1>
-              <hr>
-              <label for="name"><b>Username</b></label>
-              <input id="inputUserRegister" type="text" placeholder="Enter Username" name="name" required>
-              
-              <label for="password"><b>Password</b></label>
-              <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
-              
-              <label for="passwordrepeat"><b>Repeat Password</b></label>
-              <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
-              
-              <button type="submit" class="registerbtn">Register</button>
-              <button class='psw' id="btn-singin-register">Sing in</button>
-            </div>
-          </form>
-        </div>
-        `
-        
-        function setNewUser(event){
-         //event.preventDefault();
-         const formRegister = document.formregister;
-         if(formRegister.password.value === formRegister.passwordrepeat.value){
-      UserList.addUser(formRegister.name.value, formRegister.password.value);
-      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-      UserList.setCurrentUser(currentUser);
-      }else{
-         return formRegister.passwordrepeat.value = "no repeat password";
-      }
-      }
-   const btnSinginRegister = document.getElementById('btn-singin-register');
-   btnSinginRegister.addEventListener('click', openPageSingin);
-   btnSinginRegister.removeEventListener('click', openPageRegister);
-   const btnAddNewUser = document.querySelector('.registerbtn');
-   console.log(btnAddNewUser)
-   btnAddNewUser.addEventListener('click', setNewUser, false);
-}
-
-
-console.log(UserList.users);
+/*
 window.addEventListener('load', (event) => {
-
-   btnRegister.addEventListener('click', openPageSingin);
-   tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
+   btnSingOut.addEventListener('click', openPageSingin);
+  // tweetCollectionController.getFeed(0, 10);
+   // загрузили твиты на странницу;
    
    let count = 0;
 
@@ -884,5 +601,170 @@ window.addEventListener('load', (event) => {
 
 });
 
+*/
+btnSingOut.addEventListener('click', openPageSingin);
+const url = 'https://jslabapi.datamola.com/tweet';
+  async function getData(){
+  try {
+    const response = await fetch(url);
+    const result = await response.json();     
+   tweetCollectionController.tweetFeedView.display(result);
+    }
+       catch(err){
+         console.log(err)
+       }
+
+   };  
+
+getData();
+
+class TweetFeedApiService {
+    url = 'https://jslabapi.datamola.com/tweet';
+  async getData(){
+   try {
+      const response = await fetch(this.url);
+      const result = await response.json();     
+     
+        console.log(result)
+      }
+         catch(err){
+           console.log(err)
+         }
+  }
+
+  async postLogin(url = '', data = {}) {
+   const response = await fetch(url, {
+     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     mode: 'cors', 
+     cache: 'no-cache', 
+     credentials: 'same-origin', 
+     headers: {
+       'Content-Type': 'application/json'
+     },
+     redirect: 'follow', 
+     referrerPolicy: 'no-referrer', // no-referrer, *client
+     body: JSON.stringify(data) // body data type must match "Content-Type" header
+   });
+   return await response.json(); 
+ }
+ 
+ async postTweetAdd(url = '', data = {}) {
+   const response = await fetch(url, {
+     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     mode: 'cors', 
+     cache: 'no-cache', 
+     credentials: 'same-origin', 
+     headers: {
+       'Content-Type': 'application/json',
+       'Authorization': `Bearer ${token}`
+     },
+     redirect: 'follow', 
+     referrerPolicy: 'no-referrer', // no-referrer, *client
+     body: JSON.stringify(data) // body data type must match "Content-Type" header
+   });
+   return await response.json(); 
+ }
+
+}
 
 
+//"id"=  "b6a4ca3e-d4c9-49aa-b4f3-1f48461e6ce1"
+//"login"= "Stepan Bryl"
+
+const tweetFeedApiService = new TweetFeedApiService();
+function openPageSingin() {
+   conteinerPage.innerHTML = `
+<div id="sing-in">
+      <form action="" name="formsingin">
+          <div class="contain">
+              <h1>Sing in</h1>
+                  <hr>
+      <label for="uname"><b>Username</b></label>
+      <input id="inputUserSing" type="text" placeholder="Enter Username" name="uname" required>
+  
+      <label for="psw"><b>Password</b></label>
+      <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
+  
+      <button type="submit" class="loginbtn">LogIn</button>
+      <button class='ps' id="btn-register-singin">Register</button>
+    </div>
+    </form>
+    </div>
+`;
+
+   const btnRegisterSingin = document.getElementById('btn-register-singin');
+   btnRegisterSingin.addEventListener('click', openPageRegister);
+   btnRegisterSingin.removeEventListener('click', openPageSingin);
+   const btnLogin = document.querySelector('.loginbtn');
+   btnLogin.addEventListener('click', getNewUser, false);
+}
+
+
+function getNewUser(event) {
+   //event.preventDefault();
+     let inputUserSing = document.formsingin;
+     UserList.setCurrentUser(inputUserSing.uname.value);
+     tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
+      "login": `${inputUserSing.uname.value}`,
+     'password':`${inputUserSing.psw.value}`
+   })
+     .then((data) => {
+      if(data){
+         console.log(UserList.currentUser.name)
+        console.log(data)
+         tweetCollectionController.getFeed(0, 10);
+      } 
+     })
+}
+
+
+
+function openPageRegister() {
+   conteinerPage.innerHTML = `
+   <div id="register">
+        <form action="main.html" method="post" id="formregister" name="formregister">
+            <div class="contain">
+              <h1>Register</h1>
+              <hr>
+              <label for="name"><b>Username</b></label>
+              <input id="inputUserRegister" type="text" placeholder="Enter Username" name="name" required>
+              
+              <label for="password"><b>Password</b></label>
+              <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
+              
+              <label for="passwordrepeat"><b>Repeat Password</b></label>
+              <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
+              
+              <button type="submit" class="registerbtn">Register</button>
+              <button class='psw' id="btn-singin-register">Sing in</button>
+            </div>
+          </form>
+        </div>
+        `
+        
+        function setNewUser(event){
+         //event.preventDefault();
+         const formRegister = document.formregister;
+         if(formRegister.password.value === formRegister.passwordrepeat.value){
+      UserList.addUser(formRegister.name.value, formRegister.password.value);
+      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
+      UserList.setCurrentUser(currentUser);
+      }else{
+         return formRegister.passwordrepeat.value = "no repeat password";
+      }
+      }
+   const btnSinginRegister = document.getElementById('btn-singin-register');
+   btnSinginRegister.addEventListener('click', openPageSingin);
+   btnSinginRegister.removeEventListener('click', openPageRegister);
+   const btnAddNewUser = document.querySelector('.registerbtn');
+   btnAddNewUser.addEventListener('click', setNewUser, false);
+}
+
+/*
+   tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
+      'text': 'Hello #datamola'
+   })
+     .then((data) => {
+       console.log(data); 
+     });
+     */
