@@ -41,12 +41,13 @@ class HeaderView {
    constructor(idUser) {
       this.containerId = idUser;
    }
-   display(nameUser) {
+   display() {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
       header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser')).name}</h2>`;
-      if (nameUser) {
+      if (JSON.parse(localStorage.getItem('currentUser')).name) {
          btnRegister.innerText = 'Sing out';
+         
       } else {
          btnRegister.innerText = 'Sing in';
       }
@@ -194,7 +195,7 @@ class FilterView {
 
 class TweetController {
 
-   constructor(tweets) {
+   constructor() {
       this.headerView = new HeaderView('name-user').display(JSON.parse(localStorage.getItem('currentUser')));
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
@@ -373,13 +374,13 @@ window.addEventListener('load', (event) => {
 });
 */
 
-btnSingOut.addEventListener('click', openPageSingin);
+
 
 class TweetFeedApiService {
-    url = 'https://jslabapi.datamola.com/tweet';
+    
   async getData(){
    try {
-      const response = await fetch(this.url);
+      const response = await fetch('https://jslabapi.datamola.com/tweet');
       const result = await response.json();     
       tweetCollectionController.tweetFeedView.display(result);
       }
@@ -427,7 +428,8 @@ class TweetFeedApiService {
 //"login"= "Stepan Bryl"
 
 const tweetFeedApiService = new TweetFeedApiService();
-tweetFeedApiService.getData();
+btnSingOut.addEventListener('click', openPageSingin);
+
 
 function openPageSingin() {
    conteinerPage.innerHTML = `
@@ -448,7 +450,20 @@ function openPageSingin() {
     </form>
     </div>
 `;
-
+ 
+function getNewUser(event) {
+   event.preventDefault();
+      let inputUserSing = document.formsingin;
+      UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
+    let token = tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
+       "login": `${inputUserSing.uname.value}`,
+      'password':`${inputUserSing.psw.value}`
+    })
+      .then((data) => {
+         localStorage.setItem('myToken', JSON.stringify(data))
+      })
+      
+ }
    const btnRegisterSingin = document.getElementById('btn-register-singin');
    btnRegisterSingin.addEventListener('click', openPageRegister);
    btnRegisterSingin.removeEventListener('click', openPageSingin);
@@ -456,24 +471,8 @@ function openPageSingin() {
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
-
-function getNewUser(event) {
-   //event.preventDefault();
-     let inputUserSing = document.formsingin;
-     UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
-     tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
-      "login": `${inputUserSing.uname.value}`,
-     'password':`${inputUserSing.psw.value}`
-   })
-     .then((data) => {
-      if(data){
-         console.log(UserList.currentUser.name)
-        console.log(data)
-        tweetFeedApiService.getData();
-      } 
-     })
-}
-
+ 
+tweetFeedApiService.getData();
 
 
 function openPageRegister() {
