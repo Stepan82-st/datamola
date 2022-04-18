@@ -64,7 +64,7 @@ class TweetFeedView {
       //document.getElementById('pageTweet').style.display = 'none';
       //document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = params.map(item =>
-         (item.author === 'Stapan') ? // сравниваем с текущим юзером
+         (item.author === JSON.parse(localStorage.getItem('currentUser')).name) ? 
          ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
@@ -382,6 +382,7 @@ class TweetFeedApiService {
    try {
       const response = await fetch('https://jslabapi.datamola.com/tweet');
       const result = await response.json();     
+      console.log(result)
       tweetCollectionController.tweetFeedView.display(result);
       }
          catch(err){
@@ -413,7 +414,7 @@ class TweetFeedApiService {
      credentials: 'same-origin', 
      headers: {
        'Content-Type': 'application/json',
-       'Authorization': `Bearer ${token}`
+       'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
      },
      redirect: 'follow', 
      referrerPolicy: 'no-referrer', // no-referrer, *client
@@ -455,12 +456,12 @@ function getNewUser(event) {
    event.preventDefault();
       let inputUserSing = document.formsingin;
       UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
-    let token = tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
+     tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
        "login": `${inputUserSing.uname.value}`,
       'password':`${inputUserSing.psw.value}`
     })
       .then((data) => {
-         localStorage.setItem('myToken', JSON.stringify(data))
+         localStorage.setItem('token', JSON.stringify(data))
       })
       
  }
@@ -473,7 +474,17 @@ function getNewUser(event) {
 
  
 tweetFeedApiService.getData();
+const btnAddTweet = document.getElementById('btn-add-tweet');
+const myFormAddTweet = document.formtweetadd;
 
+btnAddTweet.addEventListener('click', function(){
+tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
+   'text': myFormAddTweet.text.value
+})
+  .then((data) => {
+    console.log(data); 
+  });
+});
 
 function openPageRegister() {
    conteinerPage.innerHTML = `
@@ -516,11 +527,3 @@ function openPageRegister() {
    btnAddNewUser.addEventListener('click', setNewUser, false);
 }
 
-/*
-   tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
-      'text': 'Hello #datamola'
-   })
-     .then((data) => {
-       console.log(data); 
-     });
-     */
