@@ -453,12 +453,12 @@ function openPageSingin() {
 `;
  
 function getNewUser(event) {
-   event.preventDefault();
+  // event.preventDefault();
       let inputUserSing = document.formsingin;
       UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
        "login": `${inputUserSing.uname.value}`,
-      'password':`${inputUserSing.psw.value}`
+      "password":`${inputUserSing.psw.value}`
     })
       .then((data) => {
          localStorage.setItem('token', JSON.stringify(data))
@@ -472,14 +472,13 @@ function getNewUser(event) {
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
- 
 tweetFeedApiService.getData();
 const btnAddTweet = document.getElementById('btn-add-tweet');
 const myFormAddTweet = document.formtweetadd;
 
 btnAddTweet.addEventListener('click', function(){
 tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
-   'text': myFormAddTweet.text.value
+   "text": myFormAddTweet.text.value
 })
   .then((data) => {
     console.log(data); 
@@ -510,15 +509,18 @@ function openPageRegister() {
         `
         
         function setNewUser(event){
-         //event.preventDefault();
-         const formRegister = document.formregister;
-         if(formRegister.password.value === formRegister.passwordrepeat.value){
-      UserList.addUser(formRegister.name.value, formRegister.password.value);
-      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-      UserList.setCurrentUser(currentUser);
-      }else{
-         return formRegister.passwordrepeat.value = "no repeat password";
-      }
+         // event.preventDefault();
+      let inputUserRegister = document.formregister;
+      if(inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
+      UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
+      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/registration', { 
+       "login": `${inputUserRegister.name.value}`,
+       "password":`${inputUserRegister.password.value}`
+    })
+      .then((data) => {
+         console.log(data);
+      })
+      openPageSingin();
       }
    const btnSinginRegister = document.getElementById('btn-singin-register');
    btnSinginRegister.addEventListener('click', openPageSingin);
