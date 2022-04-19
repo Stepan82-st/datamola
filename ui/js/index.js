@@ -1,210 +1,6 @@
 /* eslint-disable no-setter-return */
 /* eslint-disable no-unused-vars */
 'use strict'
-
-const tweets = [{
-      id: '1',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '2',
-      text: 'Какие дела?',
-      createdAt: new Date('2022-03-02T23:00:01'),
-      author: 'Брыль Степан',
-      comments: [{
-         id: '912',
-         text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2022-03-09T23:00:05'),
-         author: 'Иванов Иван'
-      }]
-   },
-   {
-      id: '3',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2022-03-01T23:00:00'),
-      author: 'Иванов Степан',
-      comments: []
-   },
-   {
-      id: '4',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-10-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-   },
-   {
-      id: '5',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-09-09T23:00:00'),
-      comments: []
-   },
-   {
-      id: '6',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-08-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: [{
-         id: '111',
-         text: 'Хорошо, а у тебя?',
-         createdAt: new Date('2021-10-09T23:00:05'),
-         author: 'Иванов Иван'
-      }]
-   },
-   {
-      id: '7',
-      text: 'Дела! #js #datamola',
-      createdAt: new Date('2021-07-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '8',
-      text: 'Дела! #js #datamola',
-      createdAt: new Date('2021-06-09T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-   },
-   {
-      id: '9',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-05-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-   },
-   {
-      id: '10',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-04-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-
-   },
-   {
-      id: '11',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2021-03-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-
-   },
-   {
-      id: '12',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-09-09T23:00:00'),
-      author: 'Колугин Иван',
-      comments: [{
-            id: '100',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-19T23:00:05'),
-            author: 'Иванов Иван'
-         },
-         {
-            id: '101',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-09T23:00:05'),
-            author: 'Иванов Иван'
-         }
-      ]
-   },
-   {
-      id: '13',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-08-09T23:00:00'),
-      author: 'Иванов Иван',
-      comments: []
-   },
-   {
-      id: '14',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-07-09T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-   },
-   {
-      id: '15',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-06-09T23:00:00'),
-      author: 'Малякин Иван',
-      comments: []
-   },
-   {
-      id: '16',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-05-11T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-   },
-   {
-      id: '17',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-04-09T23:00:00'),
-      author: 'Калякин Иван',
-      comments: []
-   },
-   {
-      id: '18',
-      text: 'Привет! #hi #datamola',
-      createdAt: new Date('2020-03-10T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-   },
-   {
-      id: '19',
-      text: 'Привет! #hi #datamola',
-      createdAt: new Date('2020-03-08T23:00:00'),
-      author: 'Николаев Иван',
-      comments: []
-
-   },
-   {
-      id: '20',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2020-03-02T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-
-   },
-   {
-      id: '21',
-      text: 'Привет! #hi #datamola I am happy',
-      createdAt: new Date('2019-03-10T23:00:00'),
-      author: 'Колугин Иван',
-      comments: []
-   },
-   {
-      id: '22',
-      text: 'Привет! #hi #datamola what are you doing?',
-      createdAt: new Date('2019-02-08T23:00:00'),
-      author: 'Брыль Степан',
-      comments: []
-
-   },
-   {
-      id: '23',
-      text: 'Привет! #js #datamola',
-      createdAt: new Date('2019-01-02T23:00:00'),
-      author: 'Колугин Иван',
-      comments: [{
-            id: '100',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-19T23:00:05'),
-            author: 'Иванов Иван'
-         },
-         {
-            id: '101',
-            text: 'Хорошо, а у тебя?',
-            createdAt: new Date('2020-10-09T23:00:05'),
-            author: 'Иванов Иван'
-         }
-      ]
-
-   }
-];
-
-
 class User {
    name;
    password;
@@ -214,14 +10,10 @@ class User {
      this.password = password;
    }
  }
-
- const setToLocalStorage = (key, value) => {
-   return localStorage.setItem(key, value);
- }
  const getFromLocalStorage = (key) => {
   return  JSON.parse(localStorage.getItem(key));
  }
- const userList = [];
+
 class UserList {
    static users = [];
    static currentUser;
@@ -230,257 +22,32 @@ class UserList {
     return this.users.push(new User(user, password));
    }
  
-   static setCurrentUser(username) {
-     this.currentUser = this.users.find(user => user.name === username.name);
-     if(this.currentUser)
-     setToLocalStorage('currentUser', JSON.stringify(this.currentUser));
-     return this.currentUser;
+   static setCurrentUser(username, password) {
+      localStorage.setItem('currentUser', JSON.stringify(new User(username, password)))
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser')).name;
+      return this.currentUser;
    }
 
    static getCurrentUser(){
      return getFromLocalStorage('currentUser');
    }
 }
-// eslint-disable-next-line no-unused-vars
 
-class Tweet {
-   _id;
-   _author;
-   text;
-   _createdAt;
-   comments = [];
-   set textParam(newText) {
-      if (this._validateText(newText)) {
-         this.text = newText;
-      } else {
-         throw new Error('Tweet text length should be less 280 symbols');
-      }
-   }
-   get textParam() {
-      return this.text;
-   }
-   get id() {
-      return this._id;
-   }
-   get author() {
-      return this._author;
-   }
-   get createdAt() {
-      return this._createdAt;
-   }
-   constructor(options) {
-      this.text = options.text || options;
-      this._id = options.id || this._uniqueID().toString();
-      this._author = options.author || JSON.parse(localStorage.getItem('currentUser')).name;
-      this._createdAt = options.createdAt || new Date();
-      this.comments = (options.comments) ? options.comments.map((com) => new Comment(com)) : [];
-   }
-   _validateText(text) {
-      return text.length <= 280;
-   }
-
-   _uniqueID() {
-      return tweets.length + 1;
-   }
-
-   static validate(tweet) {
-      if (tweet) {
-         const isValidComments = Array.isArray(tweet.comments) && (tweet.comments.length === 0 || tweet.comments.every(comment => Comment.validate(comment)));
-         return !!tweet.id && !!tweet.text && !!tweet.author && !!tweet.createdAt?.getMonth && isValidComments;
-      } else {
-         return false;
-      }
-   }
-}
-
-class Comment {
-   text;
-   set textCom(newText) {
-      if (this._validateText(newText)) {
-         this.text = newText;
-      } else {
-         throw new Error('Comment text length should be less 280 symbols')
-      }
-   }
-   get textCom() {
-      return this.text;
-   }
-   get id() {
-      return this._id;
-   }
-   get author() {
-      return this._author;
-   }
-   get createdAt() {
-      return this._createdAt;
-   }
-   constructor(options) {
-      this.text = options.text || options;
-      this._id = options.id || this._uniqueID().toString();
-      this._createdAt = options.createdAt || new Date();
-      this._author = options.author || JSON.parse(localStorage.getItem('currentUser')).name;
-   }
-   _uniqueID() {
-      return tweets.length + 1;
-   }
-   _validateText(text) {
-      return text.length <= 280;
-   }
-   static validate(com) {
-      return !!com && !!com.id && !!com.text && !!com.createdAt?.getMonth && !!com.author;
-   }
-}
 if(!JSON.parse(localStorage.getItem('currentUser')))
-localStorage.setItem('currentUser', JSON.stringify({name:'Брыль Степан', password:'1234'}));
-const _tweetArr = []; // Глобальный массив невалидных твитов;
-class TweetCollection {
-   _user;
-   setnewUser(user) {
-      if (user) {
-         this._user = user;
-      }
-      return new Error('No user');
-   }
-   getnewUser() {
-      return this._user;
-   }
+localStorage.setItem('currentUser', JSON.stringify({name:'Stepan', password:'123'}));
 
-   constructor(options) {
-      this._user = JSON.parse(localStorage.getItem('currentUser')).name;
-      this._array = this.addAll(options);
-   }
-
-   set array(value) {
-      if (!value) {
-         return new Error("No value");
-      }
-      this._array = value;
-   }
-
-   get array() {
-      return this._array;
-   }
-
-   getPage(skip = 0, top = 10, filterConfig = arguments[0]) {
-      const sortedTweets = this._array.sort((a, b) => b._createdAt - a._createdAt);
-
-      if (typeof skip !== 'number')
-         skip = 0;
-      const filterArray = this._filterTweets(filterConfig);
-      if (filterConfig) {
-         return filterArray.slice(skip, top + skip);
-      } else if (skip >= 0 && top && !filterConfig) {
-         return sortedTweets.slice(skip, top + skip);
-      } else {
-         return "invalid parameter";
-      }
-   }
-
-   _filterTweets(filterConfig) {
-
-      return this._array.filter(tweet => {
-         let authorFilter, textFilter, dateFromFilter, dateToFilter, hashtagsFilter;
-         authorFilter = textFilter = dateFromFilter = dateToFilter = hashtagsFilter = true;
-         if (filterConfig?.author) {
-            authorFilter = tweet._author.toUpperCase().includes(filterConfig.author.toUpperCase());
-         }
-         if (filterConfig?.text) {
-            textFilter = tweet.text.toUpperCase().includes(filterConfig.text.toUpperCase());
-         }
-         if (filterConfig?.dateFrom) {
-            dateFromFilter = tweet._createdAt >= filterConfig.dateFrom;
-         }
-         if (filterConfig?.dateTo) {
-            dateToFilter = tweet._createdAt <= filterConfig.dateTo;
-         }
-         if (filterConfig?.hashtags) {
-            hashtagsFilter = filterConfig.hashtags.every(item => tweet.text.includes(item));
-         }
-         // console.log("filter",tweet, dateFromFilter, dateToFilter);
-         return authorFilter && textFilter && dateFromFilter && dateToFilter && hashtagsFilter;
-      })
-   }
-
-
-   add(tweet) {
-      if (tweet.length <= 280) {
-         const newTweet = new Tweet(tweet);
-         this._array.push(newTweet);
-
-         return true;
-      } else {
-         return false;
-      }
-   }
-
-   edit(id, text) {
-      const tweet = this._getTweet(id);
-      if (tweet.author === this._user && text.length <= 280) {
-         tweet.text = text;
-         return true;
-      } else {
-         return false;
-      }
-   }
-
-   remove(id) {
-      const tweet = this._getTweet(id);
-      const index = this._array.findIndex(elem => elem._id === id);
-      if (index !== -1 && tweet.author === this._user) {
-         this._array.splice(index, 1);
-         return true;
-      } else {
-         return false;
-      }
-   }
-
-   addComment(id, text) {
-      const tweet = this._getTweet(id);
-      if (tweet && text.length <= 280) {
-         const newComment = new Comment(text)
-         tweet.comments.push(newComment);
-         return true;
-      } else {
-         return false;
-      }
-   }
-   _getTweet(id) {
-      return this._array.find(function (item) {
-         if (id)
-            return item._id === id;
-      })
-   }
-
-   addAll(tweets) {
-      const tweetValid = [];
-      tweets.map((tw) => {
-         if (Tweet.validate(tw)) {
-            tweetValid.push(new Tweet(tw));
-         } else {
-            _tweetArr.push(tw);
-         }
-      })
-      return tweetValid;
-   }
-   clear(tweetCollection) {
-      return tweetCollection.splice();
-   }
-}
-
-const tweetCollection = new TweetCollection(tweets);
-const mainTweetsArr = tweetCollection._array;
-//console.log(mainTweetsArr)
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
    constructor(idUser) {
       this.containerId = idUser;
    }
-   display(nameUser) {
+   display() {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${nameUser}</h2>`;
-      if (nameUser) {
+      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser')).name}</h2>`;
+      if (JSON.parse(localStorage.getItem('currentUser')).name) {
          btnRegister.innerText = 'Sing out';
+         
       } else {
          btnRegister.innerText = 'Sing in';
       }
@@ -491,13 +58,13 @@ class TweetFeedView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(...params) {
+   display(params) {
       const conteiner = document.getElementById(this.containerId);
-      const tweetNewCollection = tweetCollectionController.tweetCollection.getPage(...params);
+     
       //document.getElementById('pageTweet').style.display = 'none';
       //document.getElementById('tweets').style.display = 'flex';
-      conteiner.innerHTML = tweetNewCollection.map(item =>
-         (item.author === tweetCollection._user) ? // сравниваем с текущим юзером
+      conteiner.innerHTML = params.map(item =>
+         (item.author === JSON.parse(localStorage.getItem('currentUser')).name) ? 
          ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
@@ -628,9 +195,8 @@ class FilterView {
 
 class TweetController {
 
-   constructor(tweets) {
-      this.tweetCollection = new TweetCollection(tweets);
-      this.headerView = new HeaderView('name-user').display(this.tweetCollection._user);
+   constructor() {
+      this.headerView = new HeaderView('name-user').display(JSON.parse(localStorage.getItem('currentUser')));
       this.tweetFeedView = new TweetFeedView('tweets');
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
@@ -648,7 +214,6 @@ class TweetController {
       formTweetEdit.text.value = tweet.text; //tweet.id
 
       let btnEditTweetAdd = document.getElementById('btn-add-tweet');
-      console.log(btnEditTweetAdd.id)
       btnEditTweetAdd.id = "new-edit";
       btnEditTweetAdd.innerHTML = 'Edit';
       let btnNewEditTweetAdd = document.getElementById('new-edit');
@@ -686,14 +251,14 @@ class TweetController {
    }
    static save() {
       return  localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
-      }
+      } 
       static restore(){
          return new TweetCollection(JSON.parse(localStorage.getItem(`tweets`)));
       }
 
 }
 
-const tweetCollectionController = new TweetController(tweets);
+const tweetCollectionController = new TweetController();
 
 const tweetsConteiner = document.getElementById('tweets');
 const pageTweet = document.getElementById('pageTweet');
@@ -707,98 +272,22 @@ const inputHashtags = document.getElementById('input-hashtags');
 const btnAddHashtags = document.getElementById('btn-hashtags');
 const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
-const btnRegister = document.getElementById('btn-register');
+const btnSingOut = document.getElementById('btn-register');
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 
 UserList.addUser('Брыль Степан', '1234');
-UserList.addUser('Николаев Иван', '1234');
+UserList.addUser('Stepan', '123');
 UserList.addUser('Калякин Иван', '1234');
 
-function openPageSingin() {
-   conteinerPage.innerHTML = `
-<div id="sing-in">
-      <form action="" name="formsingin">
-          <div class="contain">
-              <h1>Sing in</h1>
-                  <hr>
-      <label for="uname"><b>Username</b></label>
-      <input id="inputUserSing" type="text" placeholder="Enter Username" name="uname" required>
-  
-      <label for="psw"><b>Password</b></label>
-      <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
-  
-      <button type="submit" class="loginbtn">LogIn</button>
-      <button class='ps' id="btn-register-singin">Register</button>
-    </div>
-    </form>
-    </div>
-`;
-
-   const btnRegisterSingin = document.getElementById('btn-register-singin');
-   btnRegisterSingin.addEventListener('click', openPageRegister);
-   btnRegisterSingin.removeEventListener('click', openPageSingin);
-   const btnLogin = document.querySelector('.loginbtn');
-   btnLogin.addEventListener('click', getNewUser, false);
-}
 
 
-function getNewUser(event) {
-   //event.preventDefault();
-     let inputUserSing = document.formsingin;
-     let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-     UserList.setCurrentUser(currentUser);
-}
-
-function openPageRegister() {
-   conteinerPage.innerHTML = `
-   <div id="register">
-        <form action="main.html" method="post" id="formregister" name="formregister">
-            <div class="contain">
-              <h1>Register</h1>
-              <hr>
-              <label for="name"><b>Username</b></label>
-              <input id="inputUserRegister" type="text" placeholder="Enter Username" name="name" required>
-              
-              <label for="password"><b>Password</b></label>
-              <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
-              
-              <label for="passwordrepeat"><b>Repeat Password</b></label>
-              <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
-              
-              <button type="submit" class="registerbtn">Register</button>
-              <button class='psw' id="btn-singin-register">Sing in</button>
-            </div>
-          </form>
-        </div>
-        `
-        
-        function setNewUser(event){
-         //event.preventDefault();
-         const formRegister = document.formregister;
-         if(formRegister.password.value === formRegister.passwordrepeat.value){
-      UserList.addUser(formRegister.name.value, formRegister.password.value);
-      let currentUser = UserList.users.find(user => user.name === inputUserSing.uname.value && user.password === inputUserSing.psw.value);
-      UserList.setCurrentUser(currentUser);
-      }else{
-         return formRegister.passwordrepeat.value = "no repeat password";
-      }
-      }
-   const btnSinginRegister = document.getElementById('btn-singin-register');
-   btnSinginRegister.addEventListener('click', openPageSingin);
-   btnSinginRegister.removeEventListener('click', openPageRegister);
-   const btnAddNewUser = document.querySelector('.registerbtn');
-   console.log(btnAddNewUser)
-   btnAddNewUser.addEventListener('click', setNewUser, false);
-}
-
-
-console.log(UserList.users);
+/*
 window.addEventListener('load', (event) => {
-
-   btnRegister.addEventListener('click', openPageSingin);
-   tweetCollectionController.getFeed(0, 10); // загрузили твиты на странницу;
+   btnSingOut.addEventListener('click', openPageSingin);
+  // tweetCollectionController.getFeed(0, 10);
+   // загрузили твиты на странницу;
    
    let count = 0;
 
@@ -883,6 +372,160 @@ window.addEventListener('load', (event) => {
    btnAddTweets.addEventListener('click', getAddTweet, false);
 
 });
+*/
 
 
+
+class TweetFeedApiService {
+    
+  async getData(){
+   try {
+      const response = await fetch('https://jslabapi.datamola.com/tweet');
+      const result = await response.json();     
+      console.log(result)
+      tweetCollectionController.tweetFeedView.display(result);
+      }
+         catch(err){
+           console.log(err)
+         }
+  }
+
+  async postLogin(url = '', data = {}) {
+   const response = await fetch(url, {
+     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     mode: 'cors', 
+     cache: 'no-cache', 
+     credentials: 'same-origin', 
+     headers: {
+       'Content-Type': 'application/json'
+     },
+     redirect: 'follow', 
+     referrerPolicy: 'no-referrer', // no-referrer, *client
+     body: JSON.stringify(data) // body data type must match "Content-Type" header
+   });
+   return await response.json(); 
+ }
+ 
+ async postTweetAdd(url = '', data = {}) {
+   const response = await fetch(url, {
+     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     mode: 'cors', 
+     cache: 'no-cache', 
+     credentials: 'same-origin', 
+     headers: {
+       'Content-Type': 'application/json',
+       'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
+     },
+     redirect: 'follow', 
+     referrerPolicy: 'no-referrer', // no-referrer, *client
+     body: JSON.stringify(data) // body data type must match "Content-Type" header
+   });
+   return await response.json(); 
+ }
+
+}
+
+//"id"=  "b6a4ca3e-d4c9-49aa-b4f3-1f48461e6ce1"
+//"login"= "Stepan Bryl"
+
+const tweetFeedApiService = new TweetFeedApiService();
+btnSingOut.addEventListener('click', openPageSingin);
+
+
+function openPageSingin() {
+   conteinerPage.innerHTML = `
+<div id="sing-in">
+      <form action="" name="formsingin">
+          <div class="contain">
+              <h1>Sing in</h1>
+                  <hr>
+      <label for="uname"><b>Username</b></label>
+      <input id="inputUserSing" type="text" placeholder="Enter Username" name="uname" required>
+  
+      <label for="psw"><b>Password</b></label>
+      <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
+  
+      <button type="submit" class="loginbtn">LogIn</button>
+      <button class='ps' id="btn-register-singin">Register</button>
+    </div>
+    </form>
+    </div>
+`;
+ 
+function getNewUser(event) {
+   event.preventDefault();
+      let inputUserSing = document.formsingin;
+      UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
+     tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
+       "login": `${inputUserSing.uname.value}`,
+      "password":`${inputUserSing.psw.value}`
+    })
+      .then((data) => {
+         localStorage.setItem('token', JSON.stringify(data))
+      })
+      
+ }
+   const btnRegisterSingin = document.getElementById('btn-register-singin');
+   btnRegisterSingin.addEventListener('click', openPageRegister);
+   btnRegisterSingin.removeEventListener('click', openPageSingin);
+   const btnLogin = document.querySelector('.loginbtn');
+   btnLogin.addEventListener('click', getNewUser, false);
+}
+
+tweetFeedApiService.getData();
+const btnAddTweet = document.getElementById('btn-add-tweet');
+const myFormAddTweet = document.formtweetadd;
+
+btnAddTweet.addEventListener('click', function(){
+tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
+   "text": myFormAddTweet.text.value
+})
+  .then((data) => {
+    console.log(data); 
+  });
+});
+
+function openPageRegister() {
+   conteinerPage.innerHTML = `
+   <div id="register">
+        <form action="main.html" method="post" id="formregister" name="formregister">
+            <div class="contain">
+              <h1>Register</h1>
+              <hr>
+              <label for="name"><b>Username</b></label>
+              <input id="inputUserRegister" type="text" placeholder="Enter Username" name="name" required>
+              
+              <label for="password"><b>Password</b></label>
+              <input id="inputPasswordRegister" type="password" placeholder="Enter Password" name="password" required>
+              
+              <label for="passwordrepeat"><b>Repeat Password</b></label>
+              <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
+              
+              <button type="submit" class="registerbtn">Register</button>
+              <button class='psw' id="btn-singin-register">Sing in</button>
+            </div>
+          </form>
+        </div>
+        `
+        
+        function setNewUser(event){
+         event.preventDefault();
+      let inputUserRegister = document.formregister;
+      if(inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
+      UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
+      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/registration', { 
+       "login": `${inputUserRegister.name.value}`,
+       "password":`${inputUserRegister.password.value}`
+    })
+      .then((data) => {
+         console.log(data);
+      })
+      openPageSingin();
+      }
+   const btnSinginRegister = document.getElementById('btn-singin-register');
+   btnSinginRegister.addEventListener('click', openPageSingin);
+   btnSinginRegister.removeEventListener('click', openPageRegister);
+   const btnAddNewUser = document.querySelector('.registerbtn');
+   btnAddNewUser.addEventListener('click', setNewUser, false);
+}
 
