@@ -453,7 +453,7 @@ function openPageSingin() {
 `;
  
 function getNewUser(event) {
-  // event.preventDefault();
+   event.preventDefault();
       let inputUserSing = document.formsingin;
       UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
@@ -509,7 +509,7 @@ function openPageRegister() {
         `
         
         function setNewUser(event){
-         // event.preventDefault();
+         event.preventDefault();
       let inputUserRegister = document.formregister;
       if(inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
       UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
