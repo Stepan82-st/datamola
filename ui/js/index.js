@@ -23,9 +23,7 @@ class UserList {
    }
  
    static setCurrentUser(username, password) {
-      localStorage.setItem('currentUser', JSON.stringify(new User(username, password)))
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser')).name;
-      return this.currentUser;
+      localStorage.setItem('currentUser', JSON.stringify(username));
    }
 
    static getCurrentUser(){
@@ -34,7 +32,7 @@ class UserList {
 }
 
 if(!JSON.parse(localStorage.getItem('currentUser')))
-localStorage.setItem('currentUser', JSON.stringify({name:'Stepan', password:'123'}));
+localStorage.setItem('currentUser', JSON.stringify('Stepan'));
 
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
@@ -44,8 +42,8 @@ class HeaderView {
    display() {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser')).name}</h2>`;
-      if (JSON.parse(localStorage.getItem('currentUser')).name) {
+      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser'))}</h2>`;
+      if (JSON.parse(localStorage.getItem('currentUser'))) {
          btnRegister.innerText = 'Sing out';
          
       } else {
@@ -64,7 +62,7 @@ class TweetFeedView {
       //document.getElementById('pageTweet').style.display = 'none';
       //document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = params.map(item =>
-         (item.author === JSON.parse(localStorage.getItem('currentUser')).name) ? 
+         (item.author === JSON.parse(localStorage.getItem('currentUser'))) ? 
          ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
@@ -382,8 +380,8 @@ class TweetFeedApiService {
    try {
       const response = await fetch('https://jslabapi.datamola.com/tweet');
       const result = await response.json();     
-      console.log(result)
-      tweetCollectionController.tweetFeedView.display(result);
+      
+       tweetCollectionController.tweetFeedView.display(result);
       }
          catch(err){
            console.log(err)
@@ -406,8 +404,8 @@ class TweetFeedApiService {
    return await response.json(); 
  }
  
- async postTweetAdd(url = '', data = {}) {
-   const response = await fetch(url, {
+  static async postTweetAdd(url = '', data = {}) {   
+      const response = await fetch(url, {
      method: 'POST', // *GET, POST, PUT, DELETE, etc.
      mode: 'cors', 
      cache: 'no-cache', 
@@ -417,17 +415,17 @@ class TweetFeedApiService {
        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
      },
      redirect: 'follow', 
-     referrerPolicy: 'no-referrer', // no-referrer, *client
-     body: JSON.stringify(data) // body data type must match "Content-Type" header
+     referrerPolicy: 'no-referrer', 
+     body: JSON.stringify(data) 
    });
-   return await response.json(); 
+   if(response.ok){
+        return await response.json();
+ }else{
+    console.log('error', response.status)
  }
-
 }
 
-//"id"=  "b6a4ca3e-d4c9-49aa-b4f3-1f48461e6ce1"
-//"login"= "Stepan Bryl"
-
+}
 const tweetFeedApiService = new TweetFeedApiService();
 btnSingOut.addEventListener('click', openPageSingin);
 
@@ -445,7 +443,7 @@ function openPageSingin() {
       <label for="psw"><b>Password</b></label>
       <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
   
-      <button type="submit" class="loginbtn">LogIn</button>
+      <button type="button" class="loginbtn">LogIn</button>
       <button class='ps' id="btn-register-singin">Register</button>
     </div>
     </form>
@@ -472,19 +470,23 @@ function getNewUser(event) {
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
-tweetFeedApiService.getData();
+
+
 const btnAddTweet = document.getElementById('btn-add-tweet');
 const myFormAddTweet = document.formtweetadd;
 
 btnAddTweet.addEventListener('click', function(){
-tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
+   TweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
    "text": myFormAddTweet.text.value
 })
   .then((data) => {
-    console.log(data); 
-  });
+      if(data){
+         myFormAddTweet.text.value = '';
+         tweetFeedApiService.getData();
+      }
+  })
 });
-
+tweetFeedApiService.getData();
 function openPageRegister() {
    conteinerPage.innerHTML = `
    <div id="register">
@@ -501,7 +503,7 @@ function openPageRegister() {
               <label for="passwordrepeat"><b>Repeat Password</b></label>
               <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
               
-              <button type="submit" class="registerbtn">Register</button>
+              <button type="button" class="registerbtn">Register</button>
               <button class='psw' id="btn-singin-register">Sing in</button>
             </div>
           </form>
@@ -509,7 +511,7 @@ function openPageRegister() {
         `
         
         function setNewUser(event){
-         event.preventDefault();
+        // event.preventDefault();
       let inputUserRegister = document.formregister;
       if(inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
       UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
