@@ -4,37 +4,35 @@
 class User {
    name;
    password;
- 
+
    constructor(name, password) {
-     this.name = name;
-     this.password = password;
+      this.name = name;
+      this.password = password;
    }
- }
- const getFromLocalStorage = (key) => {
-  return  JSON.parse(localStorage.getItem(key));
- }
+}
+const getFromLocalStorage = (key) => {
+   return JSON.parse(localStorage.getItem(key));
+}
 
 class UserList {
    static users = [];
    static currentUser;
 
-   static addUser(user, password) {    
-    return this.users.push(new User(user, password));
-   }
- 
-   static setCurrentUser(username, password) {
-      localStorage.setItem('currentUser', JSON.stringify(new User(username, password)))
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser')).name;
-      return this.currentUser;
+   static addUser(user, password) {
+      return this.users.push(new User(user, password));
    }
 
-   static getCurrentUser(){
-     return getFromLocalStorage('currentUser');
+   static setCurrentUser(username, password) {
+      localStorage.setItem('currentUser', JSON.stringify(username));
+   }
+
+   static getCurrentUser() {
+      return getFromLocalStorage('currentUser');
    }
 }
 
-if(!JSON.parse(localStorage.getItem('currentUser')))
-localStorage.setItem('currentUser', JSON.stringify({name:'Stepan', password:'123'}));
+if (!JSON.parse(localStorage.getItem('currentUser')))
+   localStorage.setItem('currentUser', JSON.stringify('Stepan'));
 
 // eslint-disable-next-line no-unused-vars
 class HeaderView {
@@ -44,10 +42,10 @@ class HeaderView {
    display() {
       const header = document.getElementById(this.containerId);
       const btnRegister = document.getElementById('btn-register');
-      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser')).name}</h2>`;
-      if (JSON.parse(localStorage.getItem('currentUser')).name) {
+      header.innerHTML = `<h2>${JSON.parse(localStorage.getItem('currentUser'))}</h2>`;
+      if (JSON.parse(localStorage.getItem('currentUser'))) {
          btnRegister.innerText = 'Sing out';
-         
+
       } else {
          btnRegister.innerText = 'Sing in';
       }
@@ -60,11 +58,11 @@ class TweetFeedView {
    }
    display(params) {
       const conteiner = document.getElementById(this.containerId);
-     
+
       //document.getElementById('pageTweet').style.display = 'none';
       //document.getElementById('tweets').style.display = 'flex';
       conteiner.innerHTML = params.map(item =>
-         (item.author === JSON.parse(localStorage.getItem('currentUser')).name) ? 
+         (item.author === JSON.parse(localStorage.getItem('currentUser'))) ?
          ` <article id="some-tweet" class="tweet-wrap">
            <div class="tweet-header">
              <div class="tweet-header-info" id = "${item.id}">
@@ -82,8 +80,8 @@ class TweetFeedView {
                <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
              </button>
            </div>
-           <button id="${item.id}" type="submit" name="delete" class="btn delete-btn">Delete</button>
-           <button id="${item.id}" type="submit" name="Edit" class="btn input-btn edit-btn">Edit</button>
+           <button id="${item.id}" type="button" name="delete" class="btn delete-btn">Delete</button>
+           <button id="${item.id}" type="button" name="Edit" class="btn input-btn edit-btn">Edit</button>
          </article>
          ` :
          `<article id="some-tweet" class="tweet-wrap">
@@ -201,7 +199,7 @@ class TweetController {
       this.tweetView = new TweetView('pageTweet');
       this.filterView = new FilterView('tweets');
    }
-   
+
    addTweet(text) {
       let newTweets = this.tweetCollection.add(text);
       this.tweetFeedView.display();
@@ -250,11 +248,11 @@ class TweetController {
       return this.tweetView.display(id);
    }
    static save() {
-      return  localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
-      } 
-      static restore(){
-         return new TweetCollection(JSON.parse(localStorage.getItem(`tweets`)));
-      }
+      return localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
+   }
+   static restore() {
+      return new TweetCollection(JSON.parse(localStorage.getItem(`tweets`)));
+   }
 
 }
 
@@ -277,157 +275,57 @@ const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 
-UserList.addUser('Брыль Степан', '1234');
-UserList.addUser('Stepan', '123');
-UserList.addUser('Калякин Иван', '1234');
-
-
-
-/*
-window.addEventListener('load', (event) => {
-   btnSingOut.addEventListener('click', openPageSingin);
-  // tweetCollectionController.getFeed(0, 10);
-   // загрузили твиты на странницу;
-   
-   let count = 0;
-
-   function addLoadMore() {
-      if (document.onclick = btnLoadMore) {
-         tweetCollectionController.getFeed(10 + count, 10);
-
-         const btnEditTweet = document.querySelectorAll('.edit-btn');
-         for (let i = 0; i < btnEditTweet.length; i++) {
-            btnEditTweet[i].addEventListener('click', function (e) {
-               count = 0;
-               console.log(e.currentTarget.id)
-               tweetCollectionController.editTweet(e.currentTarget.id);
-            })
-         }
-
-         const btnTweetPage = document.querySelectorAll('.message');
-         for (var i = 0; i < btnTweetPage.length; i++) {
-            btnTweetPage[i].addEventListener("click", function (e) {
-               tweetCollectionController.showTweet(e.currentTarget.id);
-            });
-         }
-      }
-      count += 10;
-   }
-   btnLoadMore.addEventListener('click', addLoadMore);
-   const btnTweetPage = document.querySelectorAll('.message');
-   const btnEditTweet = document.querySelectorAll('.edit-btn');
-   for (let i = 0; i < btnEditTweet.length; i++) {
-      btnEditTweet[i].addEventListener('click', function (e) {
-         tweetCollectionController.editTweet(e.currentTarget.id);
-      })
-   }
-
-   for (let i = 0; i < btnTweetPage.length; i++) {
-      btnTweetPage[i].addEventListener('click', function (e) {
-         tweetCollectionController.showTweet(e.currentTarget.id);
-         const btnAddComment = document.getElementById('addCom');
-         btnAddComment.addEventListener('click', addComment, false);
-      });
-   }
-
-   function addComment(event) {
-      const pageComment = document.querySelector('.commentar');
-      let comment = new Comment(pageComment.value);
-      const myTweet = document.querySelector('.name-author').id;
-      let tweet = tweetCollection._getTweet(myTweet);
-      tweet.comments.push(comment);
-      tweetCollectionController.showTweet(myTweet);
-      const btnAddComment = document.getElementById('addCom');
-      btnAddComment.addEventListener('click', addComment, false)
-   }
-
-   const myFormFilterTweets = document.formfilter;
-   const btnFind = document.getElementById('btn-find');
-
-   function getFilterTweets(event) {
-      event.preventDefault();
-      tweetCollectionController.getFeed(myFormFilterTweets.text, `${myFormFilterTweets.text.value}`) &&
-         tweetCollectionController.getFeed(myFormFilterTweets.username, `${myFormFilterTweets.username.value}`) &&
-         tweetCollectionController.getFeed(myFormFilterTweets.dateFrom, `${myFormFilterTweets.dateFrom.value}`) &&
-         tweetCollectionController.getFeed(myFormFilterTweets.dateTo, `${myFormFilterTweets.dateTo.value}`) &&
-         tweetCollectionController.getFeed(myFormFilterTweets.hashtags, [`${myFormFilterTweets.hashtags.value}`]);
-
-      myFormFilterTweets.text.value = '';
-      myFormFilterTweets.username.value = '';
-      myFormFilterTweets.hashtags.value = '';
-   }
-   btnFind.addEventListener('click', getFilterTweets, false)
-   const myFormAddTweet = document.formtweetadd;
-
-   function getAddTweet(event) {
-      event.preventDefault();
-      if (document.getElementById('btn-add-tweet')) {
-         tweetCollectionController.addTweet(myFormAddTweet.text.value);
-         myFormAddTweet.text.value = '';
-      }
-   }
-
-   // Добавление твита
-   let btnAddTweets = document.getElementById('btn-add-tweet');
-   btnAddTweets.addEventListener('click', getAddTweet, false);
-
-});
-*/
-
-
-
 class TweetFeedApiService {
-    
-  async getData(){
-   try {
-      const response = await fetch('https://jslabapi.datamola.com/tweet');
-      const result = await response.json();     
-      console.log(result)
-      tweetCollectionController.tweetFeedView.display(result);
-      }
-         catch(err){
-           console.log(err)
-         }
-  }
 
-  async postLogin(url = '', data = {}) {
-   const response = await fetch(url, {
-     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-     mode: 'cors', 
-     cache: 'no-cache', 
-     credentials: 'same-origin', 
-     headers: {
-       'Content-Type': 'application/json'
-     },
-     redirect: 'follow', 
-     referrerPolicy: 'no-referrer', // no-referrer, *client
-     body: JSON.stringify(data) // body data type must match "Content-Type" header
-   });
-   return await response.json(); 
- }
- 
- async postTweetAdd(url = '', data = {}) {
-   const response = await fetch(url, {
-     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-     mode: 'cors', 
-     cache: 'no-cache', 
-     credentials: 'same-origin', 
-     headers: {
-       'Content-Type': 'application/json',
-       'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
-     },
-     redirect: 'follow', 
-     referrerPolicy: 'no-referrer', // no-referrer, *client
-     body: JSON.stringify(data) // body data type must match "Content-Type" header
-   });
-   return await response.json(); 
- }
+   async getData() {
+      try {
+         const response = await fetch('https://jslabapi.datamola.com/tweet');
+         const result = await response.json();
+
+         tweetCollectionController.tweetFeedView.display(result);
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
+   async postLogin(url = '', data = {}) {
+      const response = await fetch(url, {
+         method: 'POST', // *GET, POST, PUT, DELETE, etc.
+         mode: 'cors',
+         cache: 'no-cache',
+         credentials: 'same-origin',
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         redirect: 'follow',
+         referrerPolicy: 'no-referrer', // no-referrer, *client
+         body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      return await response.json();
+   }
+
+   static async postTweetAdd(url = '', data = {}) {
+      const response = await fetch(url, {
+         method: 'POST', // *GET, POST, PUT, DELETE, etc.
+         mode: 'cors',
+         cache: 'no-cache',
+         credentials: 'same-origin',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
+         },
+         redirect: 'follow',
+         referrerPolicy: 'no-referrer',
+         body: JSON.stringify(data)
+      });
+      if (response.ok) {
+         return await response.json();
+      } else {
+         console.log('error', response.status)
+      }
+   }
 
 }
-
-//"id"=  "b6a4ca3e-d4c9-49aa-b4f3-1f48461e6ce1"
-//"login"= "Stepan Bryl"
-
 const tweetFeedApiService = new TweetFeedApiService();
 btnSingOut.addEventListener('click', openPageSingin);
 
@@ -445,26 +343,31 @@ function openPageSingin() {
       <label for="psw"><b>Password</b></label>
       <input id="inputUserSing" type="password" placeholder="Enter Password" name="psw" required>
   
-      <button type="submit" class="loginbtn">LogIn</button>
+      <button type="button" class="loginbtn">LogIn</button>
       <button class='ps' id="btn-register-singin">Register</button>
     </div>
     </form>
     </div>
 `;
- 
-function getNewUser(event) {
-   event.preventDefault();
+
+   function getNewUser(event) {
+      //event.preventDefault();
       let inputUserSing = document.formsingin;
       UserList.setCurrentUser(inputUserSing.uname.value, inputUserSing.psw.value);
-     tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', { 
-       "login": `${inputUserSing.uname.value}`,
-      "password":`${inputUserSing.psw.value}`
-    })
-      .then((data) => {
-         localStorage.setItem('token', JSON.stringify(data))
-      })
-      
- }
+      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/login', {
+            "login": `${inputUserSing.uname.value}`,
+            "password": `${inputUserSing.psw.value}`
+         })
+         .then((data) => {
+            if (data) {
+               localStorage.setItem('token', JSON.stringify(data));
+               window.location.href = 'main.html';
+            } else {
+               console.log('error', data);
+            }
+         })
+
+   }
    const btnRegisterSingin = document.getElementById('btn-register-singin');
    btnRegisterSingin.addEventListener('click', openPageRegister);
    btnRegisterSingin.removeEventListener('click', openPageSingin);
@@ -472,18 +375,21 @@ function getNewUser(event) {
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
-tweetFeedApiService.getData();
 const btnAddTweet = document.getElementById('btn-add-tweet');
 const myFormAddTweet = document.formtweetadd;
 
-btnAddTweet.addEventListener('click', function(){
-tweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', { 
-   "text": myFormAddTweet.text.value
-})
-  .then((data) => {
-    console.log(data); 
-  });
+btnAddTweet.addEventListener('click', function () {
+   TweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', {
+         "text": myFormAddTweet.text.value
+      })
+      .then((data) => {
+         if (data) {
+            myFormAddTweet.text.value = '';
+            tweetFeedApiService.getData();
+         }
+      })
 });
+tweetFeedApiService.getData();
 
 function openPageRegister() {
    conteinerPage.innerHTML = `
@@ -501,31 +407,30 @@ function openPageRegister() {
               <label for="passwordrepeat"><b>Repeat Password</b></label>
               <input id="inputPasswordRegisterRepeat" type="password" placeholder="Repeat Password" name="passwordrepeat" required>
               
-              <button type="submit" class="registerbtn">Register</button>
+              <button type="button" class="registerbtn">Register</button>
               <button class='psw' id="btn-singin-register">Sing in</button>
             </div>
           </form>
         </div>
         `
-        
-        function setNewUser(event){
-         event.preventDefault();
+
+   function setNewUser(event) {
+      // event.preventDefault();
       let inputUserRegister = document.formregister;
-      if(inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
-      UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
-      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/registration', { 
-       "login": `${inputUserRegister.name.value}`,
-       "password":`${inputUserRegister.password.value}`
-    })
-      .then((data) => {
-         console.log(data);
-      })
+      if (inputUserRegister.password.value === inputUserRegister.passwordrepeat.value)
+         UserList.setCurrentUser(inputUserRegister.name.value, inputUserRegister.password.value);
+      tweetFeedApiService.postLogin('https://jslabapi.datamola.com/registration', {
+            "login": `${inputUserRegister.name.value}`,
+            "password": `${inputUserRegister.password.value}`
+         })
+         .then((data) => {
+            console.log(data);
+         })
       openPageSingin();
-      }
+   }
    const btnSinginRegister = document.getElementById('btn-singin-register');
    btnSinginRegister.addEventListener('click', openPageSingin);
    btnSinginRegister.removeEventListener('click', openPageRegister);
    const btnAddNewUser = document.querySelector('.registerbtn');
    btnAddNewUser.addEventListener('click', setNewUser, false);
 }
-
