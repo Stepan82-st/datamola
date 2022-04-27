@@ -173,24 +173,49 @@ class TweetView {
    }
 }
 
+const formFilter = document.formfilter;
+const formFilterLineHashtags = [];
+const btnAddHashtags = document.getElementById('btn-hashtags');
+btnAddHashtags.addEventListener('click',function () {
+formFilterLineHashtags.push(formFilter.hashtags.value);
+
+return formFilterLineHashtags;
+});
 class FilterView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-
-   display(inputName, param) {
-      inputName.value = param;
-      return new TweetFeedView(this.containerId).display({
-         author: inputUser.value,
-         dateTo: new Date(inputDateTo.value),
-         dateFrom: new Date(inputDateFrom.value),
-         text: inputTweet.value,
-         hashtags: [inputHashtags.value]
-      });
-   }
+   display(params) {
+     
+     console.log(formFilterLineHashtags)
+      const newParams = params.filter(item => {
+         let filterAuthor, filterText, filterDateTo, filterDateFrom, filterHashtags;
+         filterAuthor = filterText = filterDateTo = filterDateFrom = filterHashtags = true;
+         if(formFilter.username.value) {
+            filterAuthor = item.author.toUpperCase().includes(formFilter.username.value.toUpperCase())
+         }
+         if(formFilter.text.value){
+            filterText = item.text.toUpperCase().includes(formFilter.text.value.toUpperCase())
+         }
+         if (formFilter.dateFrom.value) {
+            filterDateFrom = item.createdAt >= formFilter.dateFrom.value;
+         }
+         if (formFilter.dateTo.value) {
+            filterDateTo = item.createdAt <= formFilter.dateTo.value;
+         }
+         if (formFilterLineHashtags.length > 0) {  
+            console.log(formFilterLineHashtags)
+            console.log(item.text)
+            filterHashtags = formFilterLineHashtags.every(elem => item.text.toUpperCase().includes(elem.toUpperCase()));
+         }
+         console.log('filter', filterAuthor, filterHashtags);
+        
+         return filterAuthor && filterText && filterDateFrom && filterDateTo && filterHashtags;  
+      })
+     // formFilterLineHashtags = [];
+      return new TweetFeedView(this.containerId).display(newParams);
 }
-
-
+}
 class TweetController {
 
    constructor() {
@@ -262,12 +287,6 @@ const tweetsConteiner = document.getElementById('tweets');
 const pageTweet = document.getElementById('pageTweet');
 const singIn = document.getElementById('sing-in');
 const myArt = document.getElementById('tweet-body');
-const inputUser = document.getElementById('input-user');
-const inputDateTo = document.getElementById('input-dateto');
-const inputTweet = document.getElementById('POST-name');
-const inputDateFrom = document.getElementById('input-datefrom');
-const inputHashtags = document.getElementById('input-hashtags');
-const btnAddHashtags = document.getElementById('btn-hashtags');
 const conteinerPage = document.getElementById('main');
 const conteinerFilter = document.getElementById('filter');
 const btnSingOut = document.getElementById('btn-register');
@@ -276,18 +295,28 @@ const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 
 class TweetFeedApiService {
-
+   
    async getData() {
       try {
          const response = await fetch('https://jslabapi.datamola.com/tweet');
          const result = await response.json();
-
          tweetCollectionController.tweetFeedView.display(result);
       } catch (err) {
          console.log(err)
       }
    }
-
+   async getFilterData(){
+      formFilter.hashtags.value = '';
+      try {
+         const response = await fetch('https://jslabapi.datamola.com/tweet');
+         const result = await response.json();
+         console.log(result);
+        tweetCollectionController.filterView.display(result);
+         
+      } catch (err) {
+         console.log(err)
+      } 
+   }
    async postLogin(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -390,6 +419,8 @@ btnAddTweet.addEventListener('click', function () {
       })
 });
 tweetFeedApiService.getData();
+const btnFind = document.getElementById('btn-find');
+btnFind.addEventListener('click', tweetFeedApiService.getFilterData, false);
 
 function openPageRegister() {
    conteinerPage.innerHTML = `
