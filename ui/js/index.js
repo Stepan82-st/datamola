@@ -312,7 +312,9 @@ class TweetFeedApiService {
                      
                      let btnNewEditTweetAdd = document.querySelector('.edit-btn');
                      btnNewEditTweetAdd.addEventListener('click', function () {
-                     
+                     if(document.querySelector('.tweet-btn')){
+                        return;
+                     }
                         TweetFeedApiService.editTweet(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('idMyTweet'))}`, {
                            "text": formTweetEdit.value
                         })
@@ -321,7 +323,7 @@ class TweetFeedApiService {
                               formTweetEdit.value = '';
                               btnAddTweet.innerHTML = 'Tweet';
                               btnAddTweet.classList.add("tweet-btn");
-                              btnAddTweet.classList.toggle("edit-btn");
+                              btnAddTweet.classList.remove("edit-btn");
                               tweetFeedApiService.getData();
                            }
                         })
@@ -368,14 +370,13 @@ class TweetFeedApiService {
          credentials: 'same-origin',
          headers: {
             'Content-Type': 'application/json',
-
             'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
          },
          redirect: 'follow',
          referrerPolicy: 'no-referrer',
          body: JSON.stringify(data)
       });
-      if (response.ok  &&  document.getElementById('btn-add-tweet')) {
+      if (response.ok) {
          return await response.json();
       } else {
          console.log('error', response.status)
