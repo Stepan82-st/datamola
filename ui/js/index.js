@@ -292,9 +292,18 @@ class TweetFeedApiService {
          const response = await fetch('https://jslabapi.datamola.com/tweet');
          const result = await response.json();
          tweetCollectionController.tweetFeedView.display(result);
+         const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
+
+         for(let i = 0; i < btnDeleteMyTweet.length; i++){
+            btnDeleteMyTweet[i].addEventListener('click', function(e){
+               
+              TweetFeedApiService.deleteTweet(`https://jslabapi.datamola.com/tweet/${ e.currentTarget.id}`)   
+            })
+                  tweetFeedApiService.getData();
+         }
          const btnEditTweet = document.querySelectorAll('.tweet-header-info');
          const formTweetEdit = document.getElementById('tweet-conteiner');
-      
+         
          for (let i = 0; i < btnEditTweet.length; i++) {
                btnEditTweet[i].addEventListener('click', function (e) {
                   let tweet = result.find(elem => e.currentTarget.id === elem.id);
@@ -329,9 +338,6 @@ class TweetFeedApiService {
                }
                else if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
                 tweetCollectionController.tweetView.display(tweet);
-                
-
-
                }
                })
             }
@@ -402,6 +408,26 @@ class TweetFeedApiService {
       });
       if (response.ok) {
          return await response.json();
+      } else {
+         console.log('error', response.status)
+      }
+   }
+   static async deleteTweet(url = '', data = {}){
+      const response = await fetch(url, {
+         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+         mode: 'cors',
+         cache: 'no-cache',
+         credentials: 'same-origin',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
+         },
+         redirect: 'follow',
+         referrerPolicy: 'no-referrer',
+         body: JSON.stringify(data)
+      });
+      if (response.ok) {
+         return ;
       } else {
          console.log('error', response.status)
       }
