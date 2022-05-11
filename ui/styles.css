@@ -300,7 +300,8 @@ form.filter{
   margin-top: 1rem;
   border-radius:3px;
   border-bottom: 1px solid #e6ecf0;
-
+  cursor: pointer;
+  
 }
 
 .tweet-header {
