@@ -106,8 +106,7 @@ class TweetView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(idTweet) {
-      const tweetId = tweetCollection._getTweet(idTweet);
+   display(tweetId) {
       let myArticle = document.getElementById(this.containerId);
       const countMessage = document.getElementById('count-comments');
       const inputTweet = document.getElementById('tweet-conteiner')
@@ -182,7 +181,7 @@ class FilterView {
    }
    display(params) {
      
-     console.log(formFilterLineHashtags)
+    // console.log(formFilterLineHashtags)
       const newParams = params.filter(item => {
          let filterAuthor, filterText, filterDateTo, filterDateFrom, filterHashtags;
          filterAuthor = filterText = filterDateTo = filterDateFrom = filterHashtags = true;
@@ -199,15 +198,14 @@ class FilterView {
             filterDateTo = item.createdAt <= formFilter.dateTo.value;
          }
          if (formFilterLineHashtags.length > 0) {  
-            console.log(formFilterLineHashtags)
-            console.log(item.text)
+
             filterHashtags = formFilterLineHashtags.every(elem => item.text.toUpperCase().includes(elem.toUpperCase()));
          }
-         console.log('filter', filterAuthor, filterHashtags);
+        // console.log('filter', filterAuthor, filterHashtags);
         
          return filterAuthor && filterText && filterDateFrom && filterDateTo && filterHashtags;  
       })
-     // formFilterLineHashtags = [];
+
       return new TweetFeedView(this.containerId).display(newParams);
 }
 }
@@ -260,8 +258,8 @@ class TweetController {
       }
    }
    //используем для отправки твита по его id на страницу tweet; 
-   showTweet(id) {
-      return this.tweetView.display(id);
+   static showTweet(id) {
+       this.tweetView.display(id);
    }
    static save() {
       return localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
@@ -328,6 +326,12 @@ class TweetFeedApiService {
                            }
                         })
                  })
+               }
+               else if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
+                tweetCollectionController.tweetView.display(tweet);
+                
+
+
                }
                })
             }
