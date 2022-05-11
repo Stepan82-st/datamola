@@ -76,9 +76,7 @@ class TweetFeedView {
                <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                <div class="comment-count">${item.comments.length}</div>
              </div>
-             <button id="${item.id}" class="btn message">
-               <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-             </button>
+            
            </div>
            <button id="${item.id}" type="button" name="delete" class="btn delete-btn">Delete</button>
          </article>
@@ -96,9 +94,7 @@ class TweetFeedView {
              <svg class="feather feather-message-circle sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
              <div class="comment-count">${item.comments.length}</div>
            </div>
-           <button id="${item.id}" class="btn message">
-             <svg class="feather feather-send sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-           </button>
+           
          </div>
        </article>
               `
@@ -288,7 +284,9 @@ const btnSingOut = document.getElementById('btn-register');
 const btnDeleteMyTweet = document.getElementById('delete-tweet');
 const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
-
+const btnAddTweet = document.querySelector('.tweet-btn');
+const myFormAddTweet = document.formtweetadd;
+console.log(btnAddTweet);
 class TweetFeedApiService {
    
    async getData() {
@@ -302,16 +300,18 @@ class TweetFeedApiService {
          for (let i = 0; i < btnEditTweet.length; i++) {
                btnEditTweet[i].addEventListener('click', function (e) {
                   let tweet = result.find(elem => e.currentTarget.id === elem.id);
-            
+                 
                   if(tweet.author === JSON.parse(localStorage.getItem('currentUser'))){
                      localStorage.setItem('idMyTweet', JSON.stringify(tweet.id));
                      formTweetEdit.value = tweet.text;
-                     let btnEditTweetAdd = document.getElementById('btn-add-tweet');
-                     btnEditTweetAdd.id = "new-edit";
-                     btnEditTweetAdd.innerHTML = 'Edit';
+                   //  let btnEditTweetAdd = document.getElementById('btn-add-tweet');
+                   btnAddTweet.classList.remove("tweet-btn");
+                   btnAddTweet.classList.add("edit-btn");
+                   console.log(btnAddTweet)
+                     btnAddTweet.innerHTML = 'Edit';
                      
-                     let btnNewEditTweetAdd = document.getElementById('new-edit');
-                     btnNewEditTweetAdd.addEventListener('click', function (e) {
+                     let btnNewEditTweetAdd = document.querySelector('.edit-btn');
+                     btnNewEditTweetAdd.addEventListener('click', function () {
                      
                         TweetFeedApiService.editTweet(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('idMyTweet'))}`, {
                            "text": formTweetEdit.value
@@ -319,8 +319,9 @@ class TweetFeedApiService {
                         .then((data) => {
                            if (data) {
                               formTweetEdit.value = '';
-                              btnNewEditTweetAdd.innerHTML = 'Tweet';
-                              btnEditTweetAdd.id = "btn-add-tweet";
+                              btnAddTweet.innerHTML = 'Tweet';
+                              btnAddTweet.classList.add("tweet-btn");
+                              btnAddTweet.classList.toggle("edit-btn");
                               tweetFeedApiService.getData();
                            }
                         })
@@ -451,23 +452,22 @@ function openPageSingin() {
    btnLogin.addEventListener('click', getNewUser, false);
 }
 
-const btnAddTweet = document.getElementById('btn-add-tweet');
-const myFormAddTweet = document.formtweetadd;
-
 btnAddTweet.addEventListener('click', function () {
+   if(document.querySelector('.edit-btn')){
+      return ;
+   }
    TweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', {
          "text": myFormAddTweet.text.value
       })
       .then((data) => {
-           if(document.getElementById('new-edit')){
-              return
-           }
+           
            if (data) {
             myFormAddTweet.text.value = '';
             tweetFeedApiService.getData();
          }
       })
 });
+
 tweetFeedApiService.getData();
 const btnFind = document.getElementById('btn-find');
 btnFind.addEventListener('click', tweetFeedApiService.getFilterData, false);
