@@ -156,7 +156,7 @@ class TweetView {
      ></textarea>
      <div class="bx-post">
        <div class="pull-right">
-         <button id="addCom" type="submit">
+         <button id="addCom" type="button">
            Add comment
          </button>
        </div>
@@ -345,7 +345,25 @@ class TweetFeedApiService {
                  })
                }
                else if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
-                tweetCollectionController.tweetView.display(tweet);
+               
+               tweetCollectionController.tweetView.display(tweet);
+               localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
+               const btnAddComment = document.querySelector('.pull-right');
+               let postComment = document.querySelector('.commentar');
+               //console.log(btnAddComment);
+               btnAddComment.addEventListener('click', function(){
+                 TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
+                  "text": postComment.value
+               })
+               .then((data) => {
+                  if (data) {
+                     postComment.value = '';
+                     console.log(data)
+                     tweetCollectionController.tweetView.display(data);
+                  }
+               })
+              
+               })
                }
                })
             }
@@ -436,6 +454,27 @@ class TweetFeedApiService {
       });
       if (response.ok) {
          return ;
+      } else {
+         console.log('error', response.status)
+      }
+   }
+   static async postTweetAddComment(url = '', data = {}) {
+      const response = await fetch(url, {
+         method: 'POST', // *GET, POST, PUT, DELETE, etc.
+         mode: 'cors',
+         cache: 'no-cache',
+         credentials: 'same-origin',
+         headers: {
+            'Content-Type': 'application/json',
+            'tweetId': JSON.parse(localStorage.getItem('tweetId')),
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
+         },
+         redirect: 'follow',
+         referrerPolicy: 'no-referrer',
+         body: JSON.stringify(data)
+      });
+      if (response.ok) {
+         return await response.json();
       } else {
          console.log('error', response.status)
       }
