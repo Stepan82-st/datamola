@@ -298,8 +298,8 @@ class TweetFeedApiService {
             btnDeleteMyTweet[i].addEventListener('click', function(e){
                
               TweetFeedApiService.deleteTweet(`https://jslabapi.datamola.com/tweet/${ e.currentTarget.id}`)   
-            })
-                  tweetFeedApiService.getData();
+              tweetFeedApiService.getData(); })
+                  
          }
          const btnEditTweet = document.querySelectorAll('.tweet-header-info');
          const formTweetEdit = document.getElementById('tweet-conteiner');
