@@ -179,8 +179,9 @@ class FilterView {
    constructor(idPage) {
       this.containerId = idPage;
    }
-   display(params) {
-
+   display(params, from, count) {
+      from = 0;
+    count = 10;
       // console.log(formFilterLineHashtags)
       const newParams = params.filter(item => {
          let filterAuthor, filterText, filterDateTo, filterDateFrom, filterHashtags;
@@ -206,7 +207,7 @@ class FilterView {
          return filterAuthor && filterText && filterDateFrom && filterDateTo && filterHashtags;
       })
 
-      return new TweetFeedView(this.containerId).display(newParams);
+      return new TweetFeedView(this.containerId).display(newParams.slice(from, count));
    }
 }
 class TweetController {
@@ -303,7 +304,6 @@ class TweetFeedApiService {
             tweetCollectionController.tweetFeedView.display(result.slice(from, count));
          });
         
-
          const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
          for (let i = 0; i < btnDeleteMyTweet.length; i++) {
             btnDeleteMyTweet[i].addEventListener('click', function (e) {
@@ -318,7 +318,24 @@ class TweetFeedApiService {
             comments[i].addEventListener('click', function (e) {
                let tweet = result.find(elem => e.currentTarget.id === elem.id);
                tweetCollectionController.tweetView.display(tweet);
+               if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
+                  localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
+                  const btnAddComment = document.querySelector('.pull-right');
+                  let postComment = document.querySelector('.commentar');
+                  btnAddComment.addEventListener('click', function () {
+                     TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
+                           "text": postComment.value
+                        })
+                        .then((data) => {
+                           if (data) {
+                              console.log(data);
+                              postComment.value = '';
+                              tweetCollectionController.tweetView.display(data);
+                           }
+                        })
+                  })
 
+               }
             })
          }
 
@@ -377,10 +394,11 @@ class TweetFeedApiService {
          console.log(err)
       }
    }
+
    async getFilterData() {
       formFilter.hashtags.value = '';
       try {
-         const response = await fetch('https://jslabapi.datamola.com/tweet');
+         const response = await fetch(`https://jslabapi.datamola.com/tweet/?from&count`);
          const result = await response.json();
          tweetCollectionController.filterView.display(result);
 
@@ -388,6 +406,7 @@ class TweetFeedApiService {
          console.log(err)
       }
    }
+
    async postLogin(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -424,6 +443,7 @@ class TweetFeedApiService {
          console.log('error', response.status)
       }
    }
+
    static async editTweet(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -467,6 +487,7 @@ class TweetFeedApiService {
          console.log('error', response.status)
       }
    }
+
    static async deleteTweet(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
@@ -487,6 +508,7 @@ class TweetFeedApiService {
          console.log('error', response.status)
       }
    }
+
    static async postTweetAddComment(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -512,7 +534,6 @@ class TweetFeedApiService {
 }
 const tweetFeedApiService = new TweetFeedApiService();
 btnSingOut.addEventListener('click', openPageSingin);
-
 
 function openPageSingin() {
    conteinerPage.innerHTML = `
