@@ -170,25 +170,25 @@ class TweetView {
 const formFilter = document.formfilter;
 const formFilterLineHashtags = [];
 const btnAddHashtags = document.getElementById('btn-hashtags');
-btnAddHashtags.addEventListener('click',function () {
-formFilterLineHashtags.push(formFilter.hashtags.value);
+btnAddHashtags.addEventListener('click', function () {
+   formFilterLineHashtags.push(formFilter.hashtags.value);
 
-return formFilterLineHashtags;
+   return formFilterLineHashtags;
 });
 class FilterView {
    constructor(idPage) {
       this.containerId = idPage;
    }
    display(params) {
-     
-    // console.log(formFilterLineHashtags)
+
+      // console.log(formFilterLineHashtags)
       const newParams = params.filter(item => {
          let filterAuthor, filterText, filterDateTo, filterDateFrom, filterHashtags;
          filterAuthor = filterText = filterDateTo = filterDateFrom = filterHashtags = true;
-         if(formFilter.username.value) {
+         if (formFilter.username.value) {
             filterAuthor = item.author.toUpperCase().includes(formFilter.username.value.toUpperCase())
          }
-         if(formFilter.text.value){
+         if (formFilter.text.value) {
             filterText = item.text.toUpperCase().includes(formFilter.text.value.toUpperCase())
          }
          if (formFilter.dateFrom.value) {
@@ -197,17 +197,17 @@ class FilterView {
          if (formFilter.dateTo.value) {
             filterDateTo = item.createdAt <= formFilter.dateTo.value;
          }
-         if (formFilterLineHashtags.length > 0) {  
+         if (formFilterLineHashtags.length > 0) {
 
             filterHashtags = formFilterLineHashtags.every(elem => item.text.toUpperCase().includes(elem.toUpperCase()));
          }
-        // console.log('filter', filterAuthor, filterHashtags);
-        
-         return filterAuthor && filterText && filterDateFrom && filterDateTo && filterHashtags;  
+         // console.log('filter', filterAuthor, filterHashtags);
+
+         return filterAuthor && filterText && filterDateFrom && filterDateTo && filterHashtags;
       })
 
       return new TweetFeedView(this.containerId).display(newParams);
-}
+   }
 }
 class TweetController {
 
@@ -259,7 +259,7 @@ class TweetController {
    }
    //используем для отправки твита по его id на страницу tweet; 
    static showTweet(id) {
-       this.tweetView.display(id);
+      this.tweetView.display(id);
    }
    static save() {
       return localStorage.setItem(`tweets`, JSON.stringify(TweetController.tweets));
@@ -284,53 +284,61 @@ const btnEditMyTweet = document.getElementById('edit-tweet');
 const btnLoadMore = document.getElementById('load-more');
 const btnAddTweet = document.querySelector('.tweet-btn');
 const myFormAddTweet = document.formtweetadd;
-console.log(btnAddTweet);
-class TweetFeedApiService {
-   
-   async getData() {
-      try {
-         const response = await fetch('https://jslabapi.datamola.com/tweet');
-         const result = await response.json();
-         tweetCollectionController.tweetFeedView.display(result);
-         const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
 
-         for(let i = 0; i < btnDeleteMyTweet.length; i++){
-            btnDeleteMyTweet[i].addEventListener('click', function(e){
-               
-              TweetFeedApiService.deleteTweet(`https://jslabapi.datamola.com/tweet/${ e.currentTarget.id}`)   
-              tweetFeedApiService.getData(); })
-                  
+class TweetFeedApiService {
+    
+   async getData() {     
+      try {
+         let from = 0,
+             count = 10;
+         const response = await fetch(`https://jslabapi.datamola.com/tweet/?from&count`);
+         const result = await response.json();
+         tweetCollectionController.tweetFeedView.display(result.slice(from, count));
+     
+         const loadMore = document.getElementById('load-more');
+         
+         loadMore.addEventListener('click', function(){
+           from += 10;
+           count +=10;
+            tweetCollectionController.tweetFeedView.display(result.slice(from, count));
+         });
+        
+
+         const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
+         for (let i = 0; i < btnDeleteMyTweet.length; i++) {
+            btnDeleteMyTweet[i].addEventListener('click', function (e) {
+               TweetFeedApiService.deleteTweet(`https://jslabapi.datamola.com/tweet/${ e.currentTarget.id}`)
+               tweetFeedApiService.getData();
+            })
          }
          const btnEditTweet = document.querySelectorAll('.tweet-header-info');
          const formTweetEdit = document.getElementById('tweet-conteiner');
          const comments = document.querySelectorAll('.comments');
          for (let i = 0; i < comments.length; i++) {
-            comments[i].addEventListener('click', function(e){
+            comments[i].addEventListener('click', function (e) {
                let tweet = result.find(elem => e.currentTarget.id === elem.id);
                tweetCollectionController.tweetView.display(tweet);
+
             })
-            
          }
 
          for (let i = 0; i < btnEditTweet.length; i++) {
-               btnEditTweet[i].addEventListener('click', function (e) {
-                  let tweet = result.find(elem => e.currentTarget.id === elem.id);
-                 
-                  if(tweet.author === JSON.parse(localStorage.getItem('currentUser'))){
-                     localStorage.setItem('idMyTweet', JSON.stringify(tweet.id));
-                     formTweetEdit.value = tweet.text;
-                   
-                   btnAddTweet.classList.remove("tweet-btn");
-                   btnAddTweet.classList.add("edit-btn");
-                   console.log(btnAddTweet)
-                     btnAddTweet.innerHTML = 'Edit';
-                     
-                     let btnNewEditTweetAdd = document.querySelector('.edit-btn');
-                     btnNewEditTweetAdd.addEventListener('click', function () {
-                     if(document.querySelector('.tweet-btn')){
+            btnEditTweet[i].addEventListener('click', function (e) {
+               let tweet = result.find(elem => e.currentTarget.id === elem.id);
+
+               if (tweet.author === JSON.parse(localStorage.getItem('currentUser'))) {
+                  localStorage.setItem('idMyTweet', JSON.stringify(tweet.id));
+                  formTweetEdit.value = tweet.text;
+
+                  btnAddTweet.classList.remove("tweet-btn");
+                  btnAddTweet.classList.add("edit-btn");
+                  btnAddTweet.innerHTML = 'Edit';
+                  let btnNewEditTweetAdd = document.querySelector('.edit-btn');
+                  btnNewEditTweetAdd.addEventListener('click', function () {
+                     if (document.querySelector('.tweet-btn')) {
                         return;
                      }
-                        TweetFeedApiService.editTweet(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('idMyTweet'))}`, {
+                     TweetFeedApiService.editTweet(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('idMyTweet'))}`, {
                            "text": formTweetEdit.value
                         })
                         .then((data) => {
@@ -342,45 +350,43 @@ class TweetFeedApiService {
                               tweetFeedApiService.getData();
                            }
                         })
-                 })
+                  })
+               } else if (tweet.author !== JSON.parse(localStorage.getItem('currentUser'))) {
+
+                  tweetCollectionController.tweetView.display(tweet);
+                  localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
+                  const btnAddComment = document.querySelector('.pull-right');
+                  let postComment = document.querySelector('.commentar');
+                  btnAddComment.addEventListener('click', function () {
+                     TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
+                           "text": postComment.value
+                        })
+                        .then((data) => {
+                           if (data) {
+                              console.log(data);
+                              postComment.value = '';
+                              tweetCollectionController.tweetView.display(data);
+                           }
+                        })
+                  })
+
                }
-               else if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
-               
-               tweetCollectionController.tweetView.display(tweet);
-               localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
-               const btnAddComment = document.querySelector('.pull-right');
-               let postComment = document.querySelector('.commentar');
-               //console.log(btnAddComment);
-               btnAddComment.addEventListener('click', function(){
-                 TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
-                  "text": postComment.value
-               })
-               .then((data) => {
-                  if (data) {
-                     postComment.value = '';
-                     console.log(data)
-                     tweetCollectionController.tweetView.display(data);
-                  }
-               })
-              
-               })
-               }
-               })
-            }
+            })
+         }
       } catch (err) {
          console.log(err)
       }
    }
-   async getFilterData(){
+   async getFilterData() {
       formFilter.hashtags.value = '';
       try {
          const response = await fetch('https://jslabapi.datamola.com/tweet');
          const result = await response.json();
-        tweetCollectionController.filterView.display(result);
-       
+         tweetCollectionController.filterView.display(result);
+
       } catch (err) {
          console.log(err)
-      } 
+      }
    }
    async postLogin(url = '', data = {}) {
       const response = await fetch(url, {
@@ -418,7 +424,7 @@ class TweetFeedApiService {
          console.log('error', response.status)
       }
    }
-     static async editTweet(url = '', data = {}) {
+   static async editTweet(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'PUT', // *GET, POST, PUT, DELETE, etc.
          mode: 'cors',
@@ -438,7 +444,30 @@ class TweetFeedApiService {
          console.log('error', response.status)
       }
    }
-   static async deleteTweet(url = '', data = {}){
+
+   static async editComment(url = '', data = {}) {
+      const response = await fetch(url, {
+         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+         mode: 'cors',
+         cache: 'no-cache',
+         credentials: 'same-origin',
+         headers: {
+            'Content-Type': 'application/json',
+            'commentId': JSON.parse(localStorage.getItem('commentId')),
+            'tweetId': JSON.parse(localStorage.getItem('tweetId')),
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).token
+         },
+         redirect: 'follow',
+         referrerPolicy: 'no-referrer',
+         body: JSON.stringify(data)
+      });
+      if (response.ok) {
+         return await response.json();
+      } else {
+         console.log('error', response.status)
+      }
+   }
+   static async deleteTweet(url = '', data = {}) {
       const response = await fetch(url, {
          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
          mode: 'cors',
@@ -453,7 +482,7 @@ class TweetFeedApiService {
          body: JSON.stringify(data)
       });
       if (response.ok) {
-         return ;
+         return;
       } else {
          console.log('error', response.status)
       }
@@ -531,15 +560,15 @@ function openPageSingin() {
 }
 
 btnAddTweet.addEventListener('click', function () {
-   if(document.querySelector('.edit-btn')){
-      return ;
+   if (document.querySelector('.edit-btn')) {
+      return;
    }
    TweetFeedApiService.postTweetAdd('https://jslabapi.datamola.com/tweet', {
          "text": myFormAddTweet.text.value
       })
       .then((data) => {
-           
-           if (data) {
+
+         if (data) {
             myFormAddTweet.text.value = '';
             tweetFeedApiService.getData();
          }
@@ -593,4 +622,3 @@ function openPageRegister() {
    const btnAddNewUser = document.querySelector('.registerbtn');
    btnAddNewUser.addEventListener('click', setNewUser, false);
 }
-
