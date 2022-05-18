@@ -302,6 +302,92 @@ class TweetFeedApiService {
            from += 10;
            count +=10;
             tweetCollectionController.tweetFeedView.display(result.slice(from, count));
+            const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
+            for (let i = 0; i < btnDeleteMyTweet.length; i++) {
+               btnDeleteMyTweet[i].addEventListener('click', function (e) {
+                  TweetFeedApiService.deleteTweet(`https://jslabapi.datamola.com/tweet/${ e.currentTarget.id}`)
+                  tweetFeedApiService.getData();
+               })
+            }
+            const btnEditTweet = document.querySelectorAll('.tweet-header-info');
+            const formTweetEdit = document.getElementById('tweet-conteiner');
+            const comments = document.querySelectorAll('.comments');
+            for (let i = 0; i < comments.length; i++) {
+               comments[i].addEventListener('click', function (e) {
+                  let tweet = result.find(elem => e.currentTarget.id === elem.id);
+                  tweetCollectionController.tweetView.display(tweet);
+                  if(tweet.author !== JSON.parse(localStorage.getItem('currentUser'))){
+                     localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
+                     const btnAddComment = document.querySelector('.pull-right');
+                     let postComment = document.querySelector('.commentar');
+                     btnAddComment.addEventListener('click', function () {
+                        TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
+                              "text": postComment.value
+                           })
+                           .then((data) => {
+                              if (data) {
+                                 console.log(data);
+                                 postComment.value = '';
+                                 tweetCollectionController.tweetView.display(data);
+                              }
+                           })
+                     })
+   
+                  }
+               })
+            }
+   
+            for (let i = 0; i < btnEditTweet.length; i++) {
+               btnEditTweet[i].addEventListener('click', function (e) {
+                  let tweet = result.find(elem => e.currentTarget.id === elem.id);
+   
+                  if (tweet.author === JSON.parse(localStorage.getItem('currentUser'))) {
+                     localStorage.setItem('idMyTweet', JSON.stringify(tweet.id));
+                     formTweetEdit.value = tweet.text;
+   
+                     btnAddTweet.classList.remove("tweet-btn");
+                     btnAddTweet.classList.add("edit-btn");
+                     btnAddTweet.innerHTML = 'Edit';
+                     let btnNewEditTweetAdd = document.querySelector('.edit-btn');
+                     btnNewEditTweetAdd.addEventListener('click', function () {
+                        if (document.querySelector('.tweet-btn')) {
+                           return;
+                        }
+                        TweetFeedApiService.editTweet(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('idMyTweet'))}`, {
+                              "text": formTweetEdit.value
+                           })
+                           .then((data) => {
+                              if (data) {
+                                 formTweetEdit.value = '';
+                                 btnAddTweet.innerHTML = 'Tweet';
+                                 btnAddTweet.classList.add("tweet-btn");
+                                 btnAddTweet.classList.remove("edit-btn");
+                                 tweetFeedApiService.getData();
+                              }
+                           })
+                     })
+                  } else if (tweet.author !== JSON.parse(localStorage.getItem('currentUser'))) {
+   
+                     tweetCollectionController.tweetView.display(tweet);
+                     localStorage.setItem('tweetId', JSON.stringify(`${tweet.id}`));
+                     const btnAddComment = document.querySelector('.pull-right');
+                     let postComment = document.querySelector('.commentar');
+                     btnAddComment.addEventListener('click', function () {
+                        TweetFeedApiService.postTweetAddComment(`https://jslabapi.datamola.com/tweet/${ JSON.parse(localStorage.getItem('tweetId'))}/comment`, {
+                              "text": postComment.value
+                           })
+                           .then((data) => {
+                              if (data) {
+                                 console.log(data);
+                                 postComment.value = '';
+                                 tweetCollectionController.tweetView.display(data);
+                              }
+                           })
+                     })
+   
+                  }
+               })
+            }
          });
         
          const btnDeleteMyTweet = document.querySelectorAll('.delete-btn');
